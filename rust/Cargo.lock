@@ -28,9 +28,9 @@ dependencies = [
 
 [[package]]
 name = "allo-isolate"
-version = "0.1.22"
+version = "0.1.23"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "b2ad11546cc848f5e627a2d00f9b3281e96bbe2e124c7ccc193d00ac1d6d953a"
+checksum = "4aa254bc7b5f54f7ec5c361ee263cb5c757fc19ce6b81ab2727f38c12d8e9a8d"
 dependencies = [
  "anyhow",
  "atomic",
@@ -253,9 +253,9 @@ dependencies = [
 
 [[package]]
 name = "flutter_rust_bridge"
-version = "2.0.0-dev.17"
+version = "2.0.0-dev.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "234b4efd33fa1270f6ba544c5fbbfdf2c75152be472dfa4d08a6bc93e0e6a156"
+checksum = "3adf5df60baf888f5cf944144e5a283dfd53f589d52d38f5262b73bb275dad62"
 dependencies = [
  "allo-isolate",
  "android_logger",
@@ -286,9 +286,9 @@ dependencies = [
 
 [[package]]
 name = "flutter_rust_bridge_macros"
-version = "2.0.0-dev.17"
+version = "2.0.0-dev.18"
 source = "registry+https://github.com/rust-lang/crates.io-index"
-checksum = "4664645e76261931b7a4994b2dd1b219efc64155da6f22edb7d4d6a59d51146e"
+checksum = "c788d84060539bb6799324601877b1d10a113665de597b0e036b088c9ac709e5"
 
 [[package]]
 name = "freedesktop-desktop-entry"
@@ -390,6 +390,15 @@ dependencies = [
  "pin-project-lite",
  "pin-utils",
  "slab",
+]
+
+[[package]]
+name = "fuzzy-matcher"
+version = "0.3.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "54614a3312934d066701a80f20f15fa3b56d67ac7722b39eea5b4c9dd1d66c94"
+dependencies = [
+ "thread_local",
 ]
 
 [[package]]
@@ -726,6 +735,7 @@ dependencies = [
  "anyhow",
  "flutter_rust_bridge",
  "freedesktop-desktop-entry",
+ "fuzzy-matcher",
  "thiserror",
 ]
 
@@ -791,6 +801,16 @@ dependencies = [
  "proc-macro2",
  "quote",
  "syn",
+]
+
+[[package]]
+name = "thread_local"
+version = "1.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "3fdd6f064ccff2d6567adcb3873ca630700f00b5ad3f060c25b5dcfd9a4ce152"
+dependencies = [
+ "cfg-if",
+ "once_cell",
 ]
 
 [[package]]

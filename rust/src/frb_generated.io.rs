@@ -4,12 +4,28 @@
 // Section: imports
 
 use super::*;
+use crate::api::simple::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::transform_result_dco;
 use flutter_rust_bridge::{Handler, IntoIntoDart};
 
 // Section: dart2rust
 
+impl
+    CstDecode<
+        flutter_rust_bridge::RustOpaque<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        >,
+    > for *const std::ffi::c_void
+{
+    fn cst_decode(
+        self,
+    ) -> flutter_rust_bridge::RustOpaque<
+        flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+    > {
+        unsafe { flutter_rust_bridge::for_generated::cst_decode_rust_opaque(self) }
+    }
+}
 impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
     fn cst_decode(self) -> String {
         let vec: Vec<u8> = self.cst_decode();
@@ -52,6 +68,11 @@ pub extern "C" fn frbgen_spotlight_dart_fn_deliver_output(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_spotlight_wire_create_app_state(port_: i64) {
+    wire_create_app_state_impl(port_)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_spotlight_wire_greet(
     name: *mut wire_cst_list_prim_u_8_strict,
 ) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
@@ -64,11 +85,25 @@ pub extern "C" fn frbgen_spotlight_wire_init_app(port_: i64) {
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_spotlight_wire_search(
-    port_: i64,
-    search: *mut wire_cst_list_prim_u_8_strict,
+pub extern "C" fn frbgen_spotlight_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+    ptr: *const std::ffi::c_void,
 ) {
-    wire_search_impl(port_, search)
+    unsafe {
+        flutter_rust_bridge::for_generated::rust_arc_increment_strong_count::<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        >(ptr);
+    }
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        flutter_rust_bridge::for_generated::rust_arc_decrement_strong_count::<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        >(ptr);
+    }
 }
 
 #[no_mangle]

@@ -1,4 +1,4 @@
-use crate::domain::{linux::LinuxApplication, AppStateLinux, Entity};
+pub use crate::domain::{AppState, Entity};
 
 #[flutter_rust_bridge::frb(sync)] // Synchronous mode for simplicity of the demo
 pub fn greet(name: String) -> String {
@@ -11,7 +11,6 @@ pub fn init_app() {
     flutter_rust_bridge::setup_default_user_utils();
 }
 
-pub fn search(search: String) {
-    let state = AppStateLinux::new();
-    state.search(&search);
+pub fn create_app_state() -> AppState {
+    AppState::new()
 }

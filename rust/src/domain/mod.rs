@@ -2,11 +2,10 @@
 
 pub mod linux;
 
-use std::borrow::{Borrow, Cow};
+use std::{borrow::Borrow, rc::Rc};
 
 use anyhow::Result;
 use fuzzy_matcher::{skim::SkimMatcherV2, FuzzyMatcher};
-use ouroboros::self_referencing;
 
 use self::linux::LinuxApplication;
 
@@ -26,74 +25,74 @@ impl Application for FakeApplication {
     }
 }
 
+#[derive(Clone)]
 pub enum EntityType {
     App,
     Command,
 }
 
-pub struct Entity<'a> {
-    pub name: Cow<'a, str>,
-    pub description: Cow<'a, str>,
-    pub alias: Cow<'a, str>,
-    pub command: Box<dyn Fn() -> Result<()> + 'a>,
+#[derive(Clone)]
+pub struct Entity {
+    pub name: String,
+    pub description: Option<String>,
+    pub alias: Option<String>,
+    pub command: Rc<Box<dyn Fn() -> Result<()>>>,
     pub r#type: EntityType,
 }
 
-pub struct FuzzyFinder<'a> {
-    entities: Vec<Entity<'a>>,
+pub struct AppState {
+    pub fuzzy_finder: FuzzyFinder,
 }
 
-#[self_referencing]
-pub struct _AppState<T: Application + 'static> {
-    apps: Vec<T>,
-    #[borrows(apps)]
-    #[covariant]
-    fuzzy_finder: FuzzyFinder<'this>,
-}
-
-pub struct AppStateLinux(pub _AppState<LinuxApplication>);
-
-#[cfg(target_os = "linux")]
-impl AppStateLinux {
+impl AppState {
     pub fn new() -> Self {
-        let state = _AppStateBuilder {
-            apps: LinuxApplication::get_applications(),
-            fuzzy_finder_builder: |apps| -> FuzzyFinder<'_> {
-                let mut entities: Vec<_> = Vec::new();
-                for app in apps.iter() {
-                    let entity = Entity {
-                        name: app.name().into(),
-                        description: "test".into(),
-                        alias: "alias".into(),
-                        command: Box::new(move || app.exec()),
-                        r#type: EntityType::App,
-                    };
-                    entities.push(entity);
-                }
+        #[cfg(target_os = "linux")]
+        let apps = LinuxApplication::get_applications();
+        #[cfg(not(target_os = "linux"))]
+        let apps: Vec<FakeApplication> = Vec::new();
 
-                FuzzyFinder::new(entities)
-            },
+        let mut entities: Vec<_> = Vec::new();
+        for app in apps.into_iter() {
+            let entity = Entity {
+                name: app.name().to_owned(),
+                description: None,
+                alias: None,
+                command: Rc::new(Box::new(move || app.exec())),
+                r#type: EntityType::App,
+            };
+            entities.push(entity);
         }
-        .build();
-        AppStateLinux(state)
+
+        AppState {
+            fuzzy_finder: FuzzyFinder::new(entities),
+        }
     }
 
-    pub fn search(&self, search: &str) -> Vec<&Entity> {
-        self.0
-            .borrow_fuzzy_finder()
-            .search(search)
+    pub fn search(&self, search: String) -> Vec<Entity> {
+        self.fuzzy_finder
+            .search(&search)
             .into_iter()
-            .map(|(_, e)| e)
+            .map(|(_, e)| e.clone())
             .collect()
     }
 }
 
-impl<'a> FuzzyFinder<'a> {
-    pub fn new(entities: Vec<Entity<'a>>) -> Self {
+impl Default for AppState {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
+pub struct FuzzyFinder {
+    entities: Vec<Entity>,
+}
+
+impl FuzzyFinder {
+    pub fn new(entities: Vec<Entity>) -> Self {
         Self { entities }
     }
 
-    pub fn search(&self, search: &str) -> Vec<(i64, &Entity<'a>)> {
+    pub fn search(&self, search: &str) -> Vec<(i64, &Entity)> {
         let matcher = SkimMatcherV2::default();
 
         let mut result: Vec<(i64, &Entity)> = Vec::new();
@@ -114,6 +113,8 @@ impl<'a> FuzzyFinder<'a> {
 #[cfg(test)]
 mod test {
 
+    use std::rc::Rc;
+
     use crate::domain::{linux::LinuxApplication, Application, EntityType};
 
     use super::{Entity, FuzzyFinder};
@@ -122,12 +123,12 @@ mod test {
     fn run_app() {
         let apps = LinuxApplication::get_applications();
         let mut entities: Vec<_> = Vec::new();
-        for app in apps.iter() {
+        for app in apps.into_iter() {
             let entity = Entity {
-                name: app.name().into(),
-                description: "test".into(),
-                alias: "alias".into(),
-                command: Box::new(move || app.exec()),
+                name: app.name().to_owned(),
+                description: None,
+                alias: None,
+                command: Rc::new(Box::new(move || app.exec())),
                 r#type: EntityType::App,
             };
             entities.push(entity);
@@ -143,12 +144,12 @@ mod test {
     fn search_app() {
         let apps = LinuxApplication::get_applications();
         let mut entities: Vec<_> = Vec::new();
-        for app in apps.iter() {
+        for app in apps.into_iter() {
             let entity = Entity {
-                name: app.name().into(),
-                description: "test".into(),
-                alias: "alias".into(),
-                command: Box::new(move || app.exec()),
+                name: app.name().to_owned(),
+                description: None,
+                alias: None,
+                command: Rc::new(Box::new(move || app.exec())),
                 r#type: EntityType::App,
             };
             entities.push(entity);

@@ -61,11 +61,19 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  Future<AppState> createAppState({dynamic hint});
+
   String greet({required String name, dynamic hint});
 
   Future<void> initApp({dynamic hint});
 
-  Future<void> search({required String search, dynamic hint});
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_AppState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_AppState;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_AppStatePtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -75,6 +83,29 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
+
+  @override
+  Future<AppState> createAppState({dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        return wire.wire_create_app_state(port_);
+      },
+      codec: DcoCodec(
+        decodeSuccessData:
+            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState,
+        decodeErrorData: null,
+      ),
+      constMeta: kCreateAppStateConstMeta,
+      argValues: [],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kCreateAppStateConstMeta => const TaskConstMeta(
+        debugName: "create_app_state",
+        argNames: [],
+      );
 
   @override
   String greet({required String name, dynamic hint}) {
@@ -121,28 +152,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: [],
       );
 
-  @override
-  Future<void> search({required String search, dynamic hint}) {
-    return handler.executeNormal(NormalTask(
-      callFfi: (port_) {
-        var arg0 = cst_encode_String(search);
-        return wire.wire_search(port_, arg0);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_unit,
-        decodeErrorData: null,
-      ),
-      constMeta: kSearchConstMeta,
-      argValues: [search],
-      apiImpl: this,
-      hint: hint,
-    ));
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_AppState => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState;
+
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_AppState => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState;
+
+  @protected
+  AppState
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          dynamic raw) {
+    return AppState.dcoDecode(raw as List<dynamic>);
   }
 
-  TaskConstMeta get kSearchConstMeta => const TaskConstMeta(
-        debugName: "search",
-        argNames: ["search"],
-      );
+  @protected
+  AppState
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          dynamic raw) {
+    return AppState.dcoDecode(raw as List<dynamic>);
+  }
 
   @protected
   String dco_decode_String(dynamic raw) {
@@ -162,6 +192,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void dco_decode_unit(dynamic raw) {
     return;
+  }
+
+  @protected
+  int dco_decode_usize(dynamic raw) {
+    return dcoDecodeI64OrU64(raw);
+  }
+
+  @protected
+  AppState
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          SseDeserializer deserializer) {
+    return AppState.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  AppState
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          SseDeserializer deserializer) {
+    return AppState.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
@@ -185,6 +236,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_decode_unit(SseDeserializer deserializer) {}
 
   @protected
+  int sse_decode_usize(SseDeserializer deserializer) {
+    return deserializer.buffer.getUint64();
+  }
+
+  @protected
   int sse_decode_i_32(SseDeserializer deserializer) {
     return deserializer.buffer.getInt32();
   }
@@ -195,6 +251,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PlatformPointer
+      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          AppState raw) {
+    // ignore: invalid_use_of_internal_member
+    return raw.cstEncode(move: true);
+  }
+
+  @protected
+  PlatformPointer
+      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          AppState raw) {
+    // ignore: invalid_use_of_internal_member
+    return raw.cstEncode();
+  }
+
+  @protected
   int cst_encode_u_8(int raw) {
     return raw;
   }
@@ -202,6 +274,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void cst_encode_unit(void raw) {
     return raw;
+  }
+
+  @protected
+  int cst_encode_usize(int raw) {
+    return raw;
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          AppState self, SseSerializer serializer) {
+    sse_encode_usize(self.sseEncode(move: true), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+          AppState self, SseSerializer serializer) {
+    sse_encode_usize(self.sseEncode(move: null), serializer);
   }
 
   @protected
@@ -223,6 +314,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_unit(void self, SseSerializer serializer) {}
+
+  @protected
+  void sse_encode_usize(int self, SseSerializer serializer) {
+    serializer.buffer.putUint64(self);
+  }
 
   @protected
   void sse_encode_i_32(int self, SseSerializer serializer) {

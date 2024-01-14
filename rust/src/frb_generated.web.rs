@@ -4,6 +4,7 @@
 // Section: imports
 
 use super::*;
+use crate::api::simple::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::transform_result_dco;
 use flutter_rust_bridge::for_generated::wasm_bindgen;
@@ -30,6 +31,21 @@ impl CstDecode<Vec<u8>> for Box<[u8]> {
         self.into_vec()
     }
 }
+impl
+    CstDecode<
+        flutter_rust_bridge::RustOpaque<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        >,
+    > for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(
+        self,
+    ) -> flutter_rust_bridge::RustOpaque<
+        flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+    > {
+        unsafe { flutter_rust_bridge::for_generated::cst_decode_rust_opaque(self) }
+    }
+}
 impl CstDecode<String> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
     fn cst_decode(self) -> String {
         self.as_string().expect("non-UTF-8 string, or not a string")
@@ -44,6 +60,11 @@ impl CstDecode<Vec<u8>> for flutter_rust_bridge::for_generated::wasm_bindgen::Js
 }
 impl CstDecode<u8> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
     fn cst_decode(self) -> u8 {
+        self.unchecked_into_f64() as _
+    }
+}
+impl CstDecode<usize> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+    fn cst_decode(self) -> usize {
         self.unchecked_into_f64() as _
     }
 }
@@ -66,6 +87,11 @@ pub fn dart_fn_deliver_output(
 }
 
 #[wasm_bindgen]
+pub fn wire_create_app_state(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    wire_create_app_state_impl(port_)
+}
+
+#[wasm_bindgen]
 pub fn wire_greet(name: String) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
     wire_greet_impl(name)
 }
@@ -76,6 +102,23 @@ pub fn wire_init_app(port_: flutter_rust_bridge::for_generated::MessagePort) {
 }
 
 #[wasm_bindgen]
-pub fn wire_search(port_: flutter_rust_bridge::for_generated::MessagePort, search: String) {
-    wire_search_impl(port_, search)
+pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        flutter_rust_bridge::for_generated::rust_arc_increment_strong_count::<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        >(ptr);
+    }
+}
+
+#[wasm_bindgen]
+pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+    ptr: *const std::ffi::c_void,
+) {
+    unsafe {
+        flutter_rust_bridge::for_generated::rust_arc_decrement_strong_count::<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        >(ptr);
+    }
 }

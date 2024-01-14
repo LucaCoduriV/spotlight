@@ -74,3 +74,8 @@ pub fn wire_greet(name: String) -> flutter_rust_bridge::for_generated::WireSyncR
 pub fn wire_init_app(port_: flutter_rust_bridge::for_generated::MessagePort) {
     wire_init_app_impl(port_)
 }
+
+#[wasm_bindgen]
+pub fn wire_search(port_: flutter_rust_bridge::for_generated::MessagePort, search: String) {
+    wire_search_impl(port_, search)
+}

@@ -15,11 +15,43 @@ class MyApp extends StatelessWidget {
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text('flutter_rust_bridge quickstart')),
-        body: Center(
-          child: Text(
-              'Action: Call Rust `greet("Tom")`\nResult: `${greet(name: "Tom")}`'),
+        body: Column(
+          children: [
+            ElevatedButton(
+                onPressed: () async {
+                  await search(search: "firefox");
+                },
+                child: Text("RUST !")),
+            const Searchbar(),
+            Expanded(
+              child: ListView(
+                children: [for (int i = 0; i < 10; i++) Entity()],
+              ),
+            ),
+          ],
         ),
       ),
+    );
+  }
+}
+
+class Searchbar extends StatelessWidget {
+  const Searchbar({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return TextField();
+  }
+}
+
+class Entity extends StatelessWidget {
+  const Entity({super.key});
+
+  @override
+  Widget build(BuildContext context) {
+    return ListTile(
+      title: Text("Title"),
+      subtitle: Text("Subtitle"),
     );
   }
 }

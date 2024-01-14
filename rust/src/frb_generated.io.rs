@@ -64,6 +64,14 @@ pub extern "C" fn frbgen_spotlight_wire_init_app(port_: i64) {
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_spotlight_wire_search(
+    port_: i64,
+    search: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_search_impl(port_, search)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_spotlight_cst_new_list_prim_u_8_strict(
     len: i32,
 ) -> *mut wire_cst_list_prim_u_8_strict {

@@ -97,6 +97,9 @@ class RustLibWire extends BaseWire {
       wire_greet(String name) => wasmModule.wire_greet(name);
 
   void wire_init_app(NativePortType port_) => wasmModule.wire_init_app(port_);
+
+  void wire_search(NativePortType port_, String search) =>
+      wasmModule.wire_search(port_, search);
 }
 
 @JS('wasm_bindgen')
@@ -118,4 +121,6 @@ class RustLibWasmModule implements WasmModule {
       wire_greet(String name);
 
   external void wire_init_app(NativePortType port_);
+
+  external void wire_search(NativePortType port_, String search);
 }

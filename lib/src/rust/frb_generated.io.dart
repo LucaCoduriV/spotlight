@@ -166,6 +166,24 @@ class RustLibWire implements BaseWire {
   late final _wire_init_app =
       _wire_init_appPtr.asFunction<void Function(int)>();
 
+  void wire_search(
+    int port_,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> search,
+  ) {
+    return _wire_search(
+      port_,
+      search,
+    );
+  }
+
+  late final _wire_searchPtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(
+                  ffi.Int64, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_spotlight_wire_search');
+  late final _wire_search = _wire_searchPtr.asFunction<
+      void Function(int, ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
   ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_new_list_prim_u_8_strict(
     int len,
   ) {

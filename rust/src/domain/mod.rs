@@ -1,28 +1,21 @@
 #![allow(dead_code)]
 
-pub mod linux;
+#[cfg(target_os = "linux")]
+mod linux;
+#[cfg(target_os = "linux")]
+use crate::linux::LinuxApplication;
 
-use std::{borrow::Borrow, rc::Rc};
+mod mock;
 
 use anyhow::Result;
 use fuzzy_matcher::{skim::SkimMatcherV2, FuzzyMatcher};
+use std::{borrow::Borrow, rc::Rc};
 
-use self::linux::LinuxApplication;
+use self::mock::FakeApplication;
 
 pub trait Application {
     fn name(&self) -> &str;
     fn exec(&self) -> Result<()>;
-}
-
-pub struct FakeApplication;
-impl Application for FakeApplication {
-    fn name(&self) -> &str {
-        "No name"
-    }
-
-    fn exec(&self) -> Result<()> {
-        Ok(())
-    }
 }
 
 #[derive(Clone)]
@@ -49,7 +42,11 @@ impl AppState {
         #[cfg(target_os = "linux")]
         let apps = LinuxApplication::get_applications();
         #[cfg(not(target_os = "linux"))]
-        let apps: Vec<FakeApplication> = Vec::new();
+        let apps: Vec<FakeApplication> = vec![
+            FakeApplication("Firefox".to_string()),
+            FakeApplication("Google Chrome".to_string()),
+            FakeApplication("Steam".to_string()),
+        ];
 
         let mut entities: Vec<_> = Vec::new();
         for app in apps.into_iter() {
@@ -115,13 +112,13 @@ mod test {
 
     use std::rc::Rc;
 
-    use crate::domain::{linux::LinuxApplication, Application, EntityType};
+    use crate::domain::EntityType;
 
-    use super::{Entity, FuzzyFinder};
+    use super::{mock::FakeApplication, Application, Entity, FuzzyFinder};
 
     #[test]
     fn run_app() {
-        let apps = LinuxApplication::get_applications();
+        let apps = FakeApplication::get_apps();
         let mut entities: Vec<_> = Vec::new();
         for app in apps.into_iter() {
             let entity = Entity {
@@ -142,7 +139,7 @@ mod test {
 
     #[test]
     fn search_app() {
-        let apps = LinuxApplication::get_applications();
+        let apps = FakeApplication::get_apps();
         let mut entities: Vec<_> = Vec::new();
         for app in apps.into_iter() {
             let entity = Entity {

@@ -1,9 +1,9 @@
 #![allow(dead_code)]
 
 #[cfg(target_os = "linux")]
-mod linux;
-#[cfg(target_os = "linux")]
 use crate::linux::LinuxApplication;
+#[cfg(target_os = "linux")]
+mod linux;
 
 mod mock;
 

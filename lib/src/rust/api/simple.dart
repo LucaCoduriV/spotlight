@@ -5,47 +5,74 @@
 
 import '../frb_generated.dart';
 import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
+import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
+part 'simple.freezed.dart';
 
 String greet({required String name, dynamic hint}) =>
     RustLib.instance.api.greet(name: name, hint: hint);
 
-Future<State> createState({dynamic hint}) =>
-    RustLib.instance.api.createState(hint: hint);
-
 Future<List<Entity>> search(
-        {required State obj, required String search, dynamic hint}) =>
+        {required StateApp obj, required String search, dynamic hint}) =>
     RustLib.instance.api.search(obj: obj, search: search, hint: hint);
 
-// Rust type: flutter_rust_bridge::RustOpaque<flutter_rust_bridge::for_generated::rust_async::RwLock<State>>
+// Rust type: flutter_rust_bridge::RustOpaque<flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>>
 @sealed
-class State extends RustOpaque {
-  State.dcoDecode(List<dynamic> wire) : super.dcoDecode(wire, _kStaticData);
+class StateApp extends RustOpaque {
+  StateApp.dcoDecode(List<dynamic> wire) : super.dcoDecode(wire, _kStaticData);
 
-  State.sseDecode(int ptr, int externalSizeOnNative)
+  StateApp.sseDecode(int ptr, int externalSizeOnNative)
       : super.sseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_State,
+        RustLib.instance.api.rust_arc_increment_strong_count_StateApp,
     rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_State,
+        RustLib.instance.api.rust_arc_decrement_strong_count_StateApp,
     rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_StatePtr,
+        RustLib.instance.api.rust_arc_decrement_strong_count_StateAppPtr,
   );
+
+  Future<void> execute({required int id, dynamic hint}) =>
+      RustLib.instance.api.stateAppExecute(
+        that: this,
+        id: id,
+      );
+
+  static Future<StateApp> newStateApp({dynamic hint}) =>
+      RustLib.instance.api.stateAppNew(hint: hint);
 }
 
 class Entity {
+  final int index;
   final String name;
+  final String? alias;
+  final String? description;
 
   const Entity({
+    required this.index,
     required this.name,
+    this.alias,
+    this.description,
   });
 
   @override
-  int get hashCode => name.hashCode;
+  int get hashCode =>
+      index.hashCode ^ name.hashCode ^ alias.hashCode ^ description.hashCode;
 
   @override
   bool operator ==(Object other) =>
       identical(this, other) ||
-      other is Entity && runtimeType == other.runtimeType && name == other.name;
+      other is Entity &&
+          runtimeType == other.runtimeType &&
+          index == other.index &&
+          name == other.name &&
+          alias == other.alias &&
+          description == other.description;
+}
+
+@freezed
+sealed class EntityError with _$EntityError implements FrbException {
+  const factory EntityError.unknown(
+    String field0,
+  ) = EntityError_Unknown;
 }

@@ -18,22 +18,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     required super.portManager,
   });
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_StatePtr => wire
-      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStatePtr;
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_StateAppPtr => wire
+      ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr;
 
   @protected
-  State
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
 
   @protected
-  State
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
 
   @protected
-  State
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
 
   @protected
@@ -43,10 +43,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Entity dco_decode_entity(dynamic raw);
 
   @protected
+  EntityError dco_decode_entity_error(dynamic raw);
+
+  @protected
   List<Entity> dco_decode_list_entity(dynamic raw);
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -58,18 +64,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int dco_decode_usize(dynamic raw);
 
   @protected
-  State
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
 
   @protected
-  State
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
 
   @protected
-  State
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
 
   @protected
@@ -79,10 +85,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Entity sse_decode_entity(SseDeserializer deserializer);
 
   @protected
+  EntityError sse_decode_entity_error(SseDeserializer deserializer);
+
+  @protected
   List<Entity> sse_decode_list_entity(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -122,24 +134,44 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_encode_opt_String(
+      String? raw) {
+    return raw == null ? ffi.nullptr : cst_encode_String(raw);
+  }
+
+  @protected
   void cst_api_fill_to_wire_entity(Entity apiObj, wire_cst_entity wireObj) {
+    wireObj.index = cst_encode_usize(apiObj.index);
     wireObj.name = cst_encode_String(apiObj.name);
+    wireObj.alias = cst_encode_opt_String(apiObj.alias);
+    wireObj.description = cst_encode_opt_String(apiObj.description);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_entity_error(
+      EntityError apiObj, wire_cst_entity_error wireObj) {
+    if (apiObj is EntityError_Unknown) {
+      var pre_field0 = cst_encode_String(apiObj.field0);
+      wireObj.tag = 0;
+      wireObj.kind.Unknown.field0 = pre_field0;
+      return;
+    }
   }
 
   @protected
   PlatformPointer
-      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw);
+      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw);
 
   @protected
   PlatformPointer
-      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw);
+      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw);
 
   @protected
   PlatformPointer
-      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw);
+      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw);
 
   @protected
   int cst_encode_u_8(int raw);
@@ -152,18 +184,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer);
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer);
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer);
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer);
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer);
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer);
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
@@ -172,11 +204,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_entity(Entity self, SseSerializer serializer);
 
   @protected
+  void sse_encode_entity_error(EntityError self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_entity(List<Entity> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
@@ -242,19 +280,38 @@ class RustLibWire implements BaseWire {
   late final _dart_fn_deliver_output = _dart_fn_deliver_outputPtr
       .asFunction<void Function(int, ffi.Pointer<ffi.Uint8>, int, int)>();
 
-  void wire_create_state(
+  void wire_StateApp_execute(
+    int port_,
+    ffi.Pointer<ffi.Void> that,
+    int id,
+  ) {
+    return _wire_StateApp_execute(
+      port_,
+      that,
+      id,
+    );
+  }
+
+  late final _wire_StateApp_executePtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Void Function(ffi.Int64, ffi.Pointer<ffi.Void>,
+              ffi.UintPtr)>>('frbgen_spotlight_wire_StateApp_execute');
+  late final _wire_StateApp_execute = _wire_StateApp_executePtr
+      .asFunction<void Function(int, ffi.Pointer<ffi.Void>, int)>();
+
+  void wire_StateApp_new(
     int port_,
   ) {
-    return _wire_create_state(
+    return _wire_StateApp_new(
       port_,
     );
   }
 
-  late final _wire_create_statePtr =
+  late final _wire_StateApp_newPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
-          'frbgen_spotlight_wire_create_state');
-  late final _wire_create_state =
-      _wire_create_statePtr.asFunction<void Function(int)>();
+          'frbgen_spotlight_wire_StateApp_new');
+  late final _wire_StateApp_new =
+      _wire_StateApp_newPtr.asFunction<void Function(int)>();
 
   WireSyncRust2DartDco wire_greet(
     ffi.Pointer<wire_cst_list_prim_u_8_strict> name,
@@ -309,35 +366,35 @@ class RustLibWire implements BaseWire {
           ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+    return _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
       ptr,
     );
   }
 
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStatePtr =
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_spotlight_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState');
-  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState =
-      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStatePtr
+          'frbgen_spotlight_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp');
+  late final _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp =
+      _rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
     ffi.Pointer<ffi.Void> ptr,
   ) {
-    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+    return _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
       ptr,
     );
   }
 
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStatePtr =
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr =
       _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Pointer<ffi.Void>)>>(
-          'frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState');
-  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState =
-      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStatePtr
+          'frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp');
+  late final _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp =
+      _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
   ffi.Pointer<wire_cst_list_entity> cst_new_list_entity(
@@ -389,7 +446,14 @@ final class wire_cst_list_prim_u_8_strict extends ffi.Struct {
 }
 
 final class wire_cst_entity extends ffi.Struct {
+  @ffi.UintPtr()
+  external int index;
+
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> name;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> alias;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> description;
 }
 
 final class wire_cst_list_entity extends ffi.Struct {
@@ -397,4 +461,19 @@ final class wire_cst_list_entity extends ffi.Struct {
 
   @ffi.Int32()
   external int len;
+}
+
+final class wire_cst_EntityError_Unknown extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
+}
+
+final class EntityErrorKind extends ffi.Union {
+  external wire_cst_EntityError_Unknown Unknown;
+}
+
+final class wire_cst_entity_error extends ffi.Struct {
+  @ffi.Int32()
+  external int tag;
+
+  external EntityErrorKind kind;
 }

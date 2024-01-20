@@ -17,22 +17,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     required super.portManager,
   });
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_StatePtr => wire
-      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState;
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_StateAppPtr => wire
+      .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp;
 
   @protected
-  State
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
 
   @protected
-  State
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
 
   @protected
-  State
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
 
   @protected
@@ -42,10 +42,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Entity dco_decode_entity(dynamic raw);
 
   @protected
+  EntityError dco_decode_entity_error(dynamic raw);
+
+  @protected
   List<Entity> dco_decode_list_entity(dynamic raw);
 
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw);
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -57,18 +63,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int dco_decode_usize(dynamic raw);
 
   @protected
-  State
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
 
   @protected
-  State
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
 
   @protected
-  State
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
 
   @protected
@@ -78,10 +84,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Entity sse_decode_entity(SseDeserializer deserializer);
 
   @protected
+  EntityError sse_decode_entity_error(SseDeserializer deserializer);
+
+  @protected
   List<Entity> sse_decode_list_entity(SseDeserializer deserializer);
 
   @protected
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer);
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -105,7 +117,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   List<dynamic> cst_encode_entity(Entity raw) {
-    return [cst_encode_String(raw.name)];
+    return [
+      cst_encode_usize(raw.index),
+      cst_encode_String(raw.name),
+      cst_encode_opt_String(raw.alias),
+      cst_encode_opt_String(raw.description)
+    ];
+  }
+
+  @protected
+  List<dynamic> cst_encode_entity_error(EntityError raw) {
+    if (raw is EntityError_Unknown) {
+      return [0, cst_encode_String(raw.field0)];
+    }
+
+    throw Exception('unreachable');
   }
 
   @protected
@@ -119,19 +145,24 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
-  PlatformPointer
-      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw);
+  String? cst_encode_opt_String(String? raw) {
+    return raw == null ? null : cst_encode_String(raw);
+  }
 
   @protected
   PlatformPointer
-      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw);
+      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw);
 
   @protected
   PlatformPointer
-      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw);
+      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw);
+
+  @protected
+  PlatformPointer
+      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw);
 
   @protected
   int cst_encode_u_8(int raw);
@@ -144,18 +175,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer);
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer);
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer);
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer);
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer);
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer);
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer);
@@ -164,11 +195,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_entity(Entity self, SseSerializer serializer);
 
   @protected
+  void sse_encode_entity_error(EntityError self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_entity(List<Entity> self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_prim_u_8_strict(
       Uint8List self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
@@ -196,8 +233,11 @@ class RustLibWire extends BaseWire {
       wasmModule.dart_fn_deliver_output(
           call_id, ptr_, rust_vec_len_, data_len_);
 
-  void wire_create_state(NativePortType port_) =>
-      wasmModule.wire_create_state(port_);
+  void wire_StateApp_execute(NativePortType port_, Object that, int id) =>
+      wasmModule.wire_StateApp_execute(port_, that, id);
+
+  void wire_StateApp_new(NativePortType port_) =>
+      wasmModule.wire_StateApp_new(port_);
 
   dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_greet(String name) => wasmModule.wire_greet(name);
@@ -207,16 +247,16 @@ class RustLibWire extends BaseWire {
   void wire_search(NativePortType port_, Object obj, String search) =>
       wasmModule.wire_search(port_, obj, search);
 
-  void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic ptr) =>
       wasmModule
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
               ptr);
 
-  void rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  void rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic ptr) =>
       wasmModule
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
               ptr);
 }
 
@@ -235,7 +275,10 @@ class RustLibWasmModule implements WasmModule {
   external void dart_fn_deliver_output(int call_id,
       PlatformGeneralizedUint8ListPtr ptr_, int rust_vec_len_, int data_len_);
 
-  external void wire_create_state(NativePortType port_);
+  external void wire_StateApp_execute(
+      NativePortType port_, Object that, int id);
+
+  external void wire_StateApp_new(NativePortType port_);
 
   external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
       wire_greet(String name);
@@ -245,10 +288,10 @@ class RustLibWasmModule implements WasmModule {
   external void wire_search(NativePortType port_, Object obj, String search);
 
   external void
-      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+      rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic ptr);
 
   external void
-      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+      rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic ptr);
 }

@@ -61,20 +61,25 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<State> createState({dynamic hint});
+  Future<void> stateAppExecute(
+      {required StateApp that, required int id, dynamic hint});
+
+  Future<StateApp> stateAppNew({dynamic hint});
 
   String greet({required String name, dynamic hint});
 
   Future<void> initApp({dynamic hint});
 
   Future<List<Entity>> search(
-      {required State obj, required String search, dynamic hint});
+      {required StateApp obj, required String search, dynamic hint});
 
-  RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_State;
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_StateApp;
 
-  RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_State;
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_StateApp;
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_StatePtr;
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_StateAppPtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -86,25 +91,52 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<State> createState({dynamic hint}) {
+  Future<void> stateAppExecute(
+      {required StateApp that, required int id, dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        return wire.wire_create_state(port_);
+        var arg0 =
+            cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+                that);
+        var arg1 = cst_encode_usize(id);
+        return wire.wire_StateApp_execute(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_entity_error,
+      ),
+      constMeta: kStateAppExecuteConstMeta,
+      argValues: [that, id],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kStateAppExecuteConstMeta => const TaskConstMeta(
+        debugName: "StateApp_execute",
+        argNames: ["that", "id"],
+      );
+
+  @override
+  Future<StateApp> stateAppNew({dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        return wire.wire_StateApp_new(port_);
       },
       codec: DcoCodec(
         decodeSuccessData:
-            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState,
+            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp,
         decodeErrorData: null,
       ),
-      constMeta: kCreateStateConstMeta,
+      constMeta: kStateAppNewConstMeta,
       argValues: [],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kCreateStateConstMeta => const TaskConstMeta(
-        debugName: "create_state",
+  TaskConstMeta get kStateAppNewConstMeta => const TaskConstMeta(
+        debugName: "StateApp_new",
         argNames: [],
       );
 
@@ -155,11 +187,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<List<Entity>> search(
-      {required State obj, required String search, dynamic hint}) {
+      {required StateApp obj, required String search, dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 =
-            cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+            cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
                 obj);
         var arg1 = cst_encode_String(search);
         return wire.wire_search(port_, arg0, arg1);
@@ -180,31 +212,33 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: ["obj", "search"],
       );
 
-  RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_State =>
-      wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState;
+  RustArcIncrementStrongCountFnType
+      get rust_arc_increment_strong_count_StateApp => wire
+          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp;
 
-  RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_State =>
-      wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState;
+  RustArcDecrementStrongCountFnType
+      get rust_arc_decrement_strong_count_StateApp => wire
+          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp;
 
   @protected
-  State
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw) {
-    return State.dcoDecode(raw as List<dynamic>);
+    return StateApp.dcoDecode(raw as List<dynamic>);
   }
 
   @protected
-  State
-      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw) {
-    return State.dcoDecode(raw as List<dynamic>);
+    return StateApp.dcoDecode(raw as List<dynamic>);
   }
 
   @protected
-  State
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw) {
-    return State.dcoDecode(raw as List<dynamic>);
+    return StateApp.dcoDecode(raw as List<dynamic>);
   }
 
   @protected
@@ -215,11 +249,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   Entity dco_decode_entity(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 1)
-      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    if (arr.length != 4)
+      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
     return Entity(
-      name: dco_decode_String(arr[0]),
+      index: dco_decode_usize(arr[0]),
+      name: dco_decode_String(arr[1]),
+      alias: dco_decode_opt_String(arr[2]),
+      description: dco_decode_opt_String(arr[3]),
     );
+  }
+
+  @protected
+  EntityError dco_decode_entity_error(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return EntityError_Unknown(
+          dco_decode_String(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
   }
 
   @protected
@@ -230,6 +279,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   Uint8List dco_decode_list_prim_u_8_strict(dynamic raw) {
     return raw as Uint8List;
+  }
+
+  @protected
+  String? dco_decode_opt_String(dynamic raw) {
+    return raw == null ? null : dco_decode_String(raw);
   }
 
   @protected
@@ -248,26 +302,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  State
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer) {
-    return State.sseDecode(
+    return StateApp.sseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
-  State
-      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer) {
-    return State.sseDecode(
+    return StateApp.sseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
-  State
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+  StateApp
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer) {
-    return State.sseDecode(
+    return StateApp.sseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -279,8 +333,27 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   Entity sse_decode_entity(SseDeserializer deserializer) {
+    var var_index = sse_decode_usize(deserializer);
     var var_name = sse_decode_String(deserializer);
-    return Entity(name: var_name);
+    var var_alias = sse_decode_opt_String(deserializer);
+    var var_description = sse_decode_opt_String(deserializer);
+    return Entity(
+        index: var_index,
+        name: var_name,
+        alias: var_alias,
+        description: var_description);
+  }
+
+  @protected
+  EntityError sse_decode_entity_error(SseDeserializer deserializer) {
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_field0 = sse_decode_String(deserializer);
+        return EntityError_Unknown(var_field0);
+      default:
+        throw UnimplementedError('');
+    }
   }
 
   @protected
@@ -297,6 +370,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Uint8List sse_decode_list_prim_u_8_strict(SseDeserializer deserializer) {
     var len_ = sse_decode_i_32(deserializer);
     return deserializer.buffer.getUint8List(len_);
+  }
+
+  @protected
+  String? sse_decode_opt_String(SseDeserializer deserializer) {
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
   }
 
   @protected
@@ -324,24 +406,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   PlatformPointer
-      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw) {
+      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw) {
     // ignore: invalid_use_of_internal_member
     return raw.cstEncode(move: true);
   }
 
   @protected
   PlatformPointer
-      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw) {
+      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw) {
     // ignore: invalid_use_of_internal_member
     return raw.cstEncode(move: false);
   }
 
   @protected
   PlatformPointer
-      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State raw) {
+      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw) {
     // ignore: invalid_use_of_internal_member
     return raw.cstEncode();
   }
@@ -363,22 +445,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer) {
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer) {
     sse_encode_usize(self.sseEncode(move: true), serializer);
   }
 
   @protected
   void
-      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer) {
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer) {
     sse_encode_usize(self.sseEncode(move: false), serializer);
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
-          State self, SseSerializer serializer) {
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer) {
     sse_encode_usize(self.sseEncode(move: null), serializer);
   }
 
@@ -389,7 +471,19 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void sse_encode_entity(Entity self, SseSerializer serializer) {
+    sse_encode_usize(self.index, serializer);
     sse_encode_String(self.name, serializer);
+    sse_encode_opt_String(self.alias, serializer);
+    sse_encode_opt_String(self.description, serializer);
+  }
+
+  @protected
+  void sse_encode_entity_error(EntityError self, SseSerializer serializer) {
+    switch (self) {
+      case EntityError_Unknown(field0: final field0):
+        sse_encode_i_32(0, serializer);
+        sse_encode_String(field0, serializer);
+    }
   }
 
   @protected
@@ -405,6 +499,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       Uint8List self, SseSerializer serializer) {
     sse_encode_i_32(self.length, serializer);
     serializer.buffer.putUint8List(self);
+  }
+
+  @protected
+  void sse_encode_opt_String(String? self, SseSerializer serializer) {
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_String(self, serializer);
+    }
   }
 
   @protected

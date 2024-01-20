@@ -33,10 +33,37 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
-fn wire_create_state_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
+fn wire_StateApp_execute_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<
+        flutter_rust_bridge::RustOpaque<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
+        >,
+    >,
+    id: impl CstDecode<usize>,
+) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "create_state",
+            debug_name: "StateApp_execute",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_id = id.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    let api_that = api_that.rust_auto_opaque_decode_sync_ref();
+                    crate::api::simple::StateApp::execute(&api_that, api_id)
+                })())
+            }
+        },
+    )
+}
+fn wire_StateApp_new_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "StateApp_new",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -45,7 +72,7 @@ fn wire_create_state_impl(port_: flutter_rust_bridge::for_generated::MessagePort
                 transform_result_dco((move || {
                     Result::<_, ()>::Ok(
                         flutter_rust_bridge::for_generated::rust_auto_opaque_encode(
-                            crate::api::simple::create_state(),
+                            crate::api::simple::StateApp::new(),
                         ),
                     )
                 })())
@@ -90,7 +117,7 @@ fn wire_search_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     obj: impl CstDecode<
         flutter_rust_bridge::RustOpaque<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
         >,
     >,
     search: impl CstDecode<String>,
@@ -130,7 +157,7 @@ impl CstDecode<usize> for usize {
 }
 impl SseDecode
     for flutter_rust_bridge::RustOpaque<
-        flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+        flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
     >
 {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -148,8 +175,31 @@ impl SseDecode for String {
 
 impl SseDecode for crate::api::simple::Entity {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_index = <usize>::sse_decode(deserializer);
         let mut var_name = <String>::sse_decode(deserializer);
-        return crate::api::simple::Entity { name: var_name };
+        let mut var_alias = <Option<String>>::sse_decode(deserializer);
+        let mut var_description = <Option<String>>::sse_decode(deserializer);
+        return crate::api::simple::Entity {
+            index: var_index,
+            name: var_name,
+            alias: var_alias,
+            description: var_description,
+        };
+    }
+}
+
+impl SseDecode for crate::api::simple::EntityError {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_field0 = <String>::sse_decode(deserializer);
+                return crate::api::simple::EntityError::Unknown(var_field0);
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
     }
 }
 
@@ -172,6 +222,16 @@ impl SseDecode for Vec<u8> {
             ans_.push(<u8>::sse_decode(deserializer));
         }
         return ans_;
+    }
+}
+
+impl SseDecode for Option<String> {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<String>::sse_decode(deserializer));
+        } else {
+            return None;
+        }
     }
 }
 
@@ -207,7 +267,13 @@ impl SseDecode for bool {
 
 impl flutter_rust_bridge::IntoDart for crate::api::simple::Entity {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
-        [self.name.into_into_dart().into_dart()].into_dart()
+        [
+            self.index.into_into_dart().into_dart(),
+            self.name.into_into_dart().into_dart(),
+            self.alias.into_into_dart().into_dart(),
+            self.description.into_into_dart().into_dart(),
+        ]
+        .into_dart()
     }
 }
 impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::simple::Entity {}
@@ -216,10 +282,30 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::Entity> for crate::ap
         self
     }
 }
+impl flutter_rust_bridge::IntoDart for crate::api::simple::EntityError {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::simple::EntityError::Unknown(field0) => {
+                [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::simple::EntityError
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::EntityError>
+    for crate::api::simple::EntityError
+{
+    fn into_into_dart(self) -> crate::api::simple::EntityError {
+        self
+    }
+}
 
 impl SseEncode
     for flutter_rust_bridge::RustOpaque<
-        flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+        flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
     >
 {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -237,7 +323,21 @@ impl SseEncode for String {
 
 impl SseEncode for crate::api::simple::Entity {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <usize>::sse_encode(self.index, serializer);
         <String>::sse_encode(self.name, serializer);
+        <Option<String>>::sse_encode(self.alias, serializer);
+        <Option<String>>::sse_encode(self.description, serializer);
+    }
+}
+
+impl SseEncode for crate::api::simple::EntityError {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::simple::EntityError::Unknown(field0) => {
+                <i32>::sse_encode(0, serializer);
+                <String>::sse_encode(field0, serializer);
+            }
+        }
     }
 }
 
@@ -255,6 +355,15 @@ impl SseEncode for Vec<u8> {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
             <u8>::sse_encode(item, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<String> {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <String>::sse_encode(value, serializer);
         }
     }
 }

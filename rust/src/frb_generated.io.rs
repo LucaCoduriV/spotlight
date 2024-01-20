@@ -14,14 +14,14 @@ use flutter_rust_bridge::{Handler, IntoIntoDart};
 impl
     CstDecode<
         flutter_rust_bridge::RustOpaque<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
         >,
     > for *const std::ffi::c_void
 {
     fn cst_decode(
         self,
     ) -> flutter_rust_bridge::RustOpaque<
-        flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+        flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
     > {
         unsafe { flutter_rust_bridge::for_generated::cst_decode_rust_opaque(self) }
     }
@@ -35,7 +35,21 @@ impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
 impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
     fn cst_decode(self) -> crate::api::simple::Entity {
         crate::api::simple::Entity {
+            index: self.index.cst_decode(),
             name: self.name.cst_decode(),
+            alias: self.alias.cst_decode(),
+            description: self.description.cst_decode(),
+        }
+    }
+}
+impl CstDecode<crate::api::simple::EntityError> for wire_cst_entity_error {
+    fn cst_decode(self) -> crate::api::simple::EntityError {
+        match self.tag {
+            0 => {
+                let ans = unsafe { self.kind.Unknown };
+                crate::api::simple::EntityError::Unknown(ans.field0.cst_decode())
+            }
+            _ => unreachable!(),
         }
     }
 }
@@ -68,11 +82,27 @@ impl<T> NewWithNullPtr for *mut T {
 impl NewWithNullPtr for wire_cst_entity {
     fn new_with_null_ptr() -> Self {
         Self {
+            index: Default::default(),
             name: core::ptr::null_mut(),
+            alias: core::ptr::null_mut(),
+            description: core::ptr::null_mut(),
         }
     }
 }
 impl Default for wire_cst_entity {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_entity_error {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            tag: -1,
+            kind: EntityErrorKind { nil__: () },
+        }
+    }
+}
+impl Default for wire_cst_entity_error {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -96,8 +126,17 @@ pub extern "C" fn frbgen_spotlight_dart_fn_deliver_output(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_spotlight_wire_create_state(port_: i64) {
-    wire_create_state_impl(port_)
+pub extern "C" fn frbgen_spotlight_wire_StateApp_execute(
+    port_: i64,
+    that: *const std::ffi::c_void,
+    id: usize,
+) {
+    wire_StateApp_execute_impl(port_, that, id)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_spotlight_wire_StateApp_new(port_: i64) {
+    wire_StateApp_new_impl(port_)
 }
 
 #[no_mangle]
@@ -122,23 +161,23 @@ pub extern "C" fn frbgen_spotlight_wire_search(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_spotlight_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+pub extern "C" fn frbgen_spotlight_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
     ptr: *const std::ffi::c_void,
 ) {
     unsafe {
         flutter_rust_bridge::for_generated::rust_arc_increment_strong_count::<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
         >(ptr);
     }
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+pub extern "C" fn frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
     ptr: *const std::ffi::c_void,
 ) {
     unsafe {
         flutter_rust_bridge::for_generated::rust_arc_decrement_strong_count::<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
         >(ptr);
     }
 }
@@ -169,7 +208,27 @@ pub extern "C" fn frbgen_spotlight_cst_new_list_prim_u_8_strict(
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct wire_cst_entity {
+    index: usize,
     name: *mut wire_cst_list_prim_u_8_strict,
+    alias: *mut wire_cst_list_prim_u_8_strict,
+    description: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_entity_error {
+    tag: i32,
+    kind: EntityErrorKind,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub union EntityErrorKind {
+    Unknown: wire_cst_EntityError_Unknown,
+    nil__: (),
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_EntityError_Unknown {
+    field0: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

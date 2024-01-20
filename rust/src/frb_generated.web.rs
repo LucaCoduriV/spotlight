@@ -35,8 +35,8 @@ impl CstDecode<crate::api::simple::Entity>
             .unwrap();
         assert_eq!(
             self_.length(),
-            4,
-            "Expected 4 elements, got {}",
+            5,
+            "Expected 5 elements, got {}",
             self_.length()
         );
         crate::api::simple::Entity {
@@ -44,6 +44,7 @@ impl CstDecode<crate::api::simple::Entity>
             name: self_.get(1).cst_decode(),
             alias: self_.get(2).cst_decode(),
             description: self_.get(3).cst_decode(),
+            icon_path: self_.get(4).cst_decode(),
         }
     }
 }

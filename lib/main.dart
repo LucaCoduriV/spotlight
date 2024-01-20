@@ -1,33 +1,51 @@
 import 'package:flutter/material.dart';
+import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/api/simple.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
+import 'package:watch_it/watch_it.dart';
 
 Future<void> main() async {
   await RustLib.init();
+  final service = di.registerSingleton<Service>(Service());
+  service.init();
   runApp(const MyApp());
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
   const MyApp({super.key});
 
   @override
+  State<MyApp> createState() => _MyAppState();
+}
+
+class _MyAppState extends State<MyApp> {
+  final text = TextEditingController();
+  @override
+  void initState() {
+    text.addListener(() {
+      di.get<Service>().search(text.text);
+    });
+    super.initState();
+  }
+
+  @override
   Widget build(BuildContext context) {
+    final entities = watchPropertyValue((Service s) => s.entities);
     return MaterialApp(
       home: Scaffold(
         appBar: AppBar(title: const Text('flutter_rust_bridge quickstart')),
         body: Column(
           children: [
-            ElevatedButton(
-                onPressed: () async {
-                  final state = await StateApp.newStateApp();
-                  final result = await search(obj: state, search: "firefox");
-                  state.execute(id: result[0].index);
-                },
-                child: Text("RUST !")),
-            const Searchbar(),
+            TextField(controller: text),
             Expanded(
               child: ListView(
-                children: [for (int i = 0; i < 10; i++) Entity()],
+                children: entities
+                    .map((e) => Entity(
+                          index: e.index,
+                          title: e.name,
+                          subtitle: e.description ?? "",
+                        ))
+                    .toList(),
               ),
             ),
           ],
@@ -37,23 +55,24 @@ class MyApp extends StatelessWidget {
   }
 }
 
-class Searchbar extends StatelessWidget {
-  const Searchbar({super.key});
-
-  @override
-  Widget build(BuildContext context) {
-    return TextField();
-  }
-}
-
 class Entity extends StatelessWidget {
-  const Entity({super.key});
+  final String title;
+  final String subtitle;
+  final int index;
+  const Entity(
+      {super.key,
+      required this.index,
+      required this.title,
+      required this.subtitle});
 
   @override
   Widget build(BuildContext context) {
     return ListTile(
-      title: Text("Title"),
-      subtitle: Text("Subtitle"),
+      title: Text(title),
+      subtitle: Text(subtitle),
+      onTap: () {
+        di.get<Service>().execute(index);
+      },
     );
   }
 }

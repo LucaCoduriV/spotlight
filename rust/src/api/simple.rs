@@ -41,6 +41,7 @@ pub struct Entity {
     pub name: String,
     pub alias: Option<String>,
     pub description: Option<String>,
+    pub icon_path: Option<String>,
 }
 
 pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
@@ -52,6 +53,7 @@ pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
             name: ent.name().to_string(),
             alias: ent.alias().map(|v| v.to_string()),
             description: ent.description().map(|v| v.to_string()),
+            icon_path: ent.icon_path().map(|v| v.to_string()),
         })
         .collect()
 }

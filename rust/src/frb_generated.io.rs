@@ -39,6 +39,7 @@ impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
             name: self.name.cst_decode(),
             alias: self.alias.cst_decode(),
             description: self.description.cst_decode(),
+            icon_path: self.icon_path.cst_decode(),
         }
     }
 }
@@ -86,6 +87,7 @@ impl NewWithNullPtr for wire_cst_entity {
             name: core::ptr::null_mut(),
             alias: core::ptr::null_mut(),
             description: core::ptr::null_mut(),
+            icon_path: core::ptr::null_mut(),
         }
     }
 }
@@ -212,6 +214,7 @@ pub struct wire_cst_entity {
     name: *mut wire_cst_list_prim_u_8_strict,
     alias: *mut wire_cst_list_prim_u_8_strict,
     description: *mut wire_cst_list_prim_u_8_strict,
+    icon_path: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

@@ -39,6 +39,7 @@ dependencies:
     path: rust_builder
   flutter_rust_bridge: 2.0.0-dev.17
   freezed_annotation: ^2.4.1
+  watch_it: ^1.3.0
 
 dev_dependencies:
   flutter_test:

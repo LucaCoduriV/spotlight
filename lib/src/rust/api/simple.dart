@@ -47,17 +47,23 @@ class Entity {
   final String name;
   final String? alias;
   final String? description;
+  final String? iconPath;
 
   const Entity({
     required this.index,
     required this.name,
     this.alias,
     this.description,
+    this.iconPath,
   });
 
   @override
   int get hashCode =>
-      index.hashCode ^ name.hashCode ^ alias.hashCode ^ description.hashCode;
+      index.hashCode ^
+      name.hashCode ^
+      alias.hashCode ^
+      description.hashCode ^
+      iconPath.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -67,7 +73,8 @@ class Entity {
           index == other.index &&
           name == other.name &&
           alias == other.alias &&
-          description == other.description;
+          description == other.description &&
+          iconPath == other.iconPath;
 }
 
 @freezed

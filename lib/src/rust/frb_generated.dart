@@ -249,13 +249,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   Entity dco_decode_entity(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 4)
-      throw Exception('unexpected arr length: expect 4 but see ${arr.length}');
+    if (arr.length != 5)
+      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
     return Entity(
       index: dco_decode_usize(arr[0]),
       name: dco_decode_String(arr[1]),
       alias: dco_decode_opt_String(arr[2]),
       description: dco_decode_opt_String(arr[3]),
+      iconPath: dco_decode_opt_String(arr[4]),
     );
   }
 
@@ -337,11 +338,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_name = sse_decode_String(deserializer);
     var var_alias = sse_decode_opt_String(deserializer);
     var var_description = sse_decode_opt_String(deserializer);
+    var var_iconPath = sse_decode_opt_String(deserializer);
     return Entity(
         index: var_index,
         name: var_name,
         alias: var_alias,
-        description: var_description);
+        description: var_description,
+        iconPath: var_iconPath);
   }
 
   @protected
@@ -475,6 +478,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_String(self.name, serializer);
     sse_encode_opt_String(self.alias, serializer);
     sse_encode_opt_String(self.description, serializer);
+    sse_encode_opt_String(self.iconPath, serializer);
   }
 
   @protected

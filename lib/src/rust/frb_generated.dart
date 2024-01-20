@@ -61,19 +61,20 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<AppState> createAppState({dynamic hint});
+  Future<State> createState({dynamic hint});
 
   String greet({required String name, dynamic hint});
 
   Future<void> initApp({dynamic hint});
 
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_AppState;
+  Future<List<Entity>> search(
+      {required State obj, required String search, dynamic hint});
 
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_AppState;
+  RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_State;
 
-  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_AppStatePtr;
+  RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_State;
+
+  CrossPlatformFinalizerArg get rust_arc_decrement_strong_count_StatePtr;
 }
 
 class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
@@ -85,25 +86,25 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<AppState> createAppState({dynamic hint}) {
+  Future<State> createState({dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
-        return wire.wire_create_app_state(port_);
+        return wire.wire_create_state(port_);
       },
       codec: DcoCodec(
         decodeSuccessData:
-            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState,
+            dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState,
         decodeErrorData: null,
       ),
-      constMeta: kCreateAppStateConstMeta,
+      constMeta: kCreateStateConstMeta,
       argValues: [],
       apiImpl: this,
       hint: hint,
     ));
   }
 
-  TaskConstMeta get kCreateAppStateConstMeta => const TaskConstMeta(
-        debugName: "create_app_state",
+  TaskConstMeta get kCreateStateConstMeta => const TaskConstMeta(
+        debugName: "create_state",
         argNames: [],
       );
 
@@ -152,31 +153,78 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: [],
       );
 
-  RustArcIncrementStrongCountFnType
-      get rust_arc_increment_strong_count_AppState => wire
-          .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState;
+  @override
+  Future<List<Entity>> search(
+      {required State obj, required String search, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 =
+            cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+                obj);
+        var arg1 = cst_encode_String(search);
+        return wire.wire_search(port_, arg0, arg1);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_list_entity,
+        decodeErrorData: null,
+      ),
+      constMeta: kSearchConstMeta,
+      argValues: [obj, search],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
 
-  RustArcDecrementStrongCountFnType
-      get rust_arc_decrement_strong_count_AppState => wire
-          .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState;
+  TaskConstMeta get kSearchConstMeta => const TaskConstMeta(
+        debugName: "search",
+        argNames: ["obj", "search"],
+      );
+
+  RustArcIncrementStrongCountFnType get rust_arc_increment_strong_count_State =>
+      wire.rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState;
+
+  RustArcDecrementStrongCountFnType get rust_arc_decrement_strong_count_State =>
+      wire.rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState;
 
   @protected
-  AppState
-      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+  State
+      dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
           dynamic raw) {
-    return AppState.dcoDecode(raw as List<dynamic>);
+    return State.dcoDecode(raw as List<dynamic>);
   }
 
   @protected
-  AppState
-      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+  State
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
           dynamic raw) {
-    return AppState.dcoDecode(raw as List<dynamic>);
+    return State.dcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  State
+      dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          dynamic raw) {
+    return State.dcoDecode(raw as List<dynamic>);
   }
 
   @protected
   String dco_decode_String(dynamic raw) {
     return raw as String;
+  }
+
+  @protected
+  Entity dco_decode_entity(dynamic raw) {
+    final arr = raw as List<dynamic>;
+    if (arr.length != 1)
+      throw Exception('unexpected arr length: expect 1 but see ${arr.length}');
+    return Entity(
+      name: dco_decode_String(arr[0]),
+    );
+  }
+
+  @protected
+  List<Entity> dco_decode_list_entity(dynamic raw) {
+    return (raw as List<dynamic>).map(dco_decode_entity).toList();
   }
 
   @protected
@@ -200,18 +248,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  AppState
-      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+  State
+      sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
           SseDeserializer deserializer) {
-    return AppState.sseDecode(
+    return State.sseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
   @protected
-  AppState
-      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+  State
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
           SseDeserializer deserializer) {
-    return AppState.sseDecode(
+    return State.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  State
+      sse_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          SseDeserializer deserializer) {
+    return State.sseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
   }
 
@@ -219,6 +275,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String sse_decode_String(SseDeserializer deserializer) {
     var inner = sse_decode_list_prim_u_8_strict(deserializer);
     return utf8.decoder.convert(inner);
+  }
+
+  @protected
+  Entity sse_decode_entity(SseDeserializer deserializer) {
+    var var_name = sse_decode_String(deserializer);
+    return Entity(name: var_name);
+  }
+
+  @protected
+  List<Entity> sse_decode_list_entity(SseDeserializer deserializer) {
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <Entity>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_entity(deserializer));
+    }
+    return ans_;
   }
 
   @protected
@@ -252,16 +324,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   PlatformPointer
-      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
-          AppState raw) {
+      cst_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          State raw) {
     // ignore: invalid_use_of_internal_member
     return raw.cstEncode(move: true);
   }
 
   @protected
   PlatformPointer
-      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
-          AppState raw) {
+      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          State raw) {
+    // ignore: invalid_use_of_internal_member
+    return raw.cstEncode(move: false);
+  }
+
+  @protected
+  PlatformPointer
+      cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          State raw) {
     // ignore: invalid_use_of_internal_member
     return raw.cstEncode();
   }
@@ -283,21 +363,41 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @protected
   void
-      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
-          AppState self, SseSerializer serializer) {
+      sse_encode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          State self, SseSerializer serializer) {
     sse_encode_usize(self.sseEncode(move: true), serializer);
   }
 
   @protected
   void
-      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
-          AppState self, SseSerializer serializer) {
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          State self, SseSerializer serializer) {
+    sse_encode_usize(self.sseEncode(move: false), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
+          State self, SseSerializer serializer) {
     sse_encode_usize(self.sseEncode(move: null), serializer);
   }
 
   @protected
   void sse_encode_String(String self, SseSerializer serializer) {
     sse_encode_list_prim_u_8_strict(utf8.encoder.convert(self), serializer);
+  }
+
+  @protected
+  void sse_encode_entity(Entity self, SseSerializer serializer) {
+    sse_encode_String(self.name, serializer);
+  }
+
+  @protected
+  void sse_encode_list_entity(List<Entity> self, SseSerializer serializer) {
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_entity(item, serializer);
+    }
   }
 
   @protected

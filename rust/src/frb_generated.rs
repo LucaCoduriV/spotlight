@@ -33,10 +33,10 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
-fn wire_create_app_state_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
+fn wire_create_state_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "create_app_state",
+            debug_name: "create_state",
             port: Some(port_),
             mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
         },
@@ -45,7 +45,7 @@ fn wire_create_app_state_impl(port_: flutter_rust_bridge::for_generated::Message
                 transform_result_dco((move || {
                     Result::<_, ()>::Ok(
                         flutter_rust_bridge::for_generated::rust_auto_opaque_encode(
-                            crate::api::simple::create_app_state(),
+                            crate::api::simple::create_state(),
                         ),
                     )
                 })())
@@ -86,6 +86,35 @@ fn wire_init_app_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
         },
     )
 }
+fn wire_search_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    obj: impl CstDecode<
+        flutter_rust_bridge::RustOpaque<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
+        >,
+    >,
+    search: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "search",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_obj = obj.cst_decode();
+            let api_search = search.cst_decode();
+            move |context| {
+                transform_result_dco((move || {
+                    let api_obj = api_obj.rust_auto_opaque_decode_sync_ref();
+                    Result::<_, flutter_rust_bridge::for_generated::anyhow::Error>::Ok(
+                        crate::api::simple::search(&api_obj, api_search),
+                    )
+                })())
+            }
+        },
+    )
+}
 
 // Section: dart2rust
 
@@ -101,7 +130,7 @@ impl CstDecode<usize> for usize {
 }
 impl SseDecode
     for flutter_rust_bridge::RustOpaque<
-        flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
     >
 {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
@@ -114,6 +143,24 @@ impl SseDecode for String {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<u8>>::sse_decode(deserializer);
         return String::from_utf8(inner).unwrap();
+    }
+}
+
+impl SseDecode for crate::api::simple::Entity {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut var_name = <String>::sse_decode(deserializer);
+        return crate::api::simple::Entity { name: var_name };
+    }
+}
+
+impl SseDecode for Vec<crate::api::simple::Entity> {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::simple::Entity>::sse_decode(deserializer));
+        }
+        return ans_;
     }
 }
 
@@ -158,9 +205,21 @@ impl SseDecode for bool {
 
 // Section: rust2dart
 
+impl flutter_rust_bridge::IntoDart for crate::api::simple::Entity {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        [self.name.into_into_dart().into_dart()].into_dart()
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::simple::Entity {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::Entity> for crate::api::simple::Entity {
+    fn into_into_dart(self) -> crate::api::simple::Entity {
+        self
+    }
+}
+
 impl SseEncode
     for flutter_rust_bridge::RustOpaque<
-        flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
     >
 {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
@@ -173,6 +232,21 @@ impl SseEncode
 impl SseEncode for String {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <Vec<u8>>::sse_encode(self.into_bytes(), serializer);
+    }
+}
+
+impl SseEncode for crate::api::simple::Entity {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(self.name, serializer);
+    }
+}
+
+impl SseEncode for Vec<crate::api::simple::Entity> {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::simple::Entity>::sse_encode(item, serializer);
+        }
     }
 }
 

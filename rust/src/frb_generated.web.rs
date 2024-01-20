@@ -26,6 +26,35 @@ impl CstDecode<String> for String {
         self
     }
 }
+impl CstDecode<crate::api::simple::Entity>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> crate::api::simple::Entity {
+        let self_ = self
+            .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap();
+        assert_eq!(
+            self_.length(),
+            1,
+            "Expected 1 elements, got {}",
+            self_.length()
+        );
+        crate::api::simple::Entity {
+            name: self_.get(0).cst_decode(),
+        }
+    }
+}
+impl CstDecode<Vec<crate::api::simple::Entity>>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> Vec<crate::api::simple::Entity> {
+        self.dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap()
+            .iter()
+            .map(CstDecode::cst_decode)
+            .collect()
+    }
+}
 impl CstDecode<Vec<u8>> for Box<[u8]> {
     fn cst_decode(self) -> Vec<u8> {
         self.into_vec()
@@ -34,14 +63,14 @@ impl CstDecode<Vec<u8>> for Box<[u8]> {
 impl
     CstDecode<
         flutter_rust_bridge::RustOpaque<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
         >,
     > for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
     fn cst_decode(
         self,
     ) -> flutter_rust_bridge::RustOpaque<
-        flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
     > {
         unsafe { flutter_rust_bridge::for_generated::cst_decode_rust_opaque(self) }
     }
@@ -87,8 +116,8 @@ pub fn dart_fn_deliver_output(
 }
 
 #[wasm_bindgen]
-pub fn wire_create_app_state(port_: flutter_rust_bridge::for_generated::MessagePort) {
-    wire_create_app_state_impl(port_)
+pub fn wire_create_state(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    wire_create_state_impl(port_)
 }
 
 #[wasm_bindgen]
@@ -102,23 +131,32 @@ pub fn wire_init_app(port_: flutter_rust_bridge::for_generated::MessagePort) {
 }
 
 #[wasm_bindgen]
-pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+pub fn wire_search(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    obj: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    search: String,
+) {
+    wire_search_impl(port_, obj, search)
+}
+
+#[wasm_bindgen]
+pub fn rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
     ptr: *const std::ffi::c_void,
 ) {
     unsafe {
         flutter_rust_bridge::for_generated::rust_arc_increment_strong_count::<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
         >(ptr);
     }
 }
 
 #[wasm_bindgen]
-pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+pub fn rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
     ptr: *const std::ffi::c_void,
 ) {
     unsafe {
         flutter_rust_bridge::for_generated::rust_arc_decrement_strong_count::<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
         >(ptr);
     }
 }

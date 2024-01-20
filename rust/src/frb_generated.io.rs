@@ -14,14 +14,14 @@ use flutter_rust_bridge::{Handler, IntoIntoDart};
 impl
     CstDecode<
         flutter_rust_bridge::RustOpaque<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
         >,
     > for *const std::ffi::c_void
 {
     fn cst_decode(
         self,
     ) -> flutter_rust_bridge::RustOpaque<
-        flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+        flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
     > {
         unsafe { flutter_rust_bridge::for_generated::cst_decode_rust_opaque(self) }
     }
@@ -30,6 +30,22 @@ impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
     fn cst_decode(self) -> String {
         let vec: Vec<u8> = self.cst_decode();
         String::from_utf8(vec).unwrap()
+    }
+}
+impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
+    fn cst_decode(self) -> crate::api::simple::Entity {
+        crate::api::simple::Entity {
+            name: self.name.cst_decode(),
+        }
+    }
+}
+impl CstDecode<Vec<crate::api::simple::Entity>> for *mut wire_cst_list_entity {
+    fn cst_decode(self) -> Vec<crate::api::simple::Entity> {
+        let vec = unsafe {
+            let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+            flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+        };
+        vec.into_iter().map(CstDecode::cst_decode).collect()
     }
 }
 impl CstDecode<Vec<u8>> for *mut wire_cst_list_prim_u_8_strict {
@@ -47,6 +63,18 @@ pub trait NewWithNullPtr {
 impl<T> NewWithNullPtr for *mut T {
     fn new_with_null_ptr() -> Self {
         std::ptr::null_mut()
+    }
+}
+impl NewWithNullPtr for wire_cst_entity {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            name: core::ptr::null_mut(),
+        }
+    }
+}
+impl Default for wire_cst_entity {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
     }
 }
 
@@ -68,8 +96,8 @@ pub extern "C" fn frbgen_spotlight_dart_fn_deliver_output(
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_spotlight_wire_create_app_state(port_: i64) {
-    wire_create_app_state_impl(port_)
+pub extern "C" fn frbgen_spotlight_wire_create_state(port_: i64) {
+    wire_create_state_impl(port_)
 }
 
 #[no_mangle]
@@ -85,25 +113,46 @@ pub extern "C" fn frbgen_spotlight_wire_init_app(port_: i64) {
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_spotlight_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+pub extern "C" fn frbgen_spotlight_wire_search(
+    port_: i64,
+    obj: *const std::ffi::c_void,
+    search: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_search_impl(port_, obj, search)
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_spotlight_rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
     ptr: *const std::ffi::c_void,
 ) {
     unsafe {
         flutter_rust_bridge::for_generated::rust_arc_increment_strong_count::<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
         >(ptr);
     }
 }
 
 #[no_mangle]
-pub extern "C" fn frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockAppState(
+pub extern "C" fn frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockState(
     ptr: *const std::ffi::c_void,
 ) {
     unsafe {
         flutter_rust_bridge::for_generated::rust_arc_decrement_strong_count::<
-            flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>,
+            flutter_rust_bridge::for_generated::rust_async::RwLock<State>,
         >(ptr);
     }
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_spotlight_cst_new_list_entity(len: i32) -> *mut wire_cst_list_entity {
+    let wrap = wire_cst_list_entity {
+        ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+            <wire_cst_entity>::new_with_null_ptr(),
+            len,
+        ),
+        len,
+    };
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
 }
 
 #[no_mangle]
@@ -117,6 +166,17 @@ pub extern "C" fn frbgen_spotlight_cst_new_list_prim_u_8_strict(
     flutter_rust_bridge::for_generated::new_leak_box_ptr(ans)
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_entity {
+    name: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_list_entity {
+    ptr: *mut wire_cst_entity,
+    len: i32,
+}
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct wire_cst_list_prim_u_8_strict {

@@ -9,23 +9,43 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 String greet({required String name, dynamic hint}) =>
     RustLib.instance.api.greet(name: name, hint: hint);
 
-Future<AppState> createAppState({dynamic hint}) =>
-    RustLib.instance.api.createAppState(hint: hint);
+Future<State> createState({dynamic hint}) =>
+    RustLib.instance.api.createState(hint: hint);
 
-// Rust type: flutter_rust_bridge::RustOpaque<flutter_rust_bridge::for_generated::rust_async::RwLock<AppState>>
+Future<List<Entity>> search(
+        {required State obj, required String search, dynamic hint}) =>
+    RustLib.instance.api.search(obj: obj, search: search, hint: hint);
+
+// Rust type: flutter_rust_bridge::RustOpaque<flutter_rust_bridge::for_generated::rust_async::RwLock<State>>
 @sealed
-class AppState extends RustOpaque {
-  AppState.dcoDecode(List<dynamic> wire) : super.dcoDecode(wire, _kStaticData);
+class State extends RustOpaque {
+  State.dcoDecode(List<dynamic> wire) : super.dcoDecode(wire, _kStaticData);
 
-  AppState.sseDecode(int ptr, int externalSizeOnNative)
+  State.sseDecode(int ptr, int externalSizeOnNative)
       : super.sseDecode(ptr, externalSizeOnNative, _kStaticData);
 
   static final _kStaticData = RustArcStaticData(
     rustArcIncrementStrongCount:
-        RustLib.instance.api.rust_arc_increment_strong_count_AppState,
+        RustLib.instance.api.rust_arc_increment_strong_count_State,
     rustArcDecrementStrongCount:
-        RustLib.instance.api.rust_arc_decrement_strong_count_AppState,
+        RustLib.instance.api.rust_arc_decrement_strong_count_State,
     rustArcDecrementStrongCountPtr:
-        RustLib.instance.api.rust_arc_decrement_strong_count_AppStatePtr,
+        RustLib.instance.api.rust_arc_decrement_strong_count_StatePtr,
   );
+}
+
+class Entity {
+  final String name;
+
+  const Entity({
+    required this.name,
+  });
+
+  @override
+  int get hashCode => name.hashCode;
+
+  @override
+  bool operator ==(Object other) =>
+      identical(this, other) ||
+      other is Entity && runtimeType == other.runtimeType && name == other.name;
 }

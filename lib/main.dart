@@ -19,7 +19,11 @@ class MyApp extends StatelessWidget {
           children: [
             ElevatedButton(
                 onPressed: () async {
-                  final t = await createAppState();
+                  final b = await createState();
+                  final result = await search(obj: b, search: "fir");
+                  for (final e in result) {
+                    print(e.name);
+                  }
                 },
                 child: Text("RUST !")),
             const Searchbar(),

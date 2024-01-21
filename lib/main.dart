@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
@@ -12,7 +15,7 @@ Future<void> main() async {
   await windowManager.ensureInitialized();
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(800, 600),
+    size: Size(600, 250),
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: true,
@@ -26,7 +29,6 @@ Future<void> main() async {
   windowManager.waitUntilReadyToShow(windowOptions, () async {
     await windowManager.show();
     await windowManager.focus();
-    await windowManager.setMovable(false);
     await windowManager.setResizable(false);
   });
 
@@ -112,11 +114,22 @@ class _MyAppState extends State<MyApp> {
                         child: ListView(
                           controller: scrollController,
                           children: entities.mapIndexed((index, e) {
+                            final svg = switch (e.iconPath?.endsWith(".svg")) {
+                              true =>
+                                SvgPicture.file(File(e.iconPath!), height: 20),
+                              _ => null,
+                            };
+
+                            final image = e.iconPath != null && svg == null
+                                ? Image.file(File(e.iconPath!), height: 20)
+                                : null;
+
                             return AutoScrollTag(
                               key: ValueKey(index),
                               index: index,
                               controller: scrollController,
                               child: EntityItem(
+                                image: svg ?? image,
                                 selected: e.index == selected!.index,
                                 index: e.index,
                                 name: e.name,
@@ -145,6 +158,8 @@ class EntityItem extends StatelessWidget {
   final int index;
   final String type;
   final bool selected;
+  final Widget? image;
+
   const EntityItem({
     super.key,
     required this.index,
@@ -152,6 +167,7 @@ class EntityItem extends StatelessWidget {
     required this.description,
     required this.type,
     required this.selected,
+    required this.image,
   });
 
   @override
@@ -170,7 +186,7 @@ class EntityItem extends StatelessWidget {
       tileColor: selected ? Colors.black.withAlpha(25) : Colors.transparent,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(20))),
-      leading: const Icon(Icons.info),
+      leading: image ?? const Icon(Icons.image_not_supported),
       title: Row(children: [
         Text(
           name,

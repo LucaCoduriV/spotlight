@@ -41,6 +41,8 @@ dependencies:
   freezed_annotation: ^2.4.1
   watch_it: ^1.3.0
   collection: ^1.18.0
+  scroll_to_index: ^3.0.1
+  window_manager: ^0.3.7
 
 dev_dependencies:
   flutter_test:

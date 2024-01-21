@@ -1,11 +1,35 @@
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:window_manager/window_manager.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await windowManager.ensureInitialized();
+
+  WindowOptions windowOptions = const WindowOptions(
+    size: Size(800, 600),
+    center: true,
+    backgroundColor: Colors.transparent,
+    skipTaskbar: true,
+    titleBarStyle: TitleBarStyle.hidden,
+    maximumSize: Size(800, 600),
+    minimumSize: Size(800, 600),
+    fullScreen: false,
+    alwaysOnTop: true,
+  );
+
+  windowManager.waitUntilReadyToShow(windowOptions, () async {
+    await windowManager.show();
+    await windowManager.focus();
+    await windowManager.setMovable(false);
+    await windowManager.setResizable(false);
+  });
+
   await RustLib.init();
   final service = di.registerSingleton<Service>(Service());
   service.init();
@@ -22,13 +46,13 @@ class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
 class _MyAppState extends State<MyApp> {
   final text = TextEditingController();
   final listFocusNode = FocusNode();
-  int resultSelectedIndex = 0;
+  final Service service = di.get();
+  final AutoScrollController scrollController = AutoScrollController();
 
   @override
   void initState() {
     text.addListener(() async {
-      await di.get<Service>().search(text.text);
-      resultSelectedIndex = 0;
+      await service.search(text.text);
     });
     super.initState();
   }
@@ -43,76 +67,69 @@ class _MyAppState extends State<MyApp> {
   @override
   Widget build(BuildContext context) {
     final entities = watchPropertyValue((Service s) => s.entities);
+    final selected = watchPropertyValue((Service s) => s.selected);
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       home: Scaffold(
-        backgroundColor: Colors.black,
-        body: Focus(
-          onKeyEvent: (node, keyEvent) {
-            if (keyEvent is KeyUpEvent) {
-              return KeyEventResult.ignored;
-            }
-
-            if (keyEvent.logicalKey == LogicalKeyboardKey.arrowLeft ||
-                keyEvent.logicalKey == LogicalKeyboardKey.arrowRight) {
-              return KeyEventResult.skipRemainingHandlers;
-            }
-
-            if (keyEvent.logicalKey == LogicalKeyboardKey.enter) {
-              final service = di.get<Service>();
-              final entity = service.entities[resultSelectedIndex];
-              service.execute(entity.index);
-              return KeyEventResult.handled;
-            }
-            if (keyEvent.logicalKey == LogicalKeyboardKey.arrowUp) {
-              setState(() {
-                resultSelectedIndex--;
-              });
-              return KeyEventResult.handled;
-            }
-            if (keyEvent.logicalKey == LogicalKeyboardKey.arrowDown) {
-              setState(() {
-                resultSelectedIndex++;
-              });
-              return KeyEventResult.handled;
-            }
-            return KeyEventResult.ignored;
+        backgroundColor: Colors.transparent,
+        body: Shortcuts(
+          shortcuts: <LogicalKeySet, Intent>{
+            LogicalKeySet(LogicalKeyboardKey.arrowUp): const PreviousIntent(),
+            LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
+            LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyP):
+                const PreviousIntent(),
+            LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN):
+                const NextIntent(),
+            LogicalKeySet(LogicalKeyboardKey.enter): const SelectIntent(),
           },
-          child: Card(
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: Column(
-                children: [
-                  TextField(
-                    autofocus: true,
-                    controller: text,
-                    showCursor: false,
-                  ),
-                  const Padding(
-                    padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text("Results"),
-                      ],
+          child: Actions(
+            actions: <Type, Action<Intent>>{
+              PreviousIntent: PreviousAction(scrollController),
+              NextIntent: NextAction(scrollController),
+              SelectIntent: SelectAction(),
+            },
+            child: Card(
+              child: Padding(
+                padding: const EdgeInsets.all(8.0),
+                child: Column(
+                  children: [
+                    TextField(
+                      autofocus: true,
+                      controller: text,
+                      showCursor: false,
                     ),
-                  ),
-                  Expanded(
-                    child: TextFieldTapRegion(
-                      child: ListView(
-                        children: entities.mapIndexed((index, e) {
-                          return EntityItem(
-                            selected: index == resultSelectedIndex,
-                            index: e.index,
-                            name: e.name,
-                            description: e.description ?? "description",
-                            type: "Application",
-                          );
-                        }).toList(),
+                    const Padding(
+                      padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.start,
+                        children: [
+                          Text("Results"),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    Expanded(
+                      child: TextFieldTapRegion(
+                        child: ListView(
+                          controller: scrollController,
+                          children: entities.mapIndexed((index, e) {
+                            return AutoScrollTag(
+                              key: ValueKey(index),
+                              index: index,
+                              controller: scrollController,
+                              child: EntityItem(
+                                selected: e.index == selected!.index,
+                                index: e.index,
+                                name: e.name,
+                                description: e.description ?? "description",
+                                type: "Application",
+                              ),
+                            );
+                          }).toList(),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -139,6 +156,7 @@ class EntityItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final Service service = di.get();
     const TextStyle textStyleTitle = TextStyle(
       color: Colors.black,
       fontWeight: FontWeight.w600,
@@ -166,8 +184,63 @@ class EntityItem extends StatelessWidget {
         style: textStyleTrailing,
       ),
       onTap: () {
-        di.get<Service>().execute(index);
+        service.execute(index);
       },
     );
+  }
+}
+
+class PreviousIntent extends Intent {
+  const PreviousIntent();
+}
+
+class PreviousAction extends Action<PreviousIntent> {
+  final Service service = di.get();
+  final AutoScrollController controller;
+  PreviousAction(this.controller);
+
+  @override
+  Object? invoke(covariant PreviousIntent intent) {
+    service.previous();
+    if (service.index != null) {
+      controller.scrollToIndex(service.index!,
+          duration: const Duration(milliseconds: 1));
+    }
+    return null;
+  }
+}
+
+class NextIntent extends Intent {
+  const NextIntent();
+}
+
+class NextAction extends Action<NextIntent> {
+  final Service service = di.get();
+  final AutoScrollController controller;
+  NextAction(this.controller);
+
+  @override
+  Object? invoke(covariant NextIntent intent) {
+    service.next();
+    if (service.index != null) {
+      controller.scrollToIndex(service.index!,
+          duration: const Duration(milliseconds: 1));
+    }
+    return null;
+  }
+}
+
+class SelectIntent extends Intent {
+  const SelectIntent();
+}
+
+class SelectAction extends Action<SelectIntent> {
+  final Service service = di.get();
+  SelectAction();
+
+  @override
+  Object? invoke(covariant SelectIntent intent) {
+    service.select();
+    return null;
   }
 }

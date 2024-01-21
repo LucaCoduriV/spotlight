@@ -8,6 +8,7 @@ class Service extends ChangeNotifier {
 
   Future<void> init() async {
     state = await rust.StateApp.newStateApp();
+    await search("");
   }
 
   Future<void> search(String search) async {

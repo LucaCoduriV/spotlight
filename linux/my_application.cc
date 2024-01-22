@@ -1,6 +1,7 @@
 #include "my_application.h"
 
 #include <flutter_linux/flutter_linux.h>
+#include <gtk-layer-shell.h>
 #ifdef GDK_WINDOWING_X11
 #include <gdk/gdkx.h>
 #endif
@@ -19,6 +20,13 @@ static void my_application_activate(GApplication* application) {
   MyApplication* self = MY_APPLICATION(application);
   GtkWindow* window =
       GTK_WINDOW(gtk_application_window_new(GTK_APPLICATION(application)));
+  gtk_layer_init_for_window(window);
+  gtk_layer_set_layer (window, GTK_LAYER_SHELL_LAYER_TOP);
+  gtk_layer_set_namespace(window, "RSpotlight");
+  gtk_layer_set_anchor(window, GtkLayerShellEdge::GTK_LAYER_SHELL_EDGE_TOP, false);
+  gtk_layer_set_anchor(window, GtkLayerShellEdge::GTK_LAYER_SHELL_EDGE_LEFT, false);
+  gtk_layer_set_anchor(window, GtkLayerShellEdge::GTK_LAYER_SHELL_EDGE_RIGHT, false);
+  gtk_layer_set_anchor(window, GtkLayerShellEdge::GTK_LAYER_SHELL_EDGE_BOTTOM, false);
 
   // Use a header bar when running in GNOME as this is the common style used
   // by applications and is the setup most users will be using (e.g. Ubuntu
@@ -47,8 +55,9 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "spotlight");
   }
 
-  gtk_window_set_default_size(window, 1280, 720);
-  gtk_widget_show(GTK_WIDGET(window));
+  gtk_window_set_default_size(window, 850, 600);
+  gtk_widget_realize(GTK_WIDGET(window));
+  /* gtk_widget_show(GTK_WIDGET(window)); */
 
   g_autoptr(FlDartProject) project = fl_dart_project_new();
   fl_dart_project_set_dart_entrypoint_arguments(project, self->dart_entrypoint_arguments);
@@ -60,6 +69,9 @@ static void my_application_activate(GApplication* application) {
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
+  gtk_widget_set_size_request (GTK_WIDGET (window), 850, 600);
+  gtk_window_resize (window, 1, 1);
+  gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE);
 }
 
 // Implements GApplication::local_command_line.

@@ -83,12 +83,14 @@ class _MyAppState extends State<MyApp> {
             LogicalKeySet(LogicalKeyboardKey.control, LogicalKeyboardKey.keyN):
                 const NextIntent(),
             LogicalKeySet(LogicalKeyboardKey.enter): const SelectIntent(),
+            LogicalKeySet(LogicalKeyboardKey.escape): const CloseIntent(),
           },
           child: Actions(
             actions: <Type, Action<Intent>>{
               PreviousIntent: PreviousAction(scrollController),
               NextIntent: NextAction(scrollController),
               SelectIntent: SelectAction(),
+              CloseIntent: CloseAction(),
             },
             child: Card(
               child: Padding(
@@ -258,5 +260,18 @@ class SelectAction extends Action<SelectIntent> {
   Object? invoke(covariant SelectIntent intent) {
     service.select();
     return null;
+  }
+}
+
+class CloseIntent extends Intent {
+  const CloseIntent();
+}
+
+class CloseAction extends Action<CloseIntent> {
+  CloseAction();
+
+  @override
+  Object? invoke(covariant CloseIntent intent) {
+    exit(0);
   }
 }

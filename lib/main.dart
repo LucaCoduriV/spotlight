@@ -20,8 +20,8 @@ Future<void> main() async {
     backgroundColor: Colors.transparent,
     skipTaskbar: true,
     titleBarStyle: TitleBarStyle.hidden,
-    maximumSize: Size(800, 600),
-    minimumSize: Size(800, 600),
+    maximumSize: Size(850, 600),
+    minimumSize: Size(850, 600),
     fullScreen: false,
     alwaysOnTop: true,
   );
@@ -35,7 +35,40 @@ Future<void> main() async {
   await RustLib.init();
   final service = di.registerSingleton<Service>(Service());
   service.init();
-  runApp(const MyApp());
+  runApp(const WindowEventListener());
+}
+
+class WindowEventListener extends StatefulWidget {
+  const WindowEventListener({super.key});
+
+  @override
+  State<WindowEventListener> createState() => WindowEventListenerState();
+}
+
+class WindowEventListenerState extends State<WindowEventListener>
+    with WindowListener {
+  @override
+  void initState() {
+    super.initState();
+    windowManager.addListener(this);
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(this);
+    super.dispose();
+  }
+
+  @override
+  void onWindowBlur() {
+    super.onWindowBlur();
+    exit(0);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return const MyApp();
+  }
 }
 
 class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -93,58 +126,70 @@ class _MyAppState extends State<MyApp> {
               CloseIntent: CloseAction(),
             },
             child: Card(
-              child: Padding(
-                padding: const EdgeInsets.all(8.0),
-                child: Column(
-                  children: [
-                    TextField(
+              child: Column(
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(
+                      vertical: 25.0,
+                      horizontal: 20,
+                    ),
+                    child: TextField(
                       autofocus: true,
                       controller: text,
                       showCursor: false,
-                    ),
-                    const Padding(
-                      padding: EdgeInsets.fromLTRB(15, 15, 15, 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Results"),
-                        ],
+                      style: const TextStyle(
+                        fontWeight: FontWeight.w600,
+                        fontSize: 20,
+                      ),
+                      decoration: const InputDecoration.collapsed(
+                        hintText: 'Search for apps and commands...',
                       ),
                     ),
-                    Expanded(
-                      child: TextFieldTapRegion(
-                        child: ListView(
-                          controller: scrollController,
-                          children: entities.mapIndexed((index, e) {
-                            final svg = switch (e.iconPath?.endsWith(".svg")) {
-                              true =>
-                                SvgPicture.file(File(e.iconPath!), height: 20),
-                              _ => null,
-                            };
+                  ),
+                  const Divider(thickness: 1),
+                  const Padding(
+                    padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Results"),
+                      ],
+                    ),
+                  ),
+                  Expanded(
+                    child: TextFieldTapRegion(
+                      child: ListView(
+                        padding: const EdgeInsets.all(8.0),
+                        controller: scrollController,
+                        children: entities.mapIndexed((index, e) {
+                          final svg = switch (e.iconPath?.endsWith(".svg")) {
+                            true =>
+                              SvgPicture.file(File(e.iconPath!), height: 20),
+                            _ => null,
+                          };
 
-                            final image = e.iconPath != null && svg == null
-                                ? Image.file(File(e.iconPath!), height: 20)
-                                : null;
+                          final image = e.iconPath != null && svg == null
+                              ? Image.file(File(e.iconPath!), height: 20)
+                              : null;
 
-                            return AutoScrollTag(
-                              key: ValueKey(index),
-                              index: index,
-                              controller: scrollController,
-                              child: EntityItem(
-                                image: svg ?? image,
-                                selected: e.index == selected!.index,
-                                index: e.index,
-                                name: e.name,
-                                description: e.description ?? "description",
-                                type: "Application",
-                              ),
-                            );
-                          }).toList(),
-                        ),
+                          return AutoScrollTag(
+                            key: ValueKey(index),
+                            index: index,
+                            controller: scrollController,
+                            child: EntityItem(
+                              image: svg ?? image,
+                              selected: e.index == selected!.index,
+                              index: e.index,
+                              name: e.name,
+                              description: e.description ?? "description",
+                              type: "Application",
+                            ),
+                          );
+                        }).toList(),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),
@@ -272,6 +317,7 @@ class CloseAction extends Action<CloseIntent> {
 
   @override
   Object? invoke(covariant CloseIntent intent) {
+    RustLib.dispose();
     exit(0);
   }
 }

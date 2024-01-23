@@ -140,8 +140,9 @@ pub fn wire_StateApp_execute(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     id: usize,
+    arg: Option<String>,
 ) {
-    wire_StateApp_execute_impl(port_, that, id)
+    wire_StateApp_execute_impl(port_, that, id, arg)
 }
 
 #[wasm_bindgen]

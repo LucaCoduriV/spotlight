@@ -41,6 +41,7 @@ fn wire_StateApp_execute_impl(
         >,
     >,
     id: impl CstDecode<usize>,
+    arg: impl CstDecode<Option<String>>,
 ) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -51,10 +52,11 @@ fn wire_StateApp_execute_impl(
         move || {
             let api_that = that.cst_decode();
             let api_id = id.cst_decode();
+            let api_arg = arg.cst_decode();
             move |context| {
                 transform_result_dco((move || {
                     let api_that = api_that.rust_auto_opaque_decode_sync_ref();
-                    crate::api::simple::StateApp::execute(&api_that, api_id)
+                    crate::api::simple::StateApp::execute(&api_that, api_id, api_arg)
                 })())
             }
         },

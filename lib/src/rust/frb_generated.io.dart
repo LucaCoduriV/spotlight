@@ -285,20 +285,24 @@ class RustLibWire implements BaseWire {
     int port_,
     ffi.Pointer<ffi.Void> that,
     int id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> arg,
   ) {
     return _wire_StateApp_execute(
       port_,
       that,
       id,
+      arg,
     );
   }
 
   late final _wire_StateApp_executePtr = _lookup<
-      ffi.NativeFunction<
-          ffi.Void Function(ffi.Int64, ffi.Pointer<ffi.Void>,
-              ffi.UintPtr)>>('frbgen_spotlight_wire_StateApp_execute');
-  late final _wire_StateApp_execute = _wire_StateApp_executePtr
-      .asFunction<void Function(int, ffi.Pointer<ffi.Void>, int)>();
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<ffi.Void>, ffi.UintPtr,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_spotlight_wire_StateApp_execute');
+  late final _wire_StateApp_execute = _wire_StateApp_executePtr.asFunction<
+      void Function(int, ffi.Pointer<ffi.Void>, int,
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
 
   void wire_StateApp_new(
     int port_,

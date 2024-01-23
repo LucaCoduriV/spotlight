@@ -62,7 +62,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
 abstract class RustLibApi extends BaseApi {
   Future<void> stateAppExecute(
-      {required StateApp that, required int id, dynamic hint});
+      {required StateApp that, required int id, String? arg, dynamic hint});
 
   Future<StateApp> stateAppNew({dynamic hint});
 
@@ -92,21 +92,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> stateAppExecute(
-      {required StateApp that, required int id, dynamic hint}) {
+      {required StateApp that, required int id, String? arg, dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 =
             cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
                 that);
         var arg1 = cst_encode_usize(id);
-        return wire.wire_StateApp_execute(port_, arg0, arg1);
+        var arg2 = cst_encode_opt_String(arg);
+        return wire.wire_StateApp_execute(port_, arg0, arg1, arg2);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_unit,
         decodeErrorData: dco_decode_entity_error,
       ),
       constMeta: kStateAppExecuteConstMeta,
-      argValues: [that, id],
+      argValues: [that, id, arg],
       apiImpl: this,
       hint: hint,
     ));
@@ -114,7 +115,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kStateAppExecuteConstMeta => const TaskConstMeta(
         debugName: "StateApp_execute",
-        argNames: ["that", "id"],
+        argNames: ["that", "id", "arg"],
       );
 
   @override

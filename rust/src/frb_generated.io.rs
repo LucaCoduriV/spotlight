@@ -132,8 +132,9 @@ pub extern "C" fn frbgen_spotlight_wire_StateApp_execute(
     port_: i64,
     that: *const std::ffi::c_void,
     id: usize,
+    arg: *mut wire_cst_list_prim_u_8_strict,
 ) {
-    wire_StateApp_execute_impl(port_, that, id)
+    wire_StateApp_execute_impl(port_, that, id, arg)
 }
 
 #[no_mangle]

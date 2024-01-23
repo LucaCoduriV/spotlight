@@ -32,10 +32,11 @@ class StateApp extends RustOpaque {
         RustLib.instance.api.rust_arc_decrement_strong_count_StateAppPtr,
   );
 
-  Future<void> execute({required int id, dynamic hint}) =>
+  Future<void> execute({required int id, String? arg, dynamic hint}) =>
       RustLib.instance.api.stateAppExecute(
         that: this,
         id: id,
+        arg: arg,
       );
 
   static Future<StateApp> newStateApp({dynamic hint}) =>

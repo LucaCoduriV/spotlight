@@ -234,8 +234,9 @@ class RustLibWire extends BaseWire {
       wasmModule.dart_fn_deliver_output(
           call_id, ptr_, rust_vec_len_, data_len_);
 
-  void wire_StateApp_execute(NativePortType port_, Object that, int id) =>
-      wasmModule.wire_StateApp_execute(port_, that, id);
+  void wire_StateApp_execute(
+          NativePortType port_, Object that, int id, String? arg) =>
+      wasmModule.wire_StateApp_execute(port_, that, id, arg);
 
   void wire_StateApp_new(NativePortType port_) =>
       wasmModule.wire_StateApp_new(port_);
@@ -277,7 +278,7 @@ class RustLibWasmModule implements WasmModule {
       PlatformGeneralizedUint8ListPtr ptr_, int rust_vec_len_, int data_len_);
 
   external void wire_StateApp_execute(
-      NativePortType port_, Object that, int id);
+      NativePortType port_, Object that, int id, String? arg);
 
   external void wire_StateApp_new(NativePortType port_);
 

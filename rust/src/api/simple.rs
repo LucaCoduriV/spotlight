@@ -23,9 +23,9 @@ impl StateApp {
             entities: get_entities(None),
         }
     }
-    pub fn execute(&self, id: usize) -> Result<(), EntityError> {
+    pub fn execute(&self, id: usize, arg: Option<String>) -> Result<(), EntityError> {
         self.entities[id]
-            .execute()
+            .execute(arg.as_deref())
             .map_err(|e| EntityError::Unknown(e.to_string()))
     }
 }

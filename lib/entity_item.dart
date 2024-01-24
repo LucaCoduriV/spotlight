@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:spotlight/service.dart';
+import 'package:spotlight/theme.dart';
 import 'package:watch_it/watch_it.dart';
 
 class EntityItem extends StatelessWidget {
@@ -23,31 +24,26 @@ class EntityItem extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final Service service = di.get();
-    const TextStyle textStyleTitle = TextStyle(
-      color: Colors.black,
-      fontWeight: FontWeight.w600,
-    );
-
-    const TextStyle textStyleTrailing = TextStyle(
-      fontSize: 15,
-    );
 
     return ListTile(
-      tileColor: selected ? Colors.black.withAlpha(25) : Colors.transparent,
+      tileColor: selected ? CustomTheme.selectionColor : Colors.transparent,
       shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.all(Radius.circular(20))),
-      leading: image ?? const Icon(Icons.image_not_supported),
+          borderRadius: BorderRadius.all(Radius.circular(8))),
+      leading: image ?? const Icon(Icons.image_not_supported, size: 20),
       title: Row(children: [
         Text(
           name,
-          style: textStyleTitle,
+          style: CustomTheme.primaryText,
         ),
         const SizedBox(width: 15),
-        Text(description)
+        Text(
+          description,
+          style: CustomTheme.secondaryText,
+        )
       ]),
       trailing: Text(
         type,
-        style: textStyleTrailing,
+        style: CustomTheme.secondaryText,
       ),
       onTap: () {
         service.execute(index);

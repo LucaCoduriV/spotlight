@@ -6,6 +6,7 @@ import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/api/simple.dart';
+import 'package:spotlight/theme.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'entity_item.dart';
@@ -45,6 +46,13 @@ class _MainScreenState extends State<MainScreen> {
     final entities = watchPropertyValue((Service s) => s.entities);
     final selected = watchPropertyValue((Service s) => s.selected);
     return Card(
+      margin: const EdgeInsets.all(1),
+      surfaceTintColor: null,
+      color: CustomTheme.backgroundColor,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(10),
+        side: BorderSide(width: 0.2, color: CustomTheme.textColor),
+      ),
       child: Column(
         children: [
           Padding(
@@ -56,22 +64,20 @@ class _MainScreenState extends State<MainScreen> {
               autofocus: true,
               controller: text,
               showCursor: false,
-              style: const TextStyle(
-                fontWeight: FontWeight.w600,
-                fontSize: 20,
-              ),
-              decoration: const InputDecoration.collapsed(
+              style: CustomTheme.primaryText.copyWith(fontSize: 18),
+              decoration: InputDecoration.collapsed(
+                hintStyle: CustomTheme.hintText,
                 hintText: 'Search for apps and commands...',
               ),
             ),
           ),
-          const Divider(thickness: 1),
-          const Padding(
-            padding: EdgeInsets.fromLTRB(15, 10, 15, 5),
+          Divider(thickness: 0.1, color: CustomTheme.textColor),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
             child: Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: [
-                Text("Results"),
+                Text("Results", style: CustomTheme.headerText),
               ],
             ),
           ),

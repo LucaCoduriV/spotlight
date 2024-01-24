@@ -55,7 +55,7 @@ static void my_application_activate(GApplication* application) {
     gtk_window_set_title(window, "spotlight");
   }
 
-  gtk_window_set_default_size(window, 850, 600);
+  gtk_window_set_default_size(window, 750, 550);
   gtk_widget_realize(GTK_WIDGET(window));
   /* gtk_widget_show(GTK_WIDGET(window)); */
 
@@ -69,7 +69,7 @@ static void my_application_activate(GApplication* application) {
   fl_register_plugins(FL_PLUGIN_REGISTRY(view));
 
   gtk_widget_grab_focus(GTK_WIDGET(view));
-  gtk_widget_set_size_request (GTK_WIDGET (window), 850, 600);
+  gtk_widget_set_size_request (GTK_WIDGET (window), 750, 550);
   gtk_window_resize (window, 1, 1);
   gtk_layer_set_keyboard_mode (window, GTK_LAYER_SHELL_KEYBOARD_MODE_EXCLUSIVE);
 }

@@ -25,6 +25,7 @@ Future<void> main() async {
     minimumSize: Size(750, 550),
     fullScreen: false,
     alwaysOnTop: true,
+    windowButtonVisibility: false,
   );
 
   windowManager.waitUntilReadyToShow(windowOptions, () async {

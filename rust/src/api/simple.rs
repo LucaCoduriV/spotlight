@@ -23,7 +23,7 @@ impl StateApp {
             entities: get_entities(None),
         }
     }
-    pub fn execute(&self, id: usize, arg: Option<String>) -> Result<(), EntityError> {
+    pub fn execute(&mut self, id: usize, arg: Option<String>) -> Result<(), EntityError> {
         self.entities[id]
             .execute(arg.as_deref())
             .map_err(|e| EntityError::Unknown(e.to_string()))
@@ -44,8 +44,8 @@ pub struct Entity {
     pub icon_path: Option<String>,
 }
 
-pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
-    let result = FuzzyFinder::search(&search, obj.entities.as_ref());
+pub fn search(obj: &mut StateApp, search: String) -> Vec<Entity> {
+    let result = FuzzyFinder::search(&search, obj.entities.as_mut());
     result
         .into_iter()
         .map(|(index, _score, ent)| Entity {

@@ -55,8 +55,8 @@ fn wire_StateApp_execute_impl(
             let api_arg = arg.cst_decode();
             move |context| {
                 transform_result_dco((move || {
-                    let api_that = api_that.rust_auto_opaque_decode_sync_ref();
-                    crate::api::simple::StateApp::execute(&api_that, api_id, api_arg)
+                    let mut api_that = api_that.rust_auto_opaque_decode_sync_ref_mut();
+                    crate::api::simple::StateApp::execute(&mut api_that, api_id, api_arg)
                 })())
             }
         },
@@ -135,9 +135,9 @@ fn wire_search_impl(
             let api_search = search.cst_decode();
             move |context| {
                 transform_result_dco((move || {
-                    let api_obj = api_obj.rust_auto_opaque_decode_sync_ref();
+                    let mut api_obj = api_obj.rust_auto_opaque_decode_sync_ref_mut();
                     Result::<_, flutter_rust_bridge::for_generated::anyhow::Error>::Ok(
-                        crate::api::simple::search(&api_obj, api_search),
+                        crate::api::simple::search(&mut api_obj, api_search),
                     )
                 })())
             }

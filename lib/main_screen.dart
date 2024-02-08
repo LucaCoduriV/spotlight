@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:collection/collection.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
 import 'package:spotlight/service.dart';
@@ -10,6 +11,7 @@ import 'package:spotlight/theme.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'entity_item.dart';
+import 'shortcuts.dart';
 
 class MainScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
   const MainScreen({
@@ -61,6 +63,7 @@ class _MainScreenState extends State<MainScreen> {
               horizontal: 20,
             ),
             child: TextField(
+              textInputAction: TextInputAction.none,
               autofocus: true,
               controller: text,
               showCursor: false,
@@ -82,12 +85,10 @@ class _MainScreenState extends State<MainScreen> {
             ),
           ),
           Expanded(
-            child: TextFieldTapRegion(
-              child: EntityItemList(
-                widget: widget,
-                entities: entities,
-                selected: selected,
-              ),
+            child: EntityItemList(
+              widget: widget,
+              entities: entities,
+              selected: selected,
             ),
           ),
         ],

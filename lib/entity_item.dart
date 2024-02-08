@@ -3,7 +3,7 @@ import 'package:spotlight/service.dart';
 import 'package:spotlight/theme.dart';
 import 'package:watch_it/watch_it.dart';
 
-class EntityItem extends StatelessWidget {
+class EntityItem extends StatefulWidget {
   final String name;
   final String description;
   final int index;
@@ -22,31 +22,37 @@ class EntityItem extends StatelessWidget {
   });
 
   @override
+  State<EntityItem> createState() => _EntityItemState();
+}
+
+class _EntityItemState extends State<EntityItem> {
+  @override
   Widget build(BuildContext context) {
     final Service service = di.get();
 
     return ListTile(
-      tileColor: selected ? CustomTheme.selectionColor : Colors.transparent,
+      tileColor:
+          widget.selected ? CustomTheme.selectionColor : Colors.transparent,
       shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(8))),
-      leading: image ?? const Icon(Icons.image_not_supported, size: 20),
+      leading: widget.image ?? const Icon(Icons.image_not_supported, size: 20),
       title: Row(children: [
         Text(
-          name,
+          widget.name,
           style: CustomTheme.primaryText,
         ),
         const SizedBox(width: 15),
         Text(
-          description,
+          widget.description,
           style: CustomTheme.secondaryText,
         )
       ]),
       trailing: Text(
-        type,
+        widget.type,
         style: CustomTheme.secondaryText,
       ),
       onTap: () {
-        service.execute(index);
+        service.execute(widget.index);
       },
     );
   }

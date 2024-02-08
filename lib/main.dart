@@ -91,38 +91,30 @@ class _MyAppState extends State<MyApp> {
       debugShowCheckedModeBanner: false,
       home: Scaffold(
         backgroundColor: Colors.transparent,
-        body: Focus(
-          onKey: (_, key) {
-            if (key.logicalKey == LogicalKeyboardKey.backspace) {
-              return KeyEventResult.ignored;
-            }
-
-            return KeyEventResult.skipRemainingHandlers;
+        body: Shortcuts(
+          shortcuts: <LogicalKeySet, Intent>{
+            LogicalKeySet(LogicalKeyboardKey.arrowUp): const PreviousIntent(),
+            LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
+            LogicalKeySet(
+              LogicalKeyboardKey.control,
+              LogicalKeyboardKey.keyP,
+            ): const PreviousIntent(),
+            LogicalKeySet(
+              LogicalKeyboardKey.control,
+              LogicalKeyboardKey.keyN,
+            ): const NextIntent(),
+            LogicalKeySet(LogicalKeyboardKey.enter): const SelectEntryIntent(),
+            LogicalKeySet(LogicalKeyboardKey.escape): const CloseIntent(),
           },
-          child: Shortcuts(
-            shortcuts: <LogicalKeySet, Intent>{
-              LogicalKeySet(LogicalKeyboardKey.arrowUp): const PreviousIntent(),
-              LogicalKeySet(LogicalKeyboardKey.arrowDown): const NextIntent(),
-              LogicalKeySet(
-                      LogicalKeyboardKey.control, LogicalKeyboardKey.keyP):
-                  const PreviousIntent(),
-              LogicalKeySet(
-                      LogicalKeyboardKey.control, LogicalKeyboardKey.keyN):
-                  const NextIntent(),
-              LogicalKeySet(LogicalKeyboardKey.enter):
-                  const SelectEntryIntent(),
-              LogicalKeySet(LogicalKeyboardKey.escape): const CloseIntent(),
+          child: Actions(
+            actions: <Type, Action<Intent>>{
+              PreviousIntent: PreviousAction(scrollController),
+              NextIntent: NextAction(scrollController),
+              SelectEntryIntent: SelectEntryAction(),
+              CloseIntent: CloseAction(),
             },
-            child: Actions(
-              actions: <Type, Action<Intent>>{
-                PreviousIntent: PreviousAction(scrollController),
-                NextIntent: NextAction(scrollController),
-                SelectIntent: SelectEntryAction(),
-                CloseIntent: CloseAction(),
-              },
-              child: MainScreen(
-                scrollController: scrollController,
-              ),
+            child: MainScreen(
+              scrollController: scrollController,
             ),
           ),
         ),

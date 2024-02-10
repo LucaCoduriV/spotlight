@@ -11,6 +11,11 @@ use flutter_rust_bridge::{Handler, IntoIntoDart};
 
 // Section: dart2rust
 
+impl CstDecode<flutter_rust_bridge::DartOpaque> for *const std::ffi::c_void {
+    fn cst_decode(self) -> flutter_rust_bridge::DartOpaque {
+        unsafe { flutter_rust_bridge::for_generated::cst_decode_dart_opaque(self as _) }
+    }
+}
 impl
     CstDecode<
         flutter_rust_bridge::RustOpaque<
@@ -133,8 +138,9 @@ pub extern "C" fn frbgen_spotlight_wire_StateApp_execute(
     that: *const std::ffi::c_void,
     id: usize,
     arg: *mut wire_cst_list_prim_u_8_strict,
+    on_executed: *const std::ffi::c_void,
 ) {
-    wire_StateApp_execute_impl(port_, that, id, arg)
+    wire_StateApp_execute_impl(port_, that, id, arg, on_executed)
 }
 
 #[no_mangle]

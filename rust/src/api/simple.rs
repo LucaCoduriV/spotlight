@@ -1,3 +1,4 @@
+use flutter_rust_bridge::DartFnFuture;
 use spotlight_core::{get_entities, FuzzyFinder, TEntity};
 use thiserror::Error;
 
@@ -23,10 +24,17 @@ impl StateApp {
             entities: get_entities(None),
         }
     }
-    pub fn execute(&mut self, id: usize, arg: Option<String>) -> Result<(), EntityError> {
-        self.entities[id]
+    pub async fn execute(
+        &mut self,
+        id: usize,
+        arg: Option<String>,
+        on_executed: impl Fn() -> DartFnFuture<()>,
+    ) -> Result<(), EntityError> {
+        let result = self.entities[id]
             .execute(arg.as_deref())
-            .map_err(|e| EntityError::Unknown(e.to_string()))
+            .map_err(|e| EntityError::Unknown(e.to_string()));
+        on_executed().await;
+        result
     }
 }
 

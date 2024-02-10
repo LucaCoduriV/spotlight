@@ -32,6 +32,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  FutureOr<void> Function() dco_decode_DartFn_Inputs__Output_unit(dynamic raw);
+
+  @protected
+  Object dco_decode_DartOpaque(dynamic raw);
+
+  @protected
   StateApp
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
@@ -72,6 +78,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   StateApp
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
+
+  @protected
+  Object sse_decode_DartOpaque(SseDeserializer deserializer);
 
   @protected
   StateApp
@@ -170,6 +179,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           StateApp raw);
 
   @protected
+  PlatformPointer cst_encode_DartFn_Inputs__Output_unit(
+      FutureOr<void> Function() raw);
+
+  @protected
+  PlatformPointer cst_encode_DartOpaque(Object raw);
+
+  @protected
   PlatformPointer
       cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp raw);
@@ -192,6 +208,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_DartFn_Inputs__Output_unit(
+      FutureOr<void> Function() self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_DartOpaque(Object self, SseSerializer serializer);
 
   @protected
   void
@@ -286,23 +309,29 @@ class RustLibWire implements BaseWire {
     ffi.Pointer<ffi.Void> that,
     int id,
     ffi.Pointer<wire_cst_list_prim_u_8_strict> arg,
+    ffi.Pointer<ffi.Void> on_executed,
   ) {
     return _wire_StateApp_execute(
       port_,
       that,
       id,
       arg,
+      on_executed,
     );
   }
 
   late final _wire_StateApp_executePtr = _lookup<
           ffi.NativeFunction<
-              ffi.Void Function(ffi.Int64, ffi.Pointer<ffi.Void>, ffi.UintPtr,
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+              ffi.Void Function(
+                  ffi.Int64,
+                  ffi.Pointer<ffi.Void>,
+                  ffi.UintPtr,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>,
+                  ffi.Pointer<ffi.Void>)>>(
       'frbgen_spotlight_wire_StateApp_execute');
   late final _wire_StateApp_execute = _wire_StateApp_executePtr.asFunction<
       void Function(int, ffi.Pointer<ffi.Void>, int,
-          ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+          ffi.Pointer<wire_cst_list_prim_u_8_strict>, ffi.Pointer<ffi.Void>)>();
 
   void wire_StateApp_new(
     int port_,

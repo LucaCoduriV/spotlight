@@ -21,6 +21,13 @@ where
         (!self.is_null() && !self.is_undefined()).then(|| self.cst_decode())
     }
 }
+impl CstDecode<flutter_rust_bridge::DartOpaque>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> flutter_rust_bridge::DartOpaque {
+        unsafe { flutter_rust_bridge::for_generated::cst_decode_dart_opaque(self as _) }
+    }
+}
 impl CstDecode<String> for String {
     fn cst_decode(self) -> String {
         self
@@ -141,8 +148,9 @@ pub fn wire_StateApp_execute(
     that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     id: usize,
     arg: Option<String>,
+    on_executed: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
 ) {
-    wire_StateApp_execute_impl(port_, that, id, arg)
+    wire_StateApp_execute_impl(port_, that, id, arg, on_executed)
 }
 
 #[wasm_bindgen]

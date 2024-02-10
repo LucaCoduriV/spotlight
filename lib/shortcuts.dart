@@ -58,7 +58,6 @@ class SelectEntryAction extends Action<SelectEntryIntent> {
   @override
   Object? invoke(covariant SelectEntryIntent intent) {
     service.select();
-    // exit(0);
     return null;
   }
 }

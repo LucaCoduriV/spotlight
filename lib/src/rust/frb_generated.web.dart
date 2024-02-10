@@ -31,6 +31,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  FutureOr<void> Function() dco_decode_DartFn_Inputs__Output_unit(dynamic raw);
+
+  @protected
+  Object dco_decode_DartOpaque(dynamic raw);
+
+  @protected
   StateApp
       dco_decode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
@@ -71,6 +77,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   StateApp
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
+
+  @protected
+  Object sse_decode_DartOpaque(SseDeserializer deserializer);
 
   @protected
   StateApp
@@ -161,6 +170,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           StateApp raw);
 
   @protected
+  PlatformPointer cst_encode_DartFn_Inputs__Output_unit(
+      FutureOr<void> Function() raw);
+
+  @protected
+  PlatformPointer cst_encode_DartOpaque(Object raw);
+
+  @protected
   PlatformPointer
       cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp raw);
@@ -183,6 +199,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_DartFn_Inputs__Output_unit(
+      FutureOr<void> Function() self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_DartOpaque(Object self, SseSerializer serializer);
 
   @protected
   void
@@ -234,9 +257,9 @@ class RustLibWire extends BaseWire {
       wasmModule.dart_fn_deliver_output(
           call_id, ptr_, rust_vec_len_, data_len_);
 
-  void wire_StateApp_execute(
-          NativePortType port_, Object that, int id, String? arg) =>
-      wasmModule.wire_StateApp_execute(port_, that, id, arg);
+  void wire_StateApp_execute(NativePortType port_, Object that, int id,
+          String? arg, PlatformPointer on_executed) =>
+      wasmModule.wire_StateApp_execute(port_, that, id, arg, on_executed);
 
   void wire_StateApp_new(NativePortType port_) =>
       wasmModule.wire_StateApp_new(port_);
@@ -277,8 +300,8 @@ class RustLibWasmModule implements WasmModule {
   external void dart_fn_deliver_output(int call_id,
       PlatformGeneralizedUint8ListPtr ptr_, int rust_vec_len_, int data_len_);
 
-  external void wire_StateApp_execute(
-      NativePortType port_, Object that, int id, String? arg);
+  external void wire_StateApp_execute(NativePortType port_, Object that, int id,
+      String? arg, PlatformPointer on_executed);
 
   external void wire_StateApp_new(NativePortType port_);
 

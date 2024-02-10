@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 
 import 'src/rust/api/simple.dart' as rust;
@@ -42,11 +44,11 @@ class Service extends ChangeNotifier {
     notifyListeners();
   }
 
-  void select() {
+  Future<void> select() async {
     if (_index == null) {
       return;
     }
-    execute(entities[_index!].index);
+    await execute(entities[_index!].index);
   }
 
   Future<void> search(String search) async {
@@ -64,6 +66,6 @@ class Service extends ChangeNotifier {
   }
 
   Future<void> execute(int index) async {
-    state?.execute(id: index);
+    state?.execute(id: index, onExecuted: () => exit(0));
   }
 }

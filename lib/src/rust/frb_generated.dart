@@ -62,7 +62,11 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 
 abstract class RustLibApi extends BaseApi {
   Future<void> stateAppExecute(
-      {required StateApp that, required int id, String? arg, dynamic hint});
+      {required StateApp that,
+      required int id,
+      String? arg,
+      required FutureOr<void> Function() onExecuted,
+      dynamic hint});
 
   Future<StateApp> stateAppNew({dynamic hint});
 
@@ -92,7 +96,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   @override
   Future<void> stateAppExecute(
-      {required StateApp that, required int id, String? arg, dynamic hint}) {
+      {required StateApp that,
+      required int id,
+      String? arg,
+      required FutureOr<void> Function() onExecuted,
+      dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 =
@@ -100,14 +108,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
                 that);
         var arg1 = cst_encode_usize(id);
         var arg2 = cst_encode_opt_String(arg);
-        return wire.wire_StateApp_execute(port_, arg0, arg1, arg2);
+        var arg3 = cst_encode_DartFn_Inputs__Output_unit(onExecuted);
+        return wire.wire_StateApp_execute(port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
         decodeSuccessData: dco_decode_unit,
         decodeErrorData: dco_decode_entity_error,
       ),
       constMeta: kStateAppExecuteConstMeta,
-      argValues: [that, id, arg],
+      argValues: [that, id, arg, onExecuted],
       apiImpl: this,
       hint: hint,
     ));
@@ -115,7 +124,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
 
   TaskConstMeta get kStateAppExecuteConstMeta => const TaskConstMeta(
         debugName: "StateApp_execute",
-        argNames: ["that", "id", "arg"],
+        argNames: ["that", "id", "arg", "onExecuted"],
       );
 
   @override
@@ -213,6 +222,23 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: ["obj", "search"],
       );
 
+  Future<void> Function(
+    int,
+  ) encode_DartFn_Inputs__Output_unit(FutureOr<void> Function() raw) {
+    return (
+      callId,
+    ) async {
+      final rawOutput = await raw();
+
+      final serializer = SseSerializer(generalizedFrbRustBinding);
+      sse_encode_unit(rawOutput, serializer);
+      final output = serializer.intoRaw();
+
+      wire.dart_fn_deliver_output(
+          callId, output.ptr, output.rustVecLen, output.dataLen);
+    };
+  }
+
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_StateApp => wire
           .rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp;
@@ -233,6 +259,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw) {
     return StateApp.dcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  FutureOr<void> Function() dco_decode_DartFn_Inputs__Output_unit(dynamic raw) {
+    throw UnimplementedError('');
+  }
+
+  @protected
+  Object dco_decode_DartOpaque(dynamic raw) {
+    return decodeDartOpaque(raw, generalizedFrbRustBinding);
   }
 
   @protected
@@ -317,6 +353,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
           SseDeserializer deserializer) {
     return StateApp.sseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  Object sse_decode_DartOpaque(SseDeserializer deserializer) {
+    var inner = sse_decode_usize(deserializer);
+    return decodeDartOpaque(inner, generalizedFrbRustBinding);
   }
 
   @protected
@@ -425,6 +467,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PlatformPointer cst_encode_DartFn_Inputs__Output_unit(
+      FutureOr<void> Function() raw) {
+    return cst_encode_DartOpaque(encode_DartFn_Inputs__Output_unit(raw));
+  }
+
+  @protected
+  PlatformPointer cst_encode_DartOpaque(Object raw) {
+    return encodeDartOpaque(
+        raw, portManager.dartHandlerPort, generalizedFrbRustBinding);
+  }
+
+  @protected
   PlatformPointer
       cst_encode_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp raw) {
@@ -459,6 +513,20 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp self, SseSerializer serializer) {
     sse_encode_usize(self.sseEncode(move: false), serializer);
+  }
+
+  @protected
+  void sse_encode_DartFn_Inputs__Output_unit(
+      FutureOr<void> Function() self, SseSerializer serializer) {
+    sse_encode_DartOpaque(encode_DartFn_Inputs__Output_unit(self), serializer);
+  }
+
+  @protected
+  void sse_encode_DartOpaque(Object self, SseSerializer serializer) {
+    sse_encode_usize(
+        PlatformPointerUtil.ptrToInt(encodeDartOpaque(
+            self, portManager.dartHandlerPort, generalizedFrbRustBinding)),
+        serializer);
   }
 
   @protected

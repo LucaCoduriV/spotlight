@@ -42,8 +42,9 @@ fn wire_StateApp_execute_impl(
     >,
     id: impl CstDecode<usize>,
     arg: impl CstDecode<Option<String>>,
+    on_executed: impl CstDecode<flutter_rust_bridge::DartOpaque>,
 ) {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
             debug_name: "StateApp_execute",
             port: Some(port_),
@@ -53,11 +54,21 @@ fn wire_StateApp_execute_impl(
             let api_that = that.cst_decode();
             let api_id = id.cst_decode();
             let api_arg = arg.cst_decode();
-            move |context| {
-                transform_result_dco((move || {
-                    let mut api_that = api_that.rust_auto_opaque_decode_sync_ref_mut();
-                    crate::api::simple::StateApp::execute(&mut api_that, api_id, api_arg)
-                })())
+            let api_on_executed = decode_DartFn_Inputs__Output_unit(on_executed.cst_decode());
+            move |context| async move {
+                transform_result_dco(
+                    (move || async move {
+                        let mut api_that = api_that.rust_auto_opaque_decode_async_ref_mut().await;
+                        crate::api::simple::StateApp::execute(
+                            &mut api_that,
+                            api_id,
+                            api_arg,
+                            api_on_executed,
+                        )
+                        .await
+                    })()
+                    .await,
+                )
             }
         },
     )
@@ -145,6 +156,26 @@ fn wire_search_impl(
     )
 }
 
+// Section: related_funcs
+
+fn decode_DartFn_Inputs__Output_unit(
+    dart_opaque: flutter_rust_bridge::DartOpaque,
+) -> impl Fn() -> flutter_rust_bridge::DartFnFuture<()> {
+    use flutter_rust_bridge::IntoDart;
+
+    async fn body(dart_opaque: flutter_rust_bridge::DartOpaque) -> () {
+        let args = vec![];
+        let message = FLUTTER_RUST_BRIDGE_HANDLER
+            .dart_fn_invoke(dart_opaque, args)
+            .await;
+        <()>::sse_decode_single(message)
+    }
+
+    move || {
+        flutter_rust_bridge::for_generated::convert_into_dart_fn_future(body(dart_opaque.clone()))
+    }
+}
+
 // Section: dart2rust
 
 impl CstDecode<u8> for u8 {
@@ -157,6 +188,13 @@ impl CstDecode<usize> for usize {
         self
     }
 }
+impl SseDecode for flutter_rust_bridge::DartOpaque {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <usize>::sse_decode(deserializer);
+        return unsafe { flutter_rust_bridge::for_generated::sse_decode_dart_opaque(inner) };
+    }
+}
+
 impl SseDecode
     for flutter_rust_bridge::RustOpaque<
         flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
@@ -305,6 +343,12 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::EntityError>
 {
     fn into_into_dart(self) -> crate::api::simple::EntityError {
         self
+    }
+}
+
+impl SseEncode for flutter_rust_bridge::DartOpaque {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <usize>::sse_encode(self.encode(), serializer);
     }
 }
 

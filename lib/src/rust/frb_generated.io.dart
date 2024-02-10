@@ -155,6 +155,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     wireObj.alias = cst_encode_opt_String(apiObj.alias);
     wireObj.description = cst_encode_opt_String(apiObj.description);
     wireObj.icon_path = cst_encode_opt_String(apiObj.iconPath);
+    wireObj.etype = cst_encode_String(apiObj.etype);
   }
 
   @protected
@@ -347,23 +348,6 @@ class RustLibWire implements BaseWire {
   late final _wire_StateApp_new =
       _wire_StateApp_newPtr.asFunction<void Function(int)>();
 
-  WireSyncRust2DartDco wire_greet(
-    ffi.Pointer<wire_cst_list_prim_u_8_strict> name,
-  ) {
-    return _wire_greet(
-      name,
-    );
-  }
-
-  late final _wire_greetPtr = _lookup<
-          ffi.NativeFunction<
-              WireSyncRust2DartDco Function(
-                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
-      'frbgen_spotlight_wire_greet');
-  late final _wire_greet = _wire_greetPtr.asFunction<
-      WireSyncRust2DartDco Function(
-          ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
-
   void wire_init_app(
     int port_,
   ) {
@@ -490,6 +474,8 @@ final class wire_cst_entity extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> description;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> icon_path;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> etype;
 }
 
 final class wire_cst_list_entity extends ffi.Struct {

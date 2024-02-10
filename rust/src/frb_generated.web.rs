@@ -42,8 +42,8 @@ impl CstDecode<crate::api::simple::Entity>
             .unwrap();
         assert_eq!(
             self_.length(),
-            5,
-            "Expected 5 elements, got {}",
+            6,
+            "Expected 6 elements, got {}",
             self_.length()
         );
         crate::api::simple::Entity {
@@ -52,6 +52,7 @@ impl CstDecode<crate::api::simple::Entity>
             alias: self_.get(2).cst_decode(),
             description: self_.get(3).cst_decode(),
             icon_path: self_.get(4).cst_decode(),
+            etype: self_.get(5).cst_decode(),
         }
     }
 }
@@ -156,11 +157,6 @@ pub fn wire_StateApp_execute(
 #[wasm_bindgen]
 pub fn wire_StateApp_new(port_: flutter_rust_bridge::for_generated::MessagePort) {
     wire_StateApp_new_impl(port_)
-}
-
-#[wasm_bindgen]
-pub fn wire_greet(name: String) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_greet_impl(name)
 }
 
 #[wasm_bindgen]

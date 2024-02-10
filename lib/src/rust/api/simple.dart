@@ -8,9 +8,6 @@ import 'package:flutter_rust_bridge/flutter_rust_bridge_for_generated.dart';
 import 'package:freezed_annotation/freezed_annotation.dart' hide protected;
 part 'simple.freezed.dart';
 
-String greet({required String name, dynamic hint}) =>
-    RustLib.instance.api.greet(name: name, hint: hint);
-
 Future<List<Entity>> search(
         {required StateApp obj, required String search, dynamic hint}) =>
     RustLib.instance.api.search(obj: obj, search: search, hint: hint);
@@ -54,6 +51,7 @@ class Entity {
   final String? alias;
   final String? description;
   final String? iconPath;
+  final String etype;
 
   const Entity({
     required this.index,
@@ -61,6 +59,7 @@ class Entity {
     this.alias,
     this.description,
     this.iconPath,
+    required this.etype,
   });
 
   @override
@@ -69,7 +68,8 @@ class Entity {
       name.hashCode ^
       alias.hashCode ^
       description.hashCode ^
-      iconPath.hashCode;
+      iconPath.hashCode ^
+      etype.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -80,7 +80,8 @@ class Entity {
           name == other.name &&
           alias == other.alias &&
           description == other.description &&
-          iconPath == other.iconPath;
+          iconPath == other.iconPath &&
+          etype == other.etype;
 }
 
 @freezed

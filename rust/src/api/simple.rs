@@ -2,11 +2,6 @@ use flutter_rust_bridge::DartFnFuture;
 use spotlight_core::{get_entities, FuzzyFinder, TEntity};
 use thiserror::Error;
 
-#[flutter_rust_bridge::frb(sync)] // Synchronous mode for simplicity of the demo
-pub fn greet(name: String) -> String {
-    format!("Hello, {name}!")
-}
-
 #[flutter_rust_bridge::frb(init)]
 pub fn init_app() {
     // Default utilities - feel free to customize
@@ -50,6 +45,7 @@ pub struct Entity {
     pub alias: Option<String>,
     pub description: Option<String>,
     pub icon_path: Option<String>,
+    pub etype: String,
 }
 
 pub fn search(obj: &mut StateApp, search: String) -> Vec<Entity> {
@@ -62,6 +58,10 @@ pub fn search(obj: &mut StateApp, search: String) -> Vec<Entity> {
             alias: ent.alias().map(|v| v.to_string()),
             description: ent.description().map(|v| v.to_string()),
             icon_path: ent.icon_path().map(|v| v.to_string()),
+            etype: match ent.etype() {
+                spotlight_core::EType::Application => "Application".to_owned(),
+                spotlight_core::EType::Command => "Command".to_owned(),
+            },
         })
         .collect()
 }

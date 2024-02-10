@@ -45,6 +45,7 @@ impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
             alias: self.alias.cst_decode(),
             description: self.description.cst_decode(),
             icon_path: self.icon_path.cst_decode(),
+            etype: self.etype.cst_decode(),
         }
     }
 }
@@ -93,6 +94,7 @@ impl NewWithNullPtr for wire_cst_entity {
             alias: core::ptr::null_mut(),
             description: core::ptr::null_mut(),
             icon_path: core::ptr::null_mut(),
+            etype: core::ptr::null_mut(),
         }
     }
 }
@@ -146,13 +148,6 @@ pub extern "C" fn frbgen_spotlight_wire_StateApp_execute(
 #[no_mangle]
 pub extern "C" fn frbgen_spotlight_wire_StateApp_new(port_: i64) {
     wire_StateApp_new_impl(port_)
-}
-
-#[no_mangle]
-pub extern "C" fn frbgen_spotlight_wire_greet(
-    name: *mut wire_cst_list_prim_u_8_strict,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    wire_greet_impl(name)
 }
 
 #[no_mangle]
@@ -222,6 +217,7 @@ pub struct wire_cst_entity {
     alias: *mut wire_cst_list_prim_u_8_strict,
     description: *mut wire_cst_list_prim_u_8_strict,
     icon_path: *mut wire_cst_list_prim_u_8_strict,
+    etype: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

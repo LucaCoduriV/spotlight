@@ -93,23 +93,6 @@ fn wire_StateApp_new_impl(port_: flutter_rust_bridge::for_generated::MessagePort
         },
     )
 }
-fn wire_greet_impl(
-    name: impl CstDecode<String>,
-) -> flutter_rust_bridge::for_generated::WireSyncRust2DartDco {
-    FLUTTER_RUST_BRIDGE_HANDLER.wrap_sync::<flutter_rust_bridge::for_generated::DcoCodec, _>(
-        flutter_rust_bridge::for_generated::TaskInfo {
-            debug_name: "greet",
-            port: None,
-            mode: flutter_rust_bridge::for_generated::FfiCallMode::Sync,
-        },
-        move || {
-            let api_name = name.cst_decode();
-            transform_result_dco((move || {
-                Result::<_, ()>::Ok(crate::api::simple::greet(api_name))
-            })())
-        },
-    )
-}
 fn wire_init_app_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
     FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
         flutter_rust_bridge::for_generated::TaskInfo {
@@ -220,12 +203,14 @@ impl SseDecode for crate::api::simple::Entity {
         let mut var_alias = <Option<String>>::sse_decode(deserializer);
         let mut var_description = <Option<String>>::sse_decode(deserializer);
         let mut var_iconPath = <Option<String>>::sse_decode(deserializer);
+        let mut var_etype = <String>::sse_decode(deserializer);
         return crate::api::simple::Entity {
             index: var_index,
             name: var_name,
             alias: var_alias,
             description: var_description,
             icon_path: var_iconPath,
+            etype: var_etype,
         };
     }
 }
@@ -315,6 +300,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::simple::Entity {
             self.alias.into_into_dart().into_dart(),
             self.description.into_into_dart().into_dart(),
             self.icon_path.into_into_dart().into_dart(),
+            self.etype.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -377,6 +363,7 @@ impl SseEncode for crate::api::simple::Entity {
         <Option<String>>::sse_encode(self.alias, serializer);
         <Option<String>>::sse_encode(self.description, serializer);
         <Option<String>>::sse_encode(self.icon_path, serializer);
+        <String>::sse_encode(self.etype, serializer);
     }
 }
 

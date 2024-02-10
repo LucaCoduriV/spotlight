@@ -70,8 +70,6 @@ abstract class RustLibApi extends BaseApi {
 
   Future<StateApp> stateAppNew({dynamic hint});
 
-  String greet({required String name, dynamic hint});
-
   Future<void> initApp({dynamic hint});
 
   Future<List<Entity>> search(
@@ -148,29 +146,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   TaskConstMeta get kStateAppNewConstMeta => const TaskConstMeta(
         debugName: "StateApp_new",
         argNames: [],
-      );
-
-  @override
-  String greet({required String name, dynamic hint}) {
-    return handler.executeSync(SyncTask(
-      callFfi: () {
-        var arg0 = cst_encode_String(name);
-        return wire.wire_greet(arg0);
-      },
-      codec: DcoCodec(
-        decodeSuccessData: dco_decode_String,
-        decodeErrorData: null,
-      ),
-      constMeta: kGreetConstMeta,
-      argValues: [name],
-      apiImpl: this,
-      hint: hint,
-    ));
-  }
-
-  TaskConstMeta get kGreetConstMeta => const TaskConstMeta(
-        debugName: "greet",
-        argNames: ["name"],
       );
 
   @override
@@ -286,14 +261,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   Entity dco_decode_entity(dynamic raw) {
     final arr = raw as List<dynamic>;
-    if (arr.length != 5)
-      throw Exception('unexpected arr length: expect 5 but see ${arr.length}');
+    if (arr.length != 6)
+      throw Exception('unexpected arr length: expect 6 but see ${arr.length}');
     return Entity(
       index: dco_decode_usize(arr[0]),
       name: dco_decode_String(arr[1]),
       alias: dco_decode_opt_String(arr[2]),
       description: dco_decode_opt_String(arr[3]),
       iconPath: dco_decode_opt_String(arr[4]),
+      etype: dco_decode_String(arr[5]),
     );
   }
 
@@ -382,12 +358,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_alias = sse_decode_opt_String(deserializer);
     var var_description = sse_decode_opt_String(deserializer);
     var var_iconPath = sse_decode_opt_String(deserializer);
+    var var_etype = sse_decode_String(deserializer);
     return Entity(
         index: var_index,
         name: var_name,
         alias: var_alias,
         description: var_description,
-        iconPath: var_iconPath);
+        iconPath: var_iconPath,
+        etype: var_etype);
   }
 
   @protected
@@ -548,6 +526,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.alias, serializer);
     sse_encode_opt_String(self.description, serializer);
     sse_encode_opt_String(self.iconPath, serializer);
+    sse_encode_String(self.etype, serializer);
   }
 
   @protected

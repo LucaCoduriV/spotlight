@@ -131,7 +131,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       cst_encode_String(raw.name),
       cst_encode_opt_String(raw.alias),
       cst_encode_opt_String(raw.description),
-      cst_encode_opt_String(raw.iconPath)
+      cst_encode_opt_String(raw.iconPath),
+      cst_encode_String(raw.etype)
     ];
   }
 
@@ -264,9 +265,6 @@ class RustLibWire extends BaseWire {
   void wire_StateApp_new(NativePortType port_) =>
       wasmModule.wire_StateApp_new(port_);
 
-  dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_greet(String name) => wasmModule.wire_greet(name);
-
   void wire_init_app(NativePortType port_) => wasmModule.wire_init_app(port_);
 
   void wire_search(NativePortType port_, Object obj, String search) =>
@@ -304,9 +302,6 @@ class RustLibWasmModule implements WasmModule {
       String? arg, PlatformPointer on_executed);
 
   external void wire_StateApp_new(NativePortType port_);
-
-  external dynamic /* flutter_rust_bridge::for_generated::WireSyncRust2DartDco */
-      wire_greet(String name);
 
   external void wire_init_app(NativePortType port_);
 

@@ -1,5 +1,3 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scroll_to_index/scroll_to_index.dart';
@@ -10,6 +8,7 @@ import 'package:window_manager/window_manager.dart';
 
 import 'main_screen.dart';
 import 'shortcuts.dart';
+import 'window_event_listener.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -37,40 +36,7 @@ Future<void> main() async {
   await RustLib.init();
   final service = di.registerSingleton<Service>(Service());
   service.init();
-  runApp(const WindowEventListener());
-}
-
-class WindowEventListener extends StatefulWidget {
-  const WindowEventListener({super.key});
-
-  @override
-  State<WindowEventListener> createState() => WindowEventListenerState();
-}
-
-class WindowEventListenerState extends State<WindowEventListener>
-    with WindowListener {
-  @override
-  void initState() {
-    super.initState();
-    windowManager.addListener(this);
-  }
-
-  @override
-  void dispose() {
-    windowManager.removeListener(this);
-    super.dispose();
-  }
-
-  @override
-  void onWindowBlur() {
-    super.onWindowBlur();
-    exit(0);
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return const MyApp();
-  }
+  runApp(const MyApp());
 }
 
 class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -84,6 +50,19 @@ class _MyAppState extends State<MyApp> {
   final text = TextEditingController();
   final Service service = di.get();
   final AutoScrollController scrollController = AutoScrollController();
+  final windowEventListener = WindowEventListener();
+
+  @override
+  void initState() {
+    super.initState();
+    windowManager.addListener(windowEventListener);
+  }
+
+  @override
+  void dispose() {
+    windowManager.removeListener(windowEventListener);
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {

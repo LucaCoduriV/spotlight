@@ -16,9 +16,10 @@ pub struct StateApp {
 impl StateApp {
     pub fn new() -> StateApp {
         StateApp {
-            entities: get_entities(None),
+            entities: get_entities(Some(".")),
         }
     }
+
     pub async fn execute(
         &mut self,
         id: usize,
@@ -30,6 +31,31 @@ impl StateApp {
             .map_err(|e| EntityError::Unknown(e.to_string()));
         on_executed().await;
         result
+    }
+
+    pub fn get_commands(&self) -> Vec<Entity> {
+        let mut temp: Vec<_> = self
+            .entities
+            .iter()
+            .filter(|e| matches!(e.etype(), spotlight_core::EType::Command))
+            .collect();
+
+        temp.sort_by_key(|e| e.frequency());
+
+        temp.iter()
+            .enumerate()
+            .map(|(i, e)| Entity {
+                index: i,
+                name: e.name().to_string(),
+                alias: e.alias().map(|v| v.to_string()),
+                description: e.description().map(|v| v.to_string()),
+                icon_path: e.icon_path().map(|v| v.to_string()),
+                etype: match e.etype() {
+                    spotlight_core::EType::Application => "Application".to_owned(),
+                    spotlight_core::EType::Command => "Command".to_owned(),
+                },
+            })
+            .collect()
     }
 }
 
@@ -48,8 +74,8 @@ pub struct Entity {
     pub etype: String,
 }
 
-pub fn search(obj: &mut StateApp, search: String) -> Vec<Entity> {
-    let result = FuzzyFinder::search(&search, obj.entities.as_mut());
+pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
+    let result = FuzzyFinder::search(&search, obj.entities.as_ref());
     result
         .into_iter()
         .map(|(index, _score, ent)| Entity {

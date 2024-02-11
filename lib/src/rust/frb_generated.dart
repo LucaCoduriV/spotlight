@@ -68,6 +68,9 @@ abstract class RustLibApi extends BaseApi {
       required FutureOr<void> Function() onExecuted,
       dynamic hint});
 
+  Future<List<Entity>> stateAppGetCommands(
+      {required StateApp that, dynamic hint});
+
   Future<StateApp> stateAppNew({dynamic hint});
 
   Future<void> initApp({dynamic hint});
@@ -126,6 +129,32 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<List<Entity>> stateAppGetCommands(
+      {required StateApp that, dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 =
+            cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+                that);
+        return wire.wire_StateApp_get_commands(port_, arg0);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_list_entity,
+        decodeErrorData: null,
+      ),
+      constMeta: kStateAppGetCommandsConstMeta,
+      argValues: [that],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kStateAppGetCommandsConstMeta => const TaskConstMeta(
+        debugName: "StateApp_get_commands",
+        argNames: ["that"],
+      );
+
+  @override
   Future<StateApp> stateAppNew({dynamic hint}) {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
@@ -176,7 +205,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     return handler.executeNormal(NormalTask(
       callFfi: (port_) {
         var arg0 =
-            cst_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+            cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
                 obj);
         var arg1 = cst_encode_String(search);
         return wire.wire_search(port_, arg0, arg1);
@@ -232,6 +261,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   StateApp
       dco_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          dynamic raw) {
+    return StateApp.dcoDecode(raw as List<dynamic>);
+  }
+
+  @protected
+  StateApp
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw) {
     return StateApp.dcoDecode(raw as List<dynamic>);
   }
@@ -326,6 +362,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   StateApp
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          SseDeserializer deserializer) {
+    return StateApp.sseDecode(
+        sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
+  }
+
+  @protected
+  StateApp
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer) {
     return StateApp.sseDecode(
         sse_decode_usize(deserializer), sse_decode_i_32(deserializer));
@@ -445,6 +489,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  PlatformPointer
+      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw) {
+    // ignore: invalid_use_of_internal_member
+    return raw.cstEncode(move: false);
+  }
+
+  @protected
   PlatformPointer cst_encode_DartFn_Inputs__Output_unit(
       FutureOr<void> Function() raw) {
     return cst_encode_DartOpaque(encode_DartFn_Inputs__Output_unit(raw));
@@ -489,6 +541,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer) {
+    sse_encode_usize(self.sseEncode(move: false), serializer);
+  }
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp self, SseSerializer serializer) {
     sse_encode_usize(self.sseEncode(move: false), serializer);
   }

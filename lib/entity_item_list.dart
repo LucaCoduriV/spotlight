@@ -12,12 +12,14 @@ class EntityItemList extends StatelessWidget {
     super.key,
     required this.widget,
     required this.entities,
-    required this.selected,
+    this.selected,
+    this.searchString,
   });
 
   final MainScreen widget;
   final List<Entity> entities;
   final Entity? selected;
+  final String? searchString;
 
   Widget? getImage(String? path) {
     if (path == null) {
@@ -56,6 +58,7 @@ class EntityItemList extends StatelessWidget {
             name: e.name,
             description: e.description ?? "",
             type: e.etype,
+            searchString: searchString,
           ),
         );
       }).toList(),

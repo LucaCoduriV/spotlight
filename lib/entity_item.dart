@@ -10,6 +10,7 @@ class EntityItem extends StatefulWidget {
   final String type;
   final bool selected;
   final Widget? image;
+  final String? searchString;
 
   const EntityItem({
     super.key,
@@ -18,7 +19,8 @@ class EntityItem extends StatefulWidget {
     required this.description,
     required this.type,
     required this.selected,
-    required this.image,
+    this.image,
+    this.searchString,
   });
 
   @override
@@ -52,7 +54,7 @@ class _EntityItemState extends State<EntityItem> {
         style: CustomTheme.secondaryText,
       ),
       onTap: () {
-        service.execute(widget.index);
+        service.execute(widget.index, arg: widget.searchString);
       },
     );
   }

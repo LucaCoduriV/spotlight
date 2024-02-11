@@ -155,6 +155,14 @@ pub fn wire_StateApp_execute(
 }
 
 #[wasm_bindgen]
+pub fn wire_StateApp_get_commands(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+) {
+    wire_StateApp_get_commands_impl(port_, that)
+}
+
+#[wasm_bindgen]
 pub fn wire_StateApp_new(port_: flutter_rust_bridge::for_generated::MessagePort) {
     wire_StateApp_new_impl(port_)
 }

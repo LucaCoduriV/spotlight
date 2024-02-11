@@ -37,7 +37,8 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final entities = watchPropertyValue((Service s) => s.entities);
+    final entities = watchPropertyValue((Service s) => s.searchResult);
+    final commands = watchPropertyValue((Service s) => s.entitiesCommands);
     final selected = watchPropertyValue((Service s) => s.selected);
     return Card(
       margin: const EdgeInsets.all(1),
@@ -79,8 +80,27 @@ class _MainScreenState extends State<MainScreen> {
           Expanded(
             child: EntityItemList(
               widget: widget,
-              entities: entities,
+              entities: entities
+                  .getRange(0, entities.length >= 3 ? 3 : entities.length)
+                  .toList(),
               selected: selected,
+            ),
+          ),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: [
+                Text("Commands", style: CustomTheme.headerText),
+              ],
+            ),
+          ),
+          Expanded(
+            child: EntityItemList(
+              searchString: text.text,
+              widget: widget,
+              entities: commands,
+              selected: commands.firstOrNull,
             ),
           ),
         ],

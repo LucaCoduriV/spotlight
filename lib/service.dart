@@ -6,7 +6,8 @@ import 'src/rust/api/simple.dart' as rust;
 
 class Service extends ChangeNotifier {
   rust.StateApp? state;
-  List<rust.Entity> entities = [];
+  List<rust.Entity> searchResult = [];
+  List<rust.Entity> entitiesCommands = [];
 
   int? _index;
   rust.Entity? selected;
@@ -15,6 +16,7 @@ class Service extends ChangeNotifier {
 
   Future<void> init() async {
     state = await rust.StateApp.newStateApp();
+    entitiesCommands = await state!.getCommands();
     await search("");
   }
 
@@ -22,12 +24,12 @@ class Service extends ChangeNotifier {
     if (_index == null) {
       return;
     }
-    if ((_index! + 1) >= entities.length) {
+    if ((_index! + 1) >= searchResult.length) {
       _index = 0;
     } else {
       _index = _index! + 1;
     }
-    selected = entities[_index!];
+    selected = searchResult[_index!];
     notifyListeners();
   }
 
@@ -36,27 +38,27 @@ class Service extends ChangeNotifier {
       return;
     }
     if ((_index! - 1) < 0) {
-      _index = entities.length - 1;
+      _index = searchResult.length - 1;
     } else {
       _index = _index! - 1;
     }
-    selected = entities[_index!];
+    selected = searchResult[_index!];
     notifyListeners();
   }
 
-  Future<void> select() async {
+  Future<void> select({String? arg}) async {
     if (_index == null) {
       return;
     }
-    await execute(entities[_index!].index);
+    await execute(searchResult[_index!].index, arg: arg);
   }
 
   Future<void> search(String search) async {
     if (state == null) {
       return;
     }
-    entities = await rust.search(obj: state!, search: search);
-    selected = entities.firstOrNull;
+    searchResult = await rust.search(obj: state!, search: search);
+    selected = searchResult.firstOrNull;
     if (selected != null) {
       _index = 0;
     } else {
@@ -65,7 +67,7 @@ class Service extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> execute(int index) async {
-    state?.execute(id: index, onExecuted: () => exit(0));
+  Future<void> execute(int index, {String? arg}) async {
+    state?.execute(id: index, arg: arg, onExecuted: () => exit(0));
   }
 }

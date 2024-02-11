@@ -146,6 +146,14 @@ pub extern "C" fn frbgen_spotlight_wire_StateApp_execute(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_spotlight_wire_StateApp_get_commands(
+    port_: i64,
+    that: *const std::ffi::c_void,
+) {
+    wire_StateApp_get_commands_impl(port_, that)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_spotlight_wire_StateApp_new(port_: i64) {
     wire_StateApp_new_impl(port_)
 }

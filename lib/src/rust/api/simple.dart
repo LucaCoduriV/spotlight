@@ -41,6 +41,11 @@ class StateApp extends RustOpaque {
         onExecuted: onExecuted,
       );
 
+  Future<List<Entity>> getCommands({dynamic hint}) =>
+      RustLib.instance.api.stateAppGetCommands(
+        that: this,
+      );
+
   static Future<StateApp> newStateApp({dynamic hint}) =>
       RustLib.instance.api.stateAppNew(hint: hint);
 }

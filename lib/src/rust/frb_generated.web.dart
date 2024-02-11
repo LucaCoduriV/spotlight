@@ -31,6 +31,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           dynamic raw);
 
   @protected
+  StateApp
+      dco_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          dynamic raw);
+
+  @protected
   FutureOr<void> Function() dco_decode_DartFn_Inputs__Output_unit(dynamic raw);
 
   @protected
@@ -76,6 +81,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   StateApp
       sse_decode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          SseDeserializer deserializer);
+
+  @protected
+  StateApp
+      sse_decode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer);
 
   @protected
@@ -171,6 +181,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           StateApp raw);
 
   @protected
+  PlatformPointer
+      cst_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp raw);
+
+  @protected
   PlatformPointer cst_encode_DartFn_Inputs__Output_unit(
       FutureOr<void> Function() raw);
 
@@ -199,6 +214,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   void
       sse_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+          StateApp self, SseSerializer serializer);
+
+  @protected
+  void
+      sse_encode_Auto_Ref_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           StateApp self, SseSerializer serializer);
 
   @protected
@@ -262,6 +282,9 @@ class RustLibWire extends BaseWire {
           String? arg, PlatformPointer on_executed) =>
       wasmModule.wire_StateApp_execute(port_, that, id, arg, on_executed);
 
+  void wire_StateApp_get_commands(NativePortType port_, Object that) =>
+      wasmModule.wire_StateApp_get_commands(port_, that);
+
   void wire_StateApp_new(NativePortType port_) =>
       wasmModule.wire_StateApp_new(port_);
 
@@ -300,6 +323,8 @@ class RustLibWasmModule implements WasmModule {
 
   external void wire_StateApp_execute(NativePortType port_, Object that, int id,
       String? arg, PlatformPointer on_executed);
+
+  external void wire_StateApp_get_commands(NativePortType port_, Object that);
 
   external void wire_StateApp_new(NativePortType port_);
 

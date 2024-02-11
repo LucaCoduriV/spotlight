@@ -111,7 +111,9 @@ class _MainScreenState extends State<MainScreen> {
               Expanded(
                 child: ScrollablePositionedList.builder(
                   itemScrollController: widget.scrollController,
-                  itemCount: entities.length + commands.length + 1,
+                  itemCount: entities.length +
+                      commands.length +
+                      (commands.isEmpty ? 0 : 1),
                   itemBuilder: (ctx, index) {
                     if (index < entities.length) {
                       final e = entities[index];
@@ -124,7 +126,8 @@ class _MainScreenState extends State<MainScreen> {
                         type: e.etype,
                         searchString: text.text,
                       );
-                    } else if (index == entities.length) {
+                    } else if (index == entities.length &&
+                        commands.isNotEmpty) {
                       return Padding(
                         padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
                         child: Row(

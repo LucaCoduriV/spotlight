@@ -1,6 +1,3 @@
-use std::fs;
-
-use directories::ProjectDirs;
 use flutter_rust_bridge::DartFnFuture;
 use spotlight_core::{get_entities, FuzzyFinder, TEntity};
 use thiserror::Error;
@@ -19,18 +16,8 @@ pub struct StateApp {
 impl StateApp {
     #[allow(clippy::new_without_default)]
     pub fn new() -> StateApp {
-        if let Some(proj_dirs) = ProjectDirs::from("com", "blazyr", "Blazyr") {
-            let config_folder = proj_dirs.config_local_dir();
-            fs::create_dir_all(config_folder).unwrap();
-
-            let config_folder = config_folder.to_string_lossy();
-            StateApp {
-                entities: get_entities(Some(&config_folder)),
-            }
-        } else {
-            StateApp {
-                entities: get_entities(Some(".")),
-            }
+        StateApp {
+            entities: get_entities(),
         }
     }
 

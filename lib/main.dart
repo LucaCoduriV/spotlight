@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
 import 'package:watch_it/watch_it.dart';
@@ -49,7 +49,7 @@ class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
 class _MyAppState extends State<MyApp> {
   final text = TextEditingController();
   final Service service = di.get();
-  final AutoScrollController scrollController = AutoScrollController();
+  final ItemScrollController scrollController = ItemScrollController();
   final windowEventListener = WindowEventListener();
 
   @override
@@ -89,7 +89,6 @@ class _MyAppState extends State<MyApp> {
             actions: <Type, Action<Intent>>{
               PreviousIntent: PreviousAction(scrollController),
               NextIntent: NextAction(scrollController),
-              SelectEntryIntent: SelectEntryAction(),
               CloseIntent: CloseAction(),
             },
             child: MainScreen(

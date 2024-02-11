@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:scroll_to_index/scroll_to_index.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/service.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -13,15 +13,15 @@ class PreviousIntent extends Intent {
 
 class PreviousAction extends Action<PreviousIntent> {
   final Service service = di.get();
-  final AutoScrollController controller;
+  final ItemScrollController controller;
   PreviousAction(this.controller);
 
   @override
   Object? invoke(covariant PreviousIntent intent) {
     service.previous();
     if (service.index != null) {
-      controller.scrollToIndex(service.index!,
-          duration: const Duration(milliseconds: 1));
+      controller.scrollTo(
+          index: service.index!, duration: const Duration(milliseconds: 100));
     }
     return null;
   }
@@ -33,15 +33,15 @@ class NextIntent extends Intent {
 
 class NextAction extends Action<NextIntent> {
   final Service service = di.get();
-  final AutoScrollController controller;
+  final ItemScrollController controller;
   NextAction(this.controller);
 
   @override
   Object? invoke(covariant NextIntent intent) {
     service.next();
     if (service.index != null) {
-      controller.scrollToIndex(service.index!,
-          duration: const Duration(milliseconds: 1));
+      controller.scrollTo(
+          index: service.index!, duration: const Duration(milliseconds: 100));
     }
     return null;
   }
@@ -53,11 +53,12 @@ class SelectEntryIntent extends Intent {
 
 class SelectEntryAction extends Action<SelectEntryIntent> {
   final Service service = di.get();
-  SelectEntryAction();
+  final String? arg;
+  SelectEntryAction({this.arg});
 
   @override
   Object? invoke(covariant SelectEntryIntent intent) {
-    service.select();
+    service.select(arg: arg);
     return null;
   }
 }

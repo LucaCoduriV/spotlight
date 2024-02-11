@@ -37,15 +37,15 @@ impl StateApp {
         let mut temp: Vec<_> = self
             .entities
             .iter()
-            .filter(|e| matches!(e.etype(), spotlight_core::EType::Command))
+            .enumerate()
+            .filter(|(_, e)| matches!(e.etype(), spotlight_core::EType::Command))
             .collect();
 
-        temp.sort_by_key(|e| e.frequency());
+        temp.sort_by_key(|(_, e)| e.frequency());
 
         temp.iter()
-            .enumerate()
             .map(|(i, e)| Entity {
-                index: i,
+                index: *i,
                 name: e.name().to_string(),
                 alias: e.alias().map(|v| v.to_string()),
                 description: e.description().map(|v| v.to_string()),

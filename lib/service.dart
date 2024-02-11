@@ -6,8 +6,8 @@ import 'src/rust/api/simple.dart' as rust;
 
 class Service extends ChangeNotifier {
   rust.StateApp? state;
-  List<rust.Entity> searchResult = [];
-  List<rust.Entity> entitiesCommands = [];
+  List<rust.Entity> entities = [];
+  List<rust.Entity> commands = [];
 
   int? _index;
   rust.Entity? selected;
@@ -16,53 +16,67 @@ class Service extends ChangeNotifier {
 
   Future<void> init() async {
     state = await rust.StateApp.newStateApp();
-    entitiesCommands = await state!.getCommands();
+    commands = await state!.getCommands();
     await search("");
   }
 
+  /// Select the next item in searchResult or in entitiesCommands
   void next() {
     if (_index == null) {
       return;
     }
-    if ((_index! + 1) >= searchResult.length) {
+    if ((_index! + 1) >= entities.length + commands.length) {
       _index = 0;
     } else {
       _index = _index! + 1;
     }
-    selected = searchResult[_index!];
+    if (_index! >= entities.length) {
+      selected = commands[_index! - entities.length];
+    } else {
+      selected = entities[_index!];
+    }
     notifyListeners();
   }
 
+  /// Select the previous item in searchResult or in entitiesCommands
   void previous() {
     if (_index == null) {
       return;
     }
     if ((_index! - 1) < 0) {
-      _index = searchResult.length - 1;
+      _index = entities.length + commands.length - 1;
     } else {
       _index = _index! - 1;
     }
-    selected = searchResult[_index!];
+    if (_index! < entities.length) {
+      selected = entities[_index!];
+    } else {
+      selected = commands[_index! - entities.length];
+    }
     notifyListeners();
   }
 
   Future<void> select({String? arg}) async {
-    if (_index == null) {
+    if (selected == null) {
       return;
     }
-    await execute(searchResult[_index!].index, arg: arg);
+    await execute(selected!.index, arg: arg);
   }
 
   Future<void> search(String search) async {
     if (state == null) {
       return;
     }
-    searchResult = await rust.search(obj: state!, search: search);
-    selected = searchResult.firstOrNull;
-    if (selected != null) {
-      _index = 0;
-    } else {
-      _index = null;
+    entities = await rust.search(obj: state!, search: search);
+
+    // After each search select the first entity available
+    selected = entities.firstOrNull;
+    _index = 0;
+    if (entities.isEmpty) {
+      selected = commands.firstOrNull;
+      if (commands.isEmpty) {
+        _index = null;
+      }
     }
     notifyListeners();
   }

@@ -205,6 +205,13 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "ed570934406eb16438a4e976b1b4500774099c13b8cb96eec99f620f05090ddf"
 
 [[package]]
+name = "blazyr-extension"
+version = "0.1.0"
+dependencies = [
+ "abi_stable",
+]
+
+[[package]]
 name = "block"
 version = "0.1.6"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1615,6 +1622,7 @@ version = "0.1.0"
 dependencies = [
  "abi_stable",
  "anyhow",
+ "blazyr-extension",
  "directories",
  "freedesktop-desktop-entry",
  "freedesktop-icons-greedy",
@@ -1625,17 +1633,9 @@ dependencies = [
  "rayon",
  "selection",
  "serde",
- "spotlight-extension",
  "thiserror",
  "walkdir",
  "which",
-]
-
-[[package]]
-name = "spotlight-extension"
-version = "0.1.0"
-dependencies = [
- "abi_stable",
 ]
 
 [[package]]

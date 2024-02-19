@@ -295,6 +295,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Image dco_decode_box_autoadd_image(dynamic raw) {
+    return dco_decode_image(raw);
+  }
+
+  @protected
   Entity dco_decode_entity(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 6)
@@ -304,7 +309,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       name: dco_decode_String(arr[1]),
       alias: dco_decode_opt_String(arr[2]),
       description: dco_decode_opt_String(arr[3]),
-      iconPath: dco_decode_opt_String(arr[4]),
+      icon: dco_decode_opt_box_autoadd_image(arr[4]),
       etype: dco_decode_String(arr[5]),
     );
   }
@@ -314,6 +319,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     switch (raw[0]) {
       case 0:
         return EntityError_Unknown(
+          dco_decode_String(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  Image dco_decode_image(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return Image_Data(
+          dco_decode_list_prim_u_8_strict(raw[1]),
+        );
+      case 1:
+        return Image_Path(
           dco_decode_String(raw[1]),
         );
       default:
@@ -334,6 +355,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   String? dco_decode_opt_String(dynamic raw) {
     return raw == null ? null : dco_decode_String(raw);
+  }
+
+  @protected
+  Image? dco_decode_opt_box_autoadd_image(dynamic raw) {
+    return raw == null ? null : dco_decode_box_autoadd_image(raw);
   }
 
   @protected
@@ -396,19 +422,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  Image sse_decode_box_autoadd_image(SseDeserializer deserializer) {
+    return (sse_decode_image(deserializer));
+  }
+
+  @protected
   Entity sse_decode_entity(SseDeserializer deserializer) {
     var var_index = sse_decode_usize(deserializer);
     var var_name = sse_decode_String(deserializer);
     var var_alias = sse_decode_opt_String(deserializer);
     var var_description = sse_decode_opt_String(deserializer);
-    var var_iconPath = sse_decode_opt_String(deserializer);
+    var var_icon = sse_decode_opt_box_autoadd_image(deserializer);
     var var_etype = sse_decode_String(deserializer);
     return Entity(
         index: var_index,
         name: var_name,
         alias: var_alias,
         description: var_description,
-        iconPath: var_iconPath,
+        icon: var_icon,
         etype: var_etype);
   }
 
@@ -419,6 +450,21 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 0:
         var var_field0 = sse_decode_String(deserializer);
         return EntityError_Unknown(var_field0);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  Image sse_decode_image(SseDeserializer deserializer) {
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_field0 = sse_decode_list_prim_u_8_strict(deserializer);
+        return Image_Data(var_field0);
+      case 1:
+        var var_field0 = sse_decode_String(deserializer);
+        return Image_Path(var_field0);
       default:
         throw UnimplementedError('');
     }
@@ -444,6 +490,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   String? sse_decode_opt_String(SseDeserializer deserializer) {
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_String(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  Image? sse_decode_opt_box_autoadd_image(SseDeserializer deserializer) {
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_autoadd_image(deserializer));
     } else {
       return null;
     }
@@ -579,12 +634,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_box_autoadd_image(Image self, SseSerializer serializer) {
+    sse_encode_image(self, serializer);
+  }
+
+  @protected
   void sse_encode_entity(Entity self, SseSerializer serializer) {
     sse_encode_usize(self.index, serializer);
     sse_encode_String(self.name, serializer);
     sse_encode_opt_String(self.alias, serializer);
     sse_encode_opt_String(self.description, serializer);
-    sse_encode_opt_String(self.iconPath, serializer);
+    sse_encode_opt_box_autoadd_image(self.icon, serializer);
     sse_encode_String(self.etype, serializer);
   }
 
@@ -593,6 +653,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     switch (self) {
       case EntityError_Unknown(field0: final field0):
         sse_encode_i_32(0, serializer);
+        sse_encode_String(field0, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_image(Image self, SseSerializer serializer) {
+    switch (self) {
+      case Image_Data(field0: final field0):
+        sse_encode_i_32(0, serializer);
+        sse_encode_list_prim_u_8_strict(field0, serializer);
+      case Image_Path(field0: final field0):
+        sse_encode_i_32(1, serializer);
         sse_encode_String(field0, serializer);
     }
   }
@@ -617,6 +689,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_String(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_autoadd_image(Image? self, SseSerializer serializer) {
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_autoadd_image(self, serializer);
     }
   }
 

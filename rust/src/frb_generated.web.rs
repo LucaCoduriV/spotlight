@@ -51,7 +51,7 @@ impl CstDecode<crate::api::simple::Entity>
             name: self_.get(1).cst_decode(),
             alias: self_.get(2).cst_decode(),
             description: self_.get(3).cst_decode(),
-            icon_path: self_.get(4).cst_decode(),
+            icon: self_.get(4).cst_decode(),
             etype: self_.get(5).cst_decode(),
         }
     }
@@ -63,6 +63,18 @@ impl CstDecode<crate::api::simple::EntityError>
         let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
         match self_.get(0).unchecked_into_f64() as _ {
             0 => crate::api::simple::EntityError::Unknown(self_.get(1).cst_decode()),
+            _ => unreachable!(),
+        }
+    }
+}
+impl CstDecode<crate::api::simple::Image>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> crate::api::simple::Image {
+        let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
+        match self_.get(0).unchecked_into_f64() as _ {
+            0 => crate::api::simple::Image::Data(self_.get(1).cst_decode()),
+            1 => crate::api::simple::Image::Path(self_.get(1).cst_decode()),
             _ => unreachable!(),
         }
     }

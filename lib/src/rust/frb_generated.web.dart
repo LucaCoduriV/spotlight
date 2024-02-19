@@ -50,10 +50,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  Image dco_decode_box_autoadd_image(dynamic raw);
+
+  @protected
   Entity dco_decode_entity(dynamic raw);
 
   @protected
   EntityError dco_decode_entity_error(dynamic raw);
+
+  @protected
+  Image dco_decode_image(dynamic raw);
 
   @protected
   List<Entity> dco_decode_list_entity(dynamic raw);
@@ -63,6 +69,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? dco_decode_opt_String(dynamic raw);
+
+  @protected
+  Image? dco_decode_opt_box_autoadd_image(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -100,10 +109,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  Image sse_decode_box_autoadd_image(SseDeserializer deserializer);
+
+  @protected
   Entity sse_decode_entity(SseDeserializer deserializer);
 
   @protected
   EntityError sse_decode_entity_error(SseDeserializer deserializer);
+
+  @protected
+  Image sse_decode_image(SseDeserializer deserializer);
 
   @protected
   List<Entity> sse_decode_list_entity(SseDeserializer deserializer);
@@ -113,6 +128,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
+  Image? sse_decode_opt_box_autoadd_image(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -135,13 +153,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  List<dynamic> cst_encode_box_autoadd_image(Image raw) {
+    return cst_encode_image(raw);
+  }
+
+  @protected
   List<dynamic> cst_encode_entity(Entity raw) {
     return [
       cst_encode_usize(raw.index),
       cst_encode_String(raw.name),
       cst_encode_opt_String(raw.alias),
       cst_encode_opt_String(raw.description),
-      cst_encode_opt_String(raw.iconPath),
+      cst_encode_opt_box_autoadd_image(raw.icon),
       cst_encode_String(raw.etype)
     ];
   }
@@ -150,6 +173,18 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   List<dynamic> cst_encode_entity_error(EntityError raw) {
     if (raw is EntityError_Unknown) {
       return [0, cst_encode_String(raw.field0)];
+    }
+
+    throw Exception('unreachable');
+  }
+
+  @protected
+  List<dynamic> cst_encode_image(Image raw) {
+    if (raw is Image_Data) {
+      return [0, cst_encode_list_prim_u_8_strict(raw.field0)];
+    }
+    if (raw is Image_Path) {
+      return [1, cst_encode_String(raw.field0)];
     }
 
     throw Exception('unreachable');
@@ -168,6 +203,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   String? cst_encode_opt_String(String? raw) {
     return raw == null ? null : cst_encode_String(raw);
+  }
+
+  @protected
+  List<dynamic>? cst_encode_opt_box_autoadd_image(Image? raw) {
+    return raw == null ? null : cst_encode_box_autoadd_image(raw);
   }
 
   @protected
@@ -237,10 +277,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_image(Image self, SseSerializer serializer);
+
+  @protected
   void sse_encode_entity(Entity self, SseSerializer serializer);
 
   @protected
   void sse_encode_entity_error(EntityError self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_image(Image self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_entity(List<Entity> self, SseSerializer serializer);
@@ -251,6 +297,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_image(Image? self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);

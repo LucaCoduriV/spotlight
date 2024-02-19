@@ -37,6 +37,12 @@ impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
         String::from_utf8(vec).unwrap()
     }
 }
+impl CstDecode<crate::api::simple::Image> for *mut wire_cst_image {
+    fn cst_decode(self) -> crate::api::simple::Image {
+        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+        CstDecode::<crate::api::simple::Image>::cst_decode(*wrap).into()
+    }
+}
 impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
     fn cst_decode(self) -> crate::api::simple::Entity {
         crate::api::simple::Entity {
@@ -44,7 +50,7 @@ impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
             name: self.name.cst_decode(),
             alias: self.alias.cst_decode(),
             description: self.description.cst_decode(),
-            icon_path: self.icon_path.cst_decode(),
+            icon: self.icon.cst_decode(),
             etype: self.etype.cst_decode(),
         }
     }
@@ -55,6 +61,21 @@ impl CstDecode<crate::api::simple::EntityError> for wire_cst_entity_error {
             0 => {
                 let ans = unsafe { self.kind.Unknown };
                 crate::api::simple::EntityError::Unknown(ans.field0.cst_decode())
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+impl CstDecode<crate::api::simple::Image> for wire_cst_image {
+    fn cst_decode(self) -> crate::api::simple::Image {
+        match self.tag {
+            0 => {
+                let ans = unsafe { self.kind.Data };
+                crate::api::simple::Image::Data(ans.field0.cst_decode())
+            }
+            1 => {
+                let ans = unsafe { self.kind.Path };
+                crate::api::simple::Image::Path(ans.field0.cst_decode())
             }
             _ => unreachable!(),
         }
@@ -93,7 +114,7 @@ impl NewWithNullPtr for wire_cst_entity {
             name: core::ptr::null_mut(),
             alias: core::ptr::null_mut(),
             description: core::ptr::null_mut(),
-            icon_path: core::ptr::null_mut(),
+            icon: core::ptr::null_mut(),
             etype: core::ptr::null_mut(),
         }
     }
@@ -112,6 +133,19 @@ impl NewWithNullPtr for wire_cst_entity_error {
     }
 }
 impl Default for wire_cst_entity_error {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_image {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            tag: -1,
+            kind: ImageKind { nil__: () },
+        }
+    }
+}
+impl Default for wire_cst_image {
     fn default() -> Self {
         Self::new_with_null_ptr()
     }
@@ -195,6 +229,11 @@ pub extern "C" fn frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_fl
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_spotlight_cst_new_box_autoadd_image() -> *mut wire_cst_image {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_image::new_with_null_ptr())
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_spotlight_cst_new_list_entity(len: i32) -> *mut wire_cst_list_entity {
     let wrap = wire_cst_list_entity {
         ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
@@ -224,7 +263,7 @@ pub struct wire_cst_entity {
     name: *mut wire_cst_list_prim_u_8_strict,
     alias: *mut wire_cst_list_prim_u_8_strict,
     description: *mut wire_cst_list_prim_u_8_strict,
-    icon_path: *mut wire_cst_list_prim_u_8_strict,
+    icon: *mut wire_cst_image,
     etype: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
@@ -242,6 +281,29 @@ pub union EntityErrorKind {
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct wire_cst_EntityError_Unknown {
+    field0: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_image {
+    tag: i32,
+    kind: ImageKind,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub union ImageKind {
+    Data: wire_cst_Image_Data,
+    Path: wire_cst_Image_Path,
+    nil__: (),
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_Image_Data {
+    field0: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_Image_Path {
     field0: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]

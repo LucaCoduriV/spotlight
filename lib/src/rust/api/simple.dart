@@ -55,7 +55,7 @@ class Entity {
   final String name;
   final String? alias;
   final String? description;
-  final String? iconPath;
+  final Image? icon;
   final String etype;
 
   const Entity({
@@ -63,7 +63,7 @@ class Entity {
     required this.name,
     this.alias,
     this.description,
-    this.iconPath,
+    this.icon,
     required this.etype,
   });
 
@@ -73,7 +73,7 @@ class Entity {
       name.hashCode ^
       alias.hashCode ^
       description.hashCode ^
-      iconPath.hashCode ^
+      icon.hashCode ^
       etype.hashCode;
 
   @override
@@ -85,7 +85,7 @@ class Entity {
           name == other.name &&
           alias == other.alias &&
           description == other.description &&
-          iconPath == other.iconPath &&
+          icon == other.icon &&
           etype == other.etype;
 }
 
@@ -94,4 +94,14 @@ sealed class EntityError with _$EntityError implements FrbException {
   const factory EntityError.unknown(
     String field0,
   ) = EntityError_Unknown;
+}
+
+@freezed
+sealed class Image with _$Image {
+  const factory Image.data(
+    Uint8List field0,
+  ) = Image_Data;
+  const factory Image.path(
+    String field0,
+  ) = Image_Path;
 }

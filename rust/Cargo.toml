@@ -10,4 +10,4 @@ crate-type = ["cdylib", "staticlib"]
 flutter_rust_bridge = "=2.0.0-dev.18"
 anyhow = "1.0.79"
 thiserror = "1.0.56"
-spotlight-core = { path = "../../core/" }
+blazyr-core = { path = "../../core/" }

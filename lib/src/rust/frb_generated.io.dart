@@ -51,10 +51,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  Image dco_decode_box_autoadd_image(dynamic raw);
+
+  @protected
   Entity dco_decode_entity(dynamic raw);
 
   @protected
   EntityError dco_decode_entity_error(dynamic raw);
+
+  @protected
+  Image dco_decode_image(dynamic raw);
 
   @protected
   List<Entity> dco_decode_list_entity(dynamic raw);
@@ -64,6 +70,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? dco_decode_opt_String(dynamic raw);
+
+  @protected
+  Image? dco_decode_opt_box_autoadd_image(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -101,10 +110,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  Image sse_decode_box_autoadd_image(SseDeserializer deserializer);
+
+  @protected
   Entity sse_decode_entity(SseDeserializer deserializer);
 
   @protected
   EntityError sse_decode_entity_error(SseDeserializer deserializer);
+
+  @protected
+  Image sse_decode_image(SseDeserializer deserializer);
 
   @protected
   List<Entity> sse_decode_list_entity(SseDeserializer deserializer);
@@ -114,6 +129,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   String? sse_decode_opt_String(SseDeserializer deserializer);
+
+  @protected
+  Image? sse_decode_opt_box_autoadd_image(SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -133,6 +151,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_encode_String(String raw) {
     return cst_encode_list_prim_u_8_strict(utf8.encoder.convert(raw));
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_image> cst_encode_box_autoadd_image(Image raw) {
+    final ptr = wire.cst_new_box_autoadd_image();
+    cst_api_fill_to_wire_image(raw, ptr.ref);
+    return ptr;
   }
 
   @protected
@@ -159,12 +184,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  ffi.Pointer<wire_cst_image> cst_encode_opt_box_autoadd_image(Image? raw) {
+    return raw == null ? ffi.nullptr : cst_encode_box_autoadd_image(raw);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_autoadd_image(
+      Image apiObj, ffi.Pointer<wire_cst_image> wireObj) {
+    cst_api_fill_to_wire_image(apiObj, wireObj.ref);
+  }
+
+  @protected
   void cst_api_fill_to_wire_entity(Entity apiObj, wire_cst_entity wireObj) {
     wireObj.index = cst_encode_usize(apiObj.index);
     wireObj.name = cst_encode_String(apiObj.name);
     wireObj.alias = cst_encode_opt_String(apiObj.alias);
     wireObj.description = cst_encode_opt_String(apiObj.description);
-    wireObj.icon_path = cst_encode_opt_String(apiObj.iconPath);
+    wireObj.icon = cst_encode_opt_box_autoadd_image(apiObj.icon);
     wireObj.etype = cst_encode_String(apiObj.etype);
   }
 
@@ -175,6 +211,22 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       var pre_field0 = cst_encode_String(apiObj.field0);
       wireObj.tag = 0;
       wireObj.kind.Unknown.field0 = pre_field0;
+      return;
+    }
+  }
+
+  @protected
+  void cst_api_fill_to_wire_image(Image apiObj, wire_cst_image wireObj) {
+    if (apiObj is Image_Data) {
+      var pre_field0 = cst_encode_list_prim_u_8_strict(apiObj.field0);
+      wireObj.tag = 0;
+      wireObj.kind.Data.field0 = pre_field0;
+      return;
+    }
+    if (apiObj is Image_Path) {
+      var pre_field0 = cst_encode_String(apiObj.field0);
+      wireObj.tag = 1;
+      wireObj.kind.Path.field0 = pre_field0;
       return;
     }
   }
@@ -246,10 +298,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_box_autoadd_image(Image self, SseSerializer serializer);
+
+  @protected
   void sse_encode_entity(Entity self, SseSerializer serializer);
 
   @protected
   void sse_encode_entity_error(EntityError self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_image(Image self, SseSerializer serializer);
 
   @protected
   void sse_encode_list_entity(List<Entity> self, SseSerializer serializer);
@@ -260,6 +318,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_String(String? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_autoadd_image(Image? self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
@@ -452,6 +513,16 @@ class RustLibWire implements BaseWire {
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
+  ffi.Pointer<wire_cst_image> cst_new_box_autoadd_image() {
+    return _cst_new_box_autoadd_image();
+  }
+
+  late final _cst_new_box_autoadd_imagePtr =
+      _lookup<ffi.NativeFunction<ffi.Pointer<wire_cst_image> Function()>>(
+          'frbgen_spotlight_cst_new_box_autoadd_image');
+  late final _cst_new_box_autoadd_image = _cst_new_box_autoadd_imagePtr
+      .asFunction<ffi.Pointer<wire_cst_image> Function()>();
+
   ffi.Pointer<wire_cst_list_entity> cst_new_list_entity(
     int len,
   ) {
@@ -500,6 +571,27 @@ final class wire_cst_list_prim_u_8_strict extends ffi.Struct {
   external int len;
 }
 
+final class wire_cst_Image_Data extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
+}
+
+final class wire_cst_Image_Path extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
+}
+
+final class ImageKind extends ffi.Union {
+  external wire_cst_Image_Data Data;
+
+  external wire_cst_Image_Path Path;
+}
+
+final class wire_cst_image extends ffi.Struct {
+  @ffi.Int32()
+  external int tag;
+
+  external ImageKind kind;
+}
+
 final class wire_cst_entity extends ffi.Struct {
   @ffi.UintPtr()
   external int index;
@@ -510,7 +602,7 @@ final class wire_cst_entity extends ffi.Struct {
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> description;
 
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> icon_path;
+  external ffi.Pointer<wire_cst_image> icon;
 
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> etype;
 }

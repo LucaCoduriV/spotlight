@@ -10,6 +10,8 @@ import 'package:watch_it/watch_it.dart';
 import 'entity_item.dart';
 import 'shortcuts.dart';
 
+import 'src/rust/api/simple.dart' as rust;
+
 class MainScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
   const MainScreen({
     super.key,
@@ -40,24 +42,16 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-  Widget? getImage(String? path) {
-    if (path == null) {
-      return null;
-    }
-    try {
-      final svg = switch (path.endsWith(".svg")) {
-        true => SvgPicture.file(File(path), height: 20),
-        _ => null,
-      };
-
-      if (svg != null) {
-        return svg;
-      }
-
-      return Image.file(File(path), height: 20);
-    } catch (e) {
-      return null;
-    }
+  Widget? getImage(rust.Image? image) {
+    final icon = switch (image) {
+      null => null,
+      rust.Image_Data(:final field0) => Image.memory(field0, height: 20),
+      rust.Image_Path(:final field0) => switch (field0.endsWith(".svg")) {
+          true => SvgPicture.file(File(field0), height: 20),
+          false => Image.file(File(field0), height: 20),
+        },
+    };
+    return icon;
   }
 
   @override
@@ -118,7 +112,7 @@ class _MainScreenState extends State<MainScreen> {
                     if (index < entities.length) {
                       final e = entities[index];
                       return EntityItem(
-                        image: getImage(e.iconPath),
+                        image: getImage(e.icon),
                         selected: index == selectedIndex,
                         index: e.index,
                         name: e.name,
@@ -141,7 +135,7 @@ class _MainScreenState extends State<MainScreen> {
 
                     final e = commands[index - entities.length - 1];
                     return EntityItem(
-                      image: getImage(e.iconPath),
+                      image: getImage(e.icon),
                       selected: index - 1 == selectedIndex,
                       index: e.index,
                       name: e.name,

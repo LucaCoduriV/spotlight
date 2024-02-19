@@ -1,5 +1,5 @@
+use blazyr_core::{get_entities, FuzzyFinder, TEntity};
 use flutter_rust_bridge::DartFnFuture;
-use spotlight_core::{get_entities, FuzzyFinder, TEntity};
 use thiserror::Error;
 
 #[flutter_rust_bridge::frb(init)]
@@ -39,7 +39,7 @@ impl StateApp {
             .entities
             .iter()
             .enumerate()
-            .filter(|(_, e)| matches!(e.etype(), spotlight_core::EType::Command))
+            .filter(|(_, e)| matches!(e.etype(), blazyr_core::EType::Command))
             .collect();
 
         temp.sort_by_key(|(_, e)| e.frequency());
@@ -50,10 +50,13 @@ impl StateApp {
                 name: e.name().to_string(),
                 alias: e.alias().map(|v| v.to_string()),
                 description: e.description().map(|v| v.to_string()),
-                icon_path: e.icon_path().map(|v| v.to_string()),
+                icon: e.icon().map(|v| match v {
+                    blazyr_core::Image::Data(d) => Image::Data(d),
+                    blazyr_core::Image::Path(p) => Image::Path(p),
+                }),
                 etype: match e.etype() {
-                    spotlight_core::EType::Application => "Application".to_owned(),
-                    spotlight_core::EType::Command => "Command".to_owned(),
+                    blazyr_core::EType::Application => "Application".to_owned(),
+                    blazyr_core::EType::Command => "Command".to_owned(),
                 },
             })
             .collect()
@@ -71,8 +74,13 @@ pub struct Entity {
     pub name: String,
     pub alias: Option<String>,
     pub description: Option<String>,
-    pub icon_path: Option<String>,
+    pub icon: Option<Image>,
     pub etype: String,
+}
+
+pub enum Image {
+    Data(Vec<u8>),
+    Path(String),
 }
 
 pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
@@ -84,10 +92,13 @@ pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
             name: ent.name().to_string(),
             alias: ent.alias().map(|v| v.to_string()),
             description: ent.description().map(|v| v.to_string()),
-            icon_path: ent.icon_path().map(|v| v.to_string()),
+            icon: ent.icon().map(|v| match v {
+                blazyr_core::Image::Data(d) => Image::Data(d),
+                blazyr_core::Image::Path(p) => Image::Path(p),
+            }),
             etype: match ent.etype() {
-                spotlight_core::EType::Application => "Application".to_owned(),
-                spotlight_core::EType::Command => "Command".to_owned(),
+                blazyr_core::EType::Application => "Application".to_owned(),
+                blazyr_core::EType::Command => "Command".to_owned(),
             },
         })
         .collect()

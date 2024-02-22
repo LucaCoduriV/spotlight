@@ -87,19 +87,22 @@ pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
     let result = FuzzyFinder::search(&search, obj.entities.as_ref());
     result
         .into_iter()
-        .map(|(index, _score, ent)| Entity {
-            index,
-            name: ent.name().to_string(),
-            alias: ent.alias().map(|v| v.to_string()),
-            description: ent.description().map(|v| v.to_string()),
-            icon: ent.icon().map(|v| match v {
-                blazyr_core::Image::Data(d) => Image::Data(d),
-                blazyr_core::Image::Path(p) => Image::Path(p),
-            }),
-            etype: match ent.etype() {
-                blazyr_core::EType::Application => "Application".to_owned(),
-                blazyr_core::EType::Command => "Command".to_owned(),
-            },
+        .map(|(index, _score)| {
+            let ent = &obj.entities[index];
+            Entity {
+                index,
+                name: ent.name().to_string(),
+                alias: ent.alias().map(|v| v.to_string()),
+                description: ent.description().map(|v| v.to_string()),
+                icon: ent.icon().map(|v| match v {
+                    blazyr_core::Image::Data(d) => Image::Data(d),
+                    blazyr_core::Image::Path(p) => Image::Path(p),
+                }),
+                etype: match ent.etype() {
+                    blazyr_core::EType::Application => "Application".to_owned(),
+                    blazyr_core::EType::Command => "Command".to_owned(),
+                },
+            }
         })
         .collect()
 }

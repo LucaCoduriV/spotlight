@@ -117,7 +117,7 @@ class _MainScreenState extends State<MainScreen> {
                         index: e.index,
                         name: e.name,
                         description: e.description ?? "",
-                        type: e.etype,
+                        type: e.type,
                         searchString: text.text,
                       );
                     } else if (index == entities.length &&
@@ -140,7 +140,7 @@ class _MainScreenState extends State<MainScreen> {
                       index: e.index,
                       name: e.name,
                       description: e.description ?? "",
-                      type: e.etype,
+                      type: e.type,
                       searchString: text.text,
                     );
                   },

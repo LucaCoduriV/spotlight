@@ -201,7 +201,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
     wireObj.alias = cst_encode_opt_String(apiObj.alias);
     wireObj.description = cst_encode_opt_String(apiObj.description);
     wireObj.icon = cst_encode_opt_box_autoadd_image(apiObj.icon);
-    wireObj.etype = cst_encode_String(apiObj.etype);
+    wireObj.type = cst_encode_String(apiObj.type);
   }
 
   @protected
@@ -604,7 +604,7 @@ final class wire_cst_entity extends ffi.Struct {
 
   external ffi.Pointer<wire_cst_image> icon;
 
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> etype;
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> type;
 }
 
 final class wire_cst_list_entity extends ffi.Struct {

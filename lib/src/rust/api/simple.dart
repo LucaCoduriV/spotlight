@@ -56,7 +56,7 @@ class Entity {
   final String? alias;
   final String? description;
   final Image? icon;
-  final String etype;
+  final String type;
 
   const Entity({
     required this.index,
@@ -64,7 +64,7 @@ class Entity {
     this.alias,
     this.description,
     this.icon,
-    required this.etype,
+    required this.type,
   });
 
   @override
@@ -74,7 +74,7 @@ class Entity {
       alias.hashCode ^
       description.hashCode ^
       icon.hashCode ^
-      etype.hashCode;
+      type.hashCode;
 
   @override
   bool operator ==(Object other) =>
@@ -86,7 +86,7 @@ class Entity {
           alias == other.alias &&
           description == other.description &&
           icon == other.icon &&
-          etype == other.etype;
+          type == other.type;
 }
 
 @freezed

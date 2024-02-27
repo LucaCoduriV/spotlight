@@ -1,4 +1,6 @@
-use blazyr_core::{get_entities, FuzzyFinder, TEntity};
+use core::panic;
+
+use blazyr_core::{get_entities, FuzzyFinder};
 use flutter_rust_bridge::DartFnFuture;
 use thiserror::Error;
 
@@ -10,7 +12,7 @@ pub fn init_app() {
 
 #[flutter_rust_bridge::frb(opaque)]
 pub struct StateApp {
-    pub entities: Vec<Box<dyn TEntity + Send + Sync>>,
+    pub entities: Vec<blazyr_core::Entity>,
 }
 
 impl StateApp {
@@ -27,9 +29,13 @@ impl StateApp {
         arg: Option<String>,
         on_executed: impl Fn() -> DartFnFuture<()>,
     ) -> Result<(), EntityError> {
-        let result = self.entities[id]
-            .execute(arg.as_deref())
-            .map_err(|e| EntityError::Unknown(e.to_string()));
+        let entity = &mut self.entities[id];
+        let result = match entity {
+            blazyr_core::Entity::Application(app) => app.execute(arg.as_deref()),
+            blazyr_core::Entity::Command(plug) => plug.execute(arg.as_deref()),
+        }
+        .map_err(|e| EntityError::Unknown(e.to_string()));
+
         on_executed().await;
         result
     }
@@ -39,25 +45,34 @@ impl StateApp {
             .entities
             .iter()
             .enumerate()
-            .filter(|(_, e)| matches!(e.etype(), blazyr_core::EType::Command))
+            .filter(|(_, e)| matches!(e, blazyr_core::Entity::Command(_)))
             .collect();
 
-        temp.sort_by_key(|(_, e)| e.frequency());
+        temp.sort_by_key(|(_, e)| match e {
+            blazyr_core::Entity::Application(app) => app.frequency(),
+            blazyr_core::Entity::Command(plug) => plug.frequency(),
+        });
 
         temp.iter()
-            .map(|(i, e)| Entity {
-                index: *i,
-                name: e.name().to_string(),
-                alias: e.alias().map(|v| v.to_string()),
-                description: e.description().map(|v| v.to_string()),
-                icon: e.icon().map(|v| match v {
-                    blazyr_core::Image::Data(d) => Image::Data(d),
-                    blazyr_core::Image::Path(p) => Image::Path(p),
-                }),
-                etype: match e.etype() {
-                    blazyr_core::EType::Application => "Application".to_owned(),
-                    blazyr_core::EType::Command => "Command".to_owned(),
-                },
+            .map(|(i, e)| {
+                let (name, alias, description, icon) = match e {
+                    blazyr_core::Entity::Command(plug) => {
+                        (plug.name(), plug.alias(), plug.description(), plug.icon())
+                    }
+                    _ => panic!("An other type than a command was incountered"),
+                };
+
+                Entity {
+                    index: *i,
+                    name: name.to_string(),
+                    alias: alias.map(|v| v.to_string()),
+                    description: description.map(|v| v.to_string()),
+                    icon: icon.map(|v| match v {
+                        blazyr_core::Image::Data(d) => Image::Data(d),
+                        blazyr_core::Image::Path(p) => Image::Path(p),
+                    }),
+                    r#type: "Command".to_owned(),
+                }
             })
             .collect()
     }
@@ -75,7 +90,7 @@ pub struct Entity {
     pub alias: Option<String>,
     pub description: Option<String>,
     pub icon: Option<Image>,
-    pub etype: String,
+    pub r#type: String,
 }
 
 pub enum Image {
@@ -89,19 +104,34 @@ pub fn search(obj: &StateApp, search: String) -> Vec<Entity> {
         .into_iter()
         .map(|(index, _score)| {
             let ent = &obj.entities[index];
+
+            let (name, alias, description, icon, etype) = match ent {
+                blazyr_core::Entity::Command(plug) => (
+                    plug.name(),
+                    plug.alias(),
+                    plug.description(),
+                    plug.icon(),
+                    "Command".to_owned(),
+                ),
+                blazyr_core::Entity::Application(app) => (
+                    app.name(),
+                    app.alias(),
+                    app.description(),
+                    app.icon(),
+                    "Application".to_owned(),
+                ),
+            };
+
             Entity {
                 index,
-                name: ent.name().to_string(),
-                alias: ent.alias().map(|v| v.to_string()),
-                description: ent.description().map(|v| v.to_string()),
-                icon: ent.icon().map(|v| match v {
+                name: name.to_string(),
+                alias: alias.map(|v| v.to_string()),
+                description: description.map(|v| v.to_string()),
+                icon: icon.map(|v| match v {
                     blazyr_core::Image::Data(d) => Image::Data(d),
                     blazyr_core::Image::Path(p) => Image::Path(p),
                 }),
-                etype: match ent.etype() {
-                    blazyr_core::EType::Application => "Application".to_owned(),
-                    blazyr_core::EType::Command => "Command".to_owned(),
-                },
+                r#type: etype,
             }
         })
         .collect()

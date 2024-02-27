@@ -165,7 +165,7 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       cst_encode_opt_String(raw.alias),
       cst_encode_opt_String(raw.description),
       cst_encode_opt_box_autoadd_image(raw.icon),
-      cst_encode_String(raw.etype)
+      cst_encode_String(raw.type)
     ];
   }
 

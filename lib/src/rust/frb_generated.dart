@@ -310,7 +310,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       alias: dco_decode_opt_String(arr[2]),
       description: dco_decode_opt_String(arr[3]),
       icon: dco_decode_opt_box_autoadd_image(arr[4]),
-      etype: dco_decode_String(arr[5]),
+      type: dco_decode_String(arr[5]),
     );
   }
 
@@ -433,14 +433,14 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     var var_alias = sse_decode_opt_String(deserializer);
     var var_description = sse_decode_opt_String(deserializer);
     var var_icon = sse_decode_opt_box_autoadd_image(deserializer);
-    var var_etype = sse_decode_String(deserializer);
+    var var_type = sse_decode_String(deserializer);
     return Entity(
         index: var_index,
         name: var_name,
         alias: var_alias,
         description: var_description,
         icon: var_icon,
-        etype: var_etype);
+        type: var_type);
   }
 
   @protected
@@ -645,7 +645,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_opt_String(self.alias, serializer);
     sse_encode_opt_String(self.description, serializer);
     sse_encode_opt_box_autoadd_image(self.icon, serializer);
-    sse_encode_String(self.etype, serializer);
+    sse_encode_String(self.type, serializer);
   }
 
   @protected

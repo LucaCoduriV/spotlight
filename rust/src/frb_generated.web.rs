@@ -52,7 +52,7 @@ impl CstDecode<crate::api::simple::Entity>
             alias: self_.get(2).cst_decode(),
             description: self_.get(3).cst_decode(),
             icon: self_.get(4).cst_decode(),
-            etype: self_.get(5).cst_decode(),
+            r#type: self_.get(5).cst_decode(),
         }
     }
 }

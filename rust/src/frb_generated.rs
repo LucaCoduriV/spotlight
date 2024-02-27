@@ -230,14 +230,14 @@ impl SseDecode for crate::api::simple::Entity {
         let mut var_alias = <Option<String>>::sse_decode(deserializer);
         let mut var_description = <Option<String>>::sse_decode(deserializer);
         let mut var_icon = <Option<crate::api::simple::Image>>::sse_decode(deserializer);
-        let mut var_etype = <String>::sse_decode(deserializer);
+        let mut var_type = <String>::sse_decode(deserializer);
         return crate::api::simple::Entity {
             index: var_index,
             name: var_name,
             alias: var_alias,
             description: var_description,
             icon: var_icon,
-            etype: var_etype,
+            r#type: var_type,
         };
     }
 }
@@ -356,7 +356,7 @@ impl flutter_rust_bridge::IntoDart for crate::api::simple::Entity {
             self.alias.into_into_dart().into_dart(),
             self.description.into_into_dart().into_dart(),
             self.icon.into_into_dart().into_dart(),
-            self.etype.into_into_dart().into_dart(),
+            self.r#type.into_into_dart().into_dart(),
         ]
         .into_dart()
     }
@@ -437,7 +437,7 @@ impl SseEncode for crate::api::simple::Entity {
         <Option<String>>::sse_encode(self.alias, serializer);
         <Option<String>>::sse_encode(self.description, serializer);
         <Option<crate::api::simple::Image>>::sse_encode(self.icon, serializer);
-        <String>::sse_encode(self.etype, serializer);
+        <String>::sse_encode(self.r#type, serializer);
     }
 }
 

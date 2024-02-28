@@ -136,6 +136,20 @@ fn wire_init_app_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
         },
     )
 }
+fn wire_on_exit_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "on_exit",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            move |context| {
+                transform_result_dco((move || Result::<_, ()>::Ok(crate::api::simple::on_exit()))())
+            }
+        },
+    )
+}
 fn wire_search_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     obj: impl CstDecode<
@@ -165,6 +179,26 @@ fn wire_search_impl(
         },
     )
 }
+fn wire_set_dart_action_stream_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_normal::<flutter_rust_bridge::for_generated::DcoCodec, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "set_dart_action_stream",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Stream,
+        },
+        move || {
+            move |context| {
+                transform_result_dco((move || {
+                    crate::api::simple::set_dart_action_stream(StreamSink::new(
+                        context
+                            .rust2dart_context()
+                            .stream_sink::<_, crate::api::simple::DartAction>(),
+                    ))
+                })())
+            }
+        },
+    )
+}
 
 // Section: related_funcs
 
@@ -188,6 +222,19 @@ fn decode_DartFn_Inputs__Output_unit(
 
 // Section: dart2rust
 
+impl CstDecode<crate::api::simple::DartAction> for i32 {
+    fn cst_decode(self) -> crate::api::simple::DartAction {
+        match self {
+            0 => crate::api::simple::DartAction::Exit,
+            _ => unreachable!("Invalid variant for DartAction: {}", self),
+        }
+    }
+}
+impl CstDecode<i32> for i32 {
+    fn cst_decode(self) -> i32 {
+        self
+    }
+}
 impl CstDecode<u8> for u8 {
     fn cst_decode(self) -> u8 {
         self
@@ -198,6 +245,12 @@ impl CstDecode<usize> for usize {
         self
     }
 }
+impl SseDecode for flutter_rust_bridge::for_generated::anyhow::Error {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        unimplemented!("not yet supported in serialized mode, feel free to create an issue");
+    }
+}
+
 impl SseDecode for flutter_rust_bridge::DartOpaque {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <usize>::sse_decode(deserializer);
@@ -220,6 +273,16 @@ impl SseDecode for String {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <Vec<u8>>::sse_decode(deserializer);
         return String::from_utf8(inner).unwrap();
+    }
+}
+
+impl SseDecode for crate::api::simple::DartAction {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut inner = <i32>::sse_decode(deserializer);
+        return match inner {
+            0 => crate::api::simple::DartAction::Exit,
+            _ => unreachable!("Invalid variant for DartAction: {}", inner),
+        };
     }
 }
 
@@ -254,6 +317,12 @@ impl SseDecode for crate::api::simple::EntityError {
                 unimplemented!("");
             }
         }
+    }
+}
+
+impl SseDecode for i32 {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
     }
 }
 
@@ -334,12 +403,6 @@ impl SseDecode for usize {
     }
 }
 
-impl SseDecode for i32 {
-    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
-        deserializer.cursor.read_i32::<NativeEndian>().unwrap()
-    }
-}
-
 impl SseDecode for bool {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_u8().unwrap() != 0
@@ -348,6 +411,24 @@ impl SseDecode for bool {
 
 // Section: rust2dart
 
+impl flutter_rust_bridge::IntoDart for crate::api::simple::DartAction {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            Self::Exit => 0.into_dart(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::simple::DartAction
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::DartAction>
+    for crate::api::simple::DartAction
+{
+    fn into_into_dart(self) -> crate::api::simple::DartAction {
+        self
+    }
+}
 impl flutter_rust_bridge::IntoDart for crate::api::simple::Entity {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
@@ -406,6 +487,12 @@ impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::Image> for crate::api
     }
 }
 
+impl SseEncode for flutter_rust_bridge::for_generated::anyhow::Error {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <String>::sse_encode(format!("{:?}", self), serializer);
+    }
+}
+
 impl SseEncode for flutter_rust_bridge::DartOpaque {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <usize>::sse_encode(self.encode(), serializer);
@@ -430,6 +517,12 @@ impl SseEncode for String {
     }
 }
 
+impl SseEncode for crate::api::simple::DartAction {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self as _, serializer);
+    }
+}
+
 impl SseEncode for crate::api::simple::Entity {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <usize>::sse_encode(self.index, serializer);
@@ -449,6 +542,12 @@ impl SseEncode for crate::api::simple::EntityError {
                 <String>::sse_encode(field0, serializer);
             }
         }
+    }
+}
+
+impl SseEncode for i32 {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
     }
 }
 
@@ -519,12 +618,6 @@ impl SseEncode for usize {
             .cursor
             .write_u64::<NativeEndian>(self as _)
             .unwrap();
-    }
-}
-
-impl SseEncode for i32 {
-    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
-        serializer.cursor.write_i32::<NativeEndian>(self).unwrap();
     }
 }
 

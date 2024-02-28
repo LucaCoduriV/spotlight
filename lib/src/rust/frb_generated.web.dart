@@ -21,6 +21,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp;
 
   @protected
+  AnyhowException dco_decode_AnyhowException(dynamic raw);
+
+  @protected
   StateApp
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
@@ -53,10 +56,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image dco_decode_box_autoadd_image(dynamic raw);
 
   @protected
+  DartAction dco_decode_dart_action(dynamic raw);
+
+  @protected
   Entity dco_decode_entity(dynamic raw);
 
   @protected
   EntityError dco_decode_entity_error(dynamic raw);
+
+  @protected
+  int dco_decode_i_32(dynamic raw);
 
   @protected
   Image dco_decode_image(dynamic raw);
@@ -81,6 +90,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int dco_decode_usize(dynamic raw);
+
+  @protected
+  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
 
   @protected
   StateApp
@@ -112,10 +124,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image sse_decode_box_autoadd_image(SseDeserializer deserializer);
 
   @protected
+  DartAction sse_decode_dart_action(SseDeserializer deserializer);
+
+  @protected
   Entity sse_decode_entity(SseDeserializer deserializer);
 
   @protected
   EntityError sse_decode_entity_error(SseDeserializer deserializer);
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
   Image sse_decode_image(SseDeserializer deserializer);
@@ -142,10 +160,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int sse_decode_usize(SseDeserializer deserializer);
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer);
+  bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer);
+  String cst_encode_AnyhowException(AnyhowException raw) {
+    throw UnimplementedError();
+  }
 
   @protected
   String cst_encode_String(String raw) {
@@ -238,6 +258,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           StateApp raw);
 
   @protected
+  int cst_encode_dart_action(DartAction raw);
+
+  @protected
+  int cst_encode_i_32(int raw);
+
+  @protected
   int cst_encode_u_8(int raw);
 
   @protected
@@ -245,6 +271,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int cst_encode_usize(int raw);
+
+  @protected
+  void sse_encode_AnyhowException(
+      AnyhowException self, SseSerializer serializer);
 
   @protected
   void
@@ -280,10 +310,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_image(Image self, SseSerializer serializer);
 
   @protected
+  void sse_encode_dart_action(DartAction self, SseSerializer serializer);
+
+  @protected
   void sse_encode_entity(Entity self, SseSerializer serializer);
 
   @protected
   void sse_encode_entity_error(EntityError self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_image(Image self, SseSerializer serializer);
@@ -311,9 +347,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_usize(int self, SseSerializer serializer);
 
   @protected
-  void sse_encode_i_32(int self, SseSerializer serializer);
-
-  @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
 }
 
@@ -339,8 +372,13 @@ class RustLibWire extends BaseWire {
 
   void wire_init_app(NativePortType port_) => wasmModule.wire_init_app(port_);
 
+  void wire_on_exit(NativePortType port_) => wasmModule.wire_on_exit(port_);
+
   void wire_search(NativePortType port_, Object obj, String search) =>
       wasmModule.wire_search(port_, obj, search);
+
+  void wire_set_dart_action_stream(NativePortType port_) =>
+      wasmModule.wire_set_dart_action_stream(port_);
 
   void rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic ptr) =>
@@ -379,7 +417,11 @@ class RustLibWasmModule implements WasmModule {
 
   external void wire_init_app(NativePortType port_);
 
+  external void wire_on_exit(NativePortType port_);
+
   external void wire_search(NativePortType port_, Object obj, String search);
+
+  external void wire_set_dart_action_stream(NativePortType port_);
 
   external void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(

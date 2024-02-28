@@ -75,8 +75,12 @@ abstract class RustLibApi extends BaseApi {
 
   Future<void> initApp({dynamic hint});
 
+  Future<void> onExit({dynamic hint});
+
   Future<List<Entity>> search(
       {required StateApp obj, required String search, dynamic hint});
+
+  Stream<DartAction> setDartActionStream({dynamic hint});
 
   RustArcIncrementStrongCountFnType
       get rust_arc_increment_strong_count_StateApp;
@@ -200,6 +204,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       );
 
   @override
+  Future<void> onExit({dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        return wire.wire_on_exit(port_);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: null,
+      ),
+      constMeta: kOnExitConstMeta,
+      argValues: [],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kOnExitConstMeta => const TaskConstMeta(
+        debugName: "on_exit",
+        argNames: [],
+      );
+
+  @override
   Future<List<Entity>> search(
       {required StateApp obj, required String search, dynamic hint}) {
     return handler.executeNormal(NormalTask(
@@ -226,6 +252,28 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         argNames: ["obj", "search"],
       );
 
+  @override
+  Stream<DartAction> setDartActionStream({dynamic hint}) {
+    return handler.executeStream(StreamTask(
+      callFfi: (port_) {
+        return wire.wire_set_dart_action_stream(port_);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_dart_action,
+        decodeErrorData: dco_decode_AnyhowException,
+      ),
+      constMeta: kSetDartActionStreamConstMeta,
+      argValues: [],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kSetDartActionStreamConstMeta => const TaskConstMeta(
+        debugName: "set_dart_action_stream",
+        argNames: [],
+      );
+
   Future<void> Function(
     int,
   ) encode_DartFn_Inputs__Output_unit(FutureOr<void> Function() raw) {
@@ -250,6 +298,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   RustArcDecrementStrongCountFnType
       get rust_arc_decrement_strong_count_StateApp => wire
           .rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp;
+
+  @protected
+  AnyhowException dco_decode_AnyhowException(dynamic raw) {
+    return AnyhowException(raw as String);
+  }
 
   @protected
   StateApp
@@ -300,6 +353,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  DartAction dco_decode_dart_action(dynamic raw) {
+    return DartAction.values[raw as int];
+  }
+
+  @protected
   Entity dco_decode_entity(dynamic raw) {
     final arr = raw as List<dynamic>;
     if (arr.length != 6)
@@ -324,6 +382,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       default:
         throw Exception("unreachable");
     }
+  }
+
+  @protected
+  int dco_decode_i_32(dynamic raw) {
+    return raw as int;
   }
 
   @protected
@@ -378,6 +441,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer) {
+    var inner = sse_decode_String(deserializer);
+    return AnyhowException(inner);
+  }
+
+  @protected
   StateApp
       sse_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           SseDeserializer deserializer) {
@@ -427,6 +496,12 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  DartAction sse_decode_dart_action(SseDeserializer deserializer) {
+    var inner = sse_decode_i_32(deserializer);
+    return DartAction.values[inner];
+  }
+
+  @protected
   Entity sse_decode_entity(SseDeserializer deserializer) {
     var var_index = sse_decode_usize(deserializer);
     var var_name = sse_decode_String(deserializer);
@@ -453,6 +528,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       default:
         throw UnimplementedError('');
     }
+  }
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer) {
+    return deserializer.buffer.getInt32();
   }
 
   @protected
@@ -518,11 +598,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer) {
-    return deserializer.buffer.getInt32();
-  }
-
-  @protected
   bool sse_decode_bool(SseDeserializer deserializer) {
     return deserializer.buffer.getUint8() != 0;
   }
@@ -572,6 +647,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  int cst_encode_dart_action(DartAction raw) {
+    return cst_encode_i_32(raw.index);
+  }
+
+  @protected
+  int cst_encode_i_32(int raw) {
+    return raw;
+  }
+
+  @protected
   int cst_encode_u_8(int raw) {
     return raw;
   }
@@ -584,6 +669,13 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   int cst_encode_usize(int raw) {
     return raw;
+  }
+
+  @protected
+  void sse_encode_AnyhowException(
+      AnyhowException self, SseSerializer serializer) {
+    throw UnimplementedError(
+        'not yet supported in serialized mode, feel free to create an issue');
   }
 
   @protected
@@ -639,6 +731,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_dart_action(DartAction self, SseSerializer serializer) {
+    sse_encode_i_32(self.index, serializer);
+  }
+
+  @protected
   void sse_encode_entity(Entity self, SseSerializer serializer) {
     sse_encode_usize(self.index, serializer);
     sse_encode_String(self.name, serializer);
@@ -655,6 +752,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         sse_encode_i_32(0, serializer);
         sse_encode_String(field0, serializer);
     }
+  }
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer) {
+    serializer.buffer.putInt32(self);
   }
 
   @protected
@@ -711,11 +813,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   void sse_encode_usize(int self, SseSerializer serializer) {
     serializer.buffer.putUint64(self);
-  }
-
-  @protected
-  void sse_encode_i_32(int self, SseSerializer serializer) {
-    serializer.buffer.putInt32(self);
   }
 
   @protected

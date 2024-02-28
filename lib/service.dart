@@ -8,6 +8,7 @@ class Service extends ChangeNotifier {
   rust.StateApp? state;
   List<rust.Entity> entities = [];
   List<rust.Entity> commands = [];
+  late Stream<rust.DartAction> stream;
 
   int? _index;
   rust.Entity? selected;
@@ -18,6 +19,13 @@ class Service extends ChangeNotifier {
     state = await rust.StateApp.newStateApp();
     commands = await state!.getCommands();
     await search("");
+    stream = rust.setDartActionStream();
+    stream.listen((event) {
+      if (event == rust.DartAction.exit) {
+        print("ASKED TO EXIT");
+        exit(0);
+      }
+    });
   }
 
   /// Select the next item in searchResult or in entitiesCommands

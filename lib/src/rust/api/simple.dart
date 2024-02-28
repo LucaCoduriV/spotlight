@@ -12,6 +12,11 @@ Future<List<Entity>> search(
         {required StateApp obj, required String search, dynamic hint}) =>
     RustLib.instance.api.search(obj: obj, search: search, hint: hint);
 
+Stream<DartAction> setDartActionStream({dynamic hint}) =>
+    RustLib.instance.api.setDartActionStream(hint: hint);
+
+Future<void> onExit({dynamic hint}) => RustLib.instance.api.onExit(hint: hint);
+
 // Rust type: flutter_rust_bridge::RustOpaque<flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>>
 @sealed
 class StateApp extends RustOpaque {
@@ -48,6 +53,10 @@ class StateApp extends RustOpaque {
 
   static Future<StateApp> newStateApp({dynamic hint}) =>
       RustLib.instance.api.stateAppNew(hint: hint);
+}
+
+enum DartAction {
+  exit,
 }
 
 class Entity {

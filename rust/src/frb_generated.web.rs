@@ -21,6 +21,11 @@ where
         (!self.is_null() && !self.is_undefined()).then(|| self.cst_decode())
     }
 }
+impl CstDecode<flutter_rust_bridge::for_generated::anyhow::Error> for String {
+    fn cst_decode(self) -> flutter_rust_bridge::for_generated::anyhow::Error {
+        unimplemented!()
+    }
+}
 impl CstDecode<flutter_rust_bridge::DartOpaque>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
@@ -100,6 +105,13 @@ impl CstDecode<Option<String>> for Option<String> {
         self.map(CstDecode::cst_decode)
     }
 }
+impl CstDecode<flutter_rust_bridge::for_generated::anyhow::Error>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> flutter_rust_bridge::for_generated::anyhow::Error {
+        unimplemented!()
+    }
+}
 impl
     CstDecode<
         flutter_rust_bridge::RustOpaque<
@@ -118,6 +130,18 @@ impl
 impl CstDecode<String> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
     fn cst_decode(self) -> String {
         self.as_string().expect("non-UTF-8 string, or not a string")
+    }
+}
+impl CstDecode<crate::api::simple::DartAction>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> crate::api::simple::DartAction {
+        (self.unchecked_into_f64() as i32).cst_decode()
+    }
+}
+impl CstDecode<i32> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
+    fn cst_decode(self) -> i32 {
+        self.unchecked_into_f64() as _
     }
 }
 impl CstDecode<Vec<u8>> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
@@ -185,12 +209,22 @@ pub fn wire_init_app(port_: flutter_rust_bridge::for_generated::MessagePort) {
 }
 
 #[wasm_bindgen]
+pub fn wire_on_exit(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    wire_on_exit_impl(port_)
+}
+
+#[wasm_bindgen]
 pub fn wire_search(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     obj: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
     search: String,
 ) {
     wire_search_impl(port_, obj, search)
+}
+
+#[wasm_bindgen]
+pub fn wire_set_dart_action_stream(port_: flutter_rust_bridge::for_generated::MessagePort) {
+    wire_set_dart_action_stream_impl(port_)
 }
 
 #[wasm_bindgen]

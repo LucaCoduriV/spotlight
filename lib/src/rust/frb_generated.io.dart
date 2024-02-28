@@ -22,6 +22,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       ._rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr;
 
   @protected
+  AnyhowException dco_decode_AnyhowException(dynamic raw);
+
+  @protected
   StateApp
       dco_decode_Auto_Owned_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
           dynamic raw);
@@ -54,10 +57,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image dco_decode_box_autoadd_image(dynamic raw);
 
   @protected
+  DartAction dco_decode_dart_action(dynamic raw);
+
+  @protected
   Entity dco_decode_entity(dynamic raw);
 
   @protected
   EntityError dco_decode_entity_error(dynamic raw);
+
+  @protected
+  int dco_decode_i_32(dynamic raw);
 
   @protected
   Image dco_decode_image(dynamic raw);
@@ -82,6 +91,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int dco_decode_usize(dynamic raw);
+
+  @protected
+  AnyhowException sse_decode_AnyhowException(SseDeserializer deserializer);
 
   @protected
   StateApp
@@ -113,10 +125,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image sse_decode_box_autoadd_image(SseDeserializer deserializer);
 
   @protected
+  DartAction sse_decode_dart_action(SseDeserializer deserializer);
+
+  @protected
   Entity sse_decode_entity(SseDeserializer deserializer);
 
   @protected
   EntityError sse_decode_entity_error(SseDeserializer deserializer);
+
+  @protected
+  int sse_decode_i_32(SseDeserializer deserializer);
 
   @protected
   Image sse_decode_image(SseDeserializer deserializer);
@@ -143,10 +161,13 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   int sse_decode_usize(SseDeserializer deserializer);
 
   @protected
-  int sse_decode_i_32(SseDeserializer deserializer);
+  bool sse_decode_bool(SseDeserializer deserializer);
 
   @protected
-  bool sse_decode_bool(SseDeserializer deserializer);
+  ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_encode_AnyhowException(
+      AnyhowException raw) {
+    throw UnimplementedError();
+  }
 
   @protected
   ffi.Pointer<wire_cst_list_prim_u_8_strict> cst_encode_String(String raw) {
@@ -259,6 +280,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
           StateApp raw);
 
   @protected
+  int cst_encode_dart_action(DartAction raw);
+
+  @protected
+  int cst_encode_i_32(int raw);
+
+  @protected
   int cst_encode_u_8(int raw);
 
   @protected
@@ -266,6 +293,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   int cst_encode_usize(int raw);
+
+  @protected
+  void sse_encode_AnyhowException(
+      AnyhowException self, SseSerializer serializer);
 
   @protected
   void
@@ -301,10 +332,16 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_box_autoadd_image(Image self, SseSerializer serializer);
 
   @protected
+  void sse_encode_dart_action(DartAction self, SseSerializer serializer);
+
+  @protected
   void sse_encode_entity(Entity self, SseSerializer serializer);
 
   @protected
   void sse_encode_entity_error(EntityError self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_i_32(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_image(Image self, SseSerializer serializer);
@@ -330,9 +367,6 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_usize(int self, SseSerializer serializer);
-
-  @protected
-  void sse_encode_i_32(int self, SseSerializer serializer);
 
   @protected
   void sse_encode_bool(bool self, SseSerializer serializer);
@@ -460,6 +494,19 @@ class RustLibWire implements BaseWire {
   late final _wire_init_app =
       _wire_init_appPtr.asFunction<void Function(int)>();
 
+  void wire_on_exit(
+    int port_,
+  ) {
+    return _wire_on_exit(
+      port_,
+    );
+  }
+
+  late final _wire_on_exitPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'frbgen_spotlight_wire_on_exit');
+  late final _wire_on_exit = _wire_on_exitPtr.asFunction<void Function(int)>();
+
   void wire_search(
     int port_,
     ffi.Pointer<ffi.Void> obj,
@@ -480,6 +527,20 @@ class RustLibWire implements BaseWire {
   late final _wire_search = _wire_searchPtr.asFunction<
       void Function(int, ffi.Pointer<ffi.Void>,
           ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
+  void wire_set_dart_action_stream(
+    int port_,
+  ) {
+    return _wire_set_dart_action_stream(
+      port_,
+    );
+  }
+
+  late final _wire_set_dart_action_streamPtr =
+      _lookup<ffi.NativeFunction<ffi.Void Function(ffi.Int64)>>(
+          'frbgen_spotlight_wire_set_dart_action_stream');
+  late final _wire_set_dart_action_stream =
+      _wire_set_dart_action_streamPtr.asFunction<void Function(int)>();
 
   void
       rust_arc_increment_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(

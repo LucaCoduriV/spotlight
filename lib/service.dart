@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:window_manager/window_manager.dart';
 
 import 'src/rust/api/simple.dart' as rust;
 
@@ -90,6 +91,13 @@ class Service extends ChangeNotifier {
   }
 
   Future<void> execute(int index, {String? arg}) async {
-    state?.execute(id: index, arg: arg, onExecuted: () => exit(0));
+    windowManager.hide();
+    state?.execute(
+        id: index,
+        arg: arg,
+        onExecuted: () async {
+          await rust.onExit();
+          exit(0);
+        });
   }
 }

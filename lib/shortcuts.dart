@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/service.dart';
 import 'package:watch_it/watch_it.dart';
+import 'package:window_manager/window_manager.dart';
 import 'src/rust/api/simple.dart' as rust;
 
 import 'src/rust/frb_generated.dart';
@@ -73,6 +74,7 @@ class CloseAction extends Action<CloseIntent> {
 
   @override
   Object? invoke(covariant CloseIntent intent) async {
+    windowManager.hide();
     await rust.onExit();
     RustLib.dispose();
     exit(0);

@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/service.dart';
-import 'package:spotlight/src/rust/api/simple.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:window_manager/window_manager.dart';

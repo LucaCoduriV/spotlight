@@ -1,7 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/svg.dart';
+import 'package:jovial_svg/jovial_svg.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/theme.dart';
@@ -9,7 +9,6 @@ import 'package:watch_it/watch_it.dart';
 
 import 'entity_item.dart';
 import 'shortcuts.dart';
-
 import 'src/rust/api/simple.dart' as rust;
 
 class MainScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -45,13 +44,26 @@ class _MainScreenState extends State<MainScreen> {
   Widget? getImage(rust.Image? image) {
     final icon = switch (image) {
       null => null,
-      rust.Image_Data(:final field0) => Image.memory(field0, height: 20),
+      rust.Image_Data(:final field0) =>
+        Image.memory(field0, height: 20, width: 20),
       rust.Image_Path(:final field0) => switch (field0.endsWith(".svg")) {
-          true => SvgPicture.file(File(field0), height: 20),
-          false => Image.file(File(field0), height: 20),
+          true => SizedBox(
+              width: 20,
+              height: 20,
+              child: ScalableImageWidget(
+                  si: ScalableImage.fromSvgString(_readFileString(field0))),
+            ),
+          false => Image.file(File(field0), height: 20, width: 20),
         },
     };
     return icon;
+  }
+
+  String _readFileString(String filePath) {
+    Uri myUri = Uri.parse(filePath);
+    File file = File.fromUri(myUri);
+    String bytes = file.readAsStringSync();
+    return bytes;
   }
 
   @override

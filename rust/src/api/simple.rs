@@ -21,7 +21,7 @@ pub fn init_app() {
 
 #[flutter_rust_bridge::frb(opaque)]
 pub struct StateApp {
-    pub entities: Vec<blazyr_core::Entity>,
+    pub entities: Vec<blazyr_core::Entity<App>>,
     pub frequencies: Vec<u64>,
     pub apps_range: Range<usize>,
     pub plugins_range: Range<usize>,

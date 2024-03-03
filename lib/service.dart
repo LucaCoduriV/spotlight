@@ -96,7 +96,6 @@ class Service extends ChangeNotifier {
         id: index,
         arg: arg,
         onExecuted: () async {
-          await rust.onExit();
           exit(0);
         });
   }

@@ -9,7 +9,7 @@ import 'package:watch_it/watch_it.dart';
 
 import 'entity_item.dart';
 import 'shortcuts.dart';
-import 'src/rust/api/simple.dart' as rust;
+import 'src/rust/api/core.dart' as rust_core;
 
 class MainScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
   const MainScreen({
@@ -41,12 +41,12 @@ class _MainScreenState extends State<MainScreen> {
     super.dispose();
   }
 
-  Widget? getImage(rust.Image? image) {
+  Widget? getImage(rust_core.Image? image) {
     final icon = switch (image) {
       null => null,
-      rust.Image_Data(:final field0) =>
+      rust_core.Image_Data(:final field0) =>
         Image.memory(field0, height: 20, width: 20),
-      rust.Image_Path(:final field0) => switch (field0.endsWith(".svg")) {
+      rust_core.Image_Path(:final field0) => switch (field0.endsWith(".svg")) {
           true => SizedBox(
               width: 20,
               height: 20,

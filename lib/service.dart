@@ -3,26 +3,26 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'src/rust/api/simple.dart' as rust;
+import 'src/rust/api/core.dart' as rust_core;
 
 class Service extends ChangeNotifier {
-  rust.StateApp? state;
-  List<rust.Entity> entities = [];
-  List<rust.Entity> commands = [];
-  late Stream<rust.DartAction> stream;
+  rust_core.StateApp? state;
+  List<rust_core.Entity> entities = [];
+  List<rust_core.Entity> commands = [];
+  late Stream<rust_core.DartAction> stream;
 
   int? _index;
-  rust.Entity? selected;
+  rust_core.Entity? selected;
 
   get index => _index;
 
   Future<void> init() async {
-    state = await rust.StateApp.newStateApp();
+    state = await rust_core.StateApp.newStateApp();
     commands = await state!.getCommands();
     await search("");
-    stream = rust.setDartActionStream();
+    stream = rust_core.setDartActionStream();
     stream.listen((event) {
-      if (event == rust.DartAction.exit) {
+      if (event == rust_core.DartAction.exit) {
         print("ASKED TO EXIT");
         exit(0);
       }
@@ -76,7 +76,7 @@ class Service extends ChangeNotifier {
     if (state == null) {
       return;
     }
-    entities = await rust.search(obj: state!, search: search);
+    entities = await rust_core.search(obj: state!, search: search);
 
     // After each search select the first entity available
     selected = entities.firstOrNull;

@@ -4,7 +4,7 @@
 // Section: imports
 
 use super::*;
-use crate::api::simple::*;
+use crate::api::core::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::transform_result_dco;
 use flutter_rust_bridge::{Handler, IntoIntoDart};
@@ -44,15 +44,15 @@ impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
         String::from_utf8(vec).unwrap()
     }
 }
-impl CstDecode<crate::api::simple::Image> for *mut wire_cst_image {
-    fn cst_decode(self) -> crate::api::simple::Image {
+impl CstDecode<crate::api::core::Image> for *mut wire_cst_image {
+    fn cst_decode(self) -> crate::api::core::Image {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
-        CstDecode::<crate::api::simple::Image>::cst_decode(*wrap).into()
+        CstDecode::<crate::api::core::Image>::cst_decode(*wrap).into()
     }
 }
-impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
-    fn cst_decode(self) -> crate::api::simple::Entity {
-        crate::api::simple::Entity {
+impl CstDecode<crate::api::core::Entity> for wire_cst_entity {
+    fn cst_decode(self) -> crate::api::core::Entity {
+        crate::api::core::Entity {
             index: self.index.cst_decode(),
             name: self.name.cst_decode(),
             alias: self.alias.cst_decode(),
@@ -62,34 +62,34 @@ impl CstDecode<crate::api::simple::Entity> for wire_cst_entity {
         }
     }
 }
-impl CstDecode<crate::api::simple::EntityError> for wire_cst_entity_error {
-    fn cst_decode(self) -> crate::api::simple::EntityError {
+impl CstDecode<crate::api::core::EntityError> for wire_cst_entity_error {
+    fn cst_decode(self) -> crate::api::core::EntityError {
         match self.tag {
             0 => {
                 let ans = unsafe { self.kind.Unknown };
-                crate::api::simple::EntityError::Unknown(ans.field0.cst_decode())
+                crate::api::core::EntityError::Unknown(ans.field0.cst_decode())
             }
             _ => unreachable!(),
         }
     }
 }
-impl CstDecode<crate::api::simple::Image> for wire_cst_image {
-    fn cst_decode(self) -> crate::api::simple::Image {
+impl CstDecode<crate::api::core::Image> for wire_cst_image {
+    fn cst_decode(self) -> crate::api::core::Image {
         match self.tag {
             0 => {
                 let ans = unsafe { self.kind.Data };
-                crate::api::simple::Image::Data(ans.field0.cst_decode())
+                crate::api::core::Image::Data(ans.field0.cst_decode())
             }
             1 => {
                 let ans = unsafe { self.kind.Path };
-                crate::api::simple::Image::Path(ans.field0.cst_decode())
+                crate::api::core::Image::Path(ans.field0.cst_decode())
             }
             _ => unreachable!(),
         }
     }
 }
-impl CstDecode<Vec<crate::api::simple::Entity>> for *mut wire_cst_list_entity {
-    fn cst_decode(self) -> Vec<crate::api::simple::Entity> {
+impl CstDecode<Vec<crate::api::core::Entity>> for *mut wire_cst_list_entity {
+    fn cst_decode(self) -> Vec<crate::api::core::Entity> {
         let vec = unsafe {
             let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
             flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)

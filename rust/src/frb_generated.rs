@@ -18,7 +18,7 @@
 
 // Section: imports
 
-use crate::api::simple::*;
+use crate::api::core::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::transform_result_dco;
 use flutter_rust_bridge::{Handler, IntoIntoDart};
@@ -59,7 +59,7 @@ fn wire_StateApp_execute_impl(
                 transform_result_dco(
                     (move || async move {
                         let mut api_that = api_that.rust_auto_opaque_decode_async_ref_mut().await;
-                        crate::api::simple::StateApp::execute(
+                        crate::api::core::StateApp::execute(
                             &mut api_that,
                             api_id,
                             api_arg,
@@ -93,7 +93,7 @@ fn wire_StateApp_get_commands_impl(
                 transform_result_dco((move || {
                     let api_that = api_that.rust_auto_opaque_decode_sync_ref();
                     Result::<_, flutter_rust_bridge::for_generated::anyhow::Error>::Ok(
-                        crate::api::simple::StateApp::get_commands(&api_that),
+                        crate::api::core::StateApp::get_commands(&api_that),
                     )
                 })())
             }
@@ -112,7 +112,7 @@ fn wire_StateApp_new_impl(port_: flutter_rust_bridge::for_generated::MessagePort
                 transform_result_dco((move || {
                     Result::<_, ()>::Ok(
                         flutter_rust_bridge::for_generated::rust_auto_opaque_encode(
-                            crate::api::simple::StateApp::new(),
+                            crate::api::core::StateApp::new(),
                         ),
                     )
                 })())
@@ -129,9 +129,7 @@ fn wire_init_app_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
         },
         move || {
             move |context| {
-                transform_result_dco(
-                    (move || Result::<_, ()>::Ok(crate::api::simple::init_app()))(),
-                )
+                transform_result_dco((move || Result::<_, ()>::Ok(crate::api::core::init_app()))())
             }
         },
     )
@@ -145,7 +143,7 @@ fn wire_on_exit_impl(port_: flutter_rust_bridge::for_generated::MessagePort) {
         },
         move || {
             move |context| {
-                transform_result_dco((move || Result::<_, ()>::Ok(crate::api::simple::on_exit()))())
+                transform_result_dco((move || Result::<_, ()>::Ok(crate::api::core::on_exit()))())
             }
         },
     )
@@ -172,7 +170,7 @@ fn wire_search_impl(
                 transform_result_dco((move || {
                     let api_obj = api_obj.rust_auto_opaque_decode_sync_ref();
                     Result::<_, flutter_rust_bridge::for_generated::anyhow::Error>::Ok(
-                        crate::api::simple::search(&api_obj, api_search),
+                        crate::api::core::search(&api_obj, api_search),
                     )
                 })())
             }
@@ -189,10 +187,10 @@ fn wire_set_dart_action_stream_impl(port_: flutter_rust_bridge::for_generated::M
         move || {
             move |context| {
                 transform_result_dco((move || {
-                    crate::api::simple::set_dart_action_stream(StreamSink::new(
+                    crate::api::core::set_dart_action_stream(StreamSink::new(
                         context
                             .rust2dart_context()
-                            .stream_sink::<_, crate::api::simple::DartAction>(),
+                            .stream_sink::<_, crate::api::core::DartAction>(),
                     ))
                 })())
             }
@@ -222,10 +220,10 @@ fn decode_DartFn_Inputs__Output_unit(
 
 // Section: dart2rust
 
-impl CstDecode<crate::api::simple::DartAction> for i32 {
-    fn cst_decode(self) -> crate::api::simple::DartAction {
+impl CstDecode<crate::api::core::DartAction> for i32 {
+    fn cst_decode(self) -> crate::api::core::DartAction {
         match self {
-            0 => crate::api::simple::DartAction::Exit,
+            0 => crate::api::core::DartAction::Exit,
             _ => unreachable!("Invalid variant for DartAction: {}", self),
         }
     }
@@ -276,25 +274,25 @@ impl SseDecode for String {
     }
 }
 
-impl SseDecode for crate::api::simple::DartAction {
+impl SseDecode for crate::api::core::DartAction {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <i32>::sse_decode(deserializer);
         return match inner {
-            0 => crate::api::simple::DartAction::Exit,
+            0 => crate::api::core::DartAction::Exit,
             _ => unreachable!("Invalid variant for DartAction: {}", inner),
         };
     }
 }
 
-impl SseDecode for crate::api::simple::Entity {
+impl SseDecode for crate::api::core::Entity {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut var_index = <usize>::sse_decode(deserializer);
         let mut var_name = <String>::sse_decode(deserializer);
         let mut var_alias = <Option<String>>::sse_decode(deserializer);
         let mut var_description = <Option<String>>::sse_decode(deserializer);
-        let mut var_icon = <Option<crate::api::simple::Image>>::sse_decode(deserializer);
+        let mut var_icon = <Option<crate::api::core::Image>>::sse_decode(deserializer);
         let mut var_type = <String>::sse_decode(deserializer);
-        return crate::api::simple::Entity {
+        return crate::api::core::Entity {
             index: var_index,
             name: var_name,
             alias: var_alias,
@@ -305,13 +303,13 @@ impl SseDecode for crate::api::simple::Entity {
     }
 }
 
-impl SseDecode for crate::api::simple::EntityError {
+impl SseDecode for crate::api::core::EntityError {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut tag_ = <i32>::sse_decode(deserializer);
         match tag_ {
             0 => {
                 let mut var_field0 = <String>::sse_decode(deserializer);
-                return crate::api::simple::EntityError::Unknown(var_field0);
+                return crate::api::core::EntityError::Unknown(var_field0);
             }
             _ => {
                 unimplemented!("");
@@ -326,17 +324,17 @@ impl SseDecode for i32 {
     }
 }
 
-impl SseDecode for crate::api::simple::Image {
+impl SseDecode for crate::api::core::Image {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut tag_ = <i32>::sse_decode(deserializer);
         match tag_ {
             0 => {
                 let mut var_field0 = <Vec<u8>>::sse_decode(deserializer);
-                return crate::api::simple::Image::Data(var_field0);
+                return crate::api::core::Image::Data(var_field0);
             }
             1 => {
                 let mut var_field0 = <String>::sse_decode(deserializer);
-                return crate::api::simple::Image::Path(var_field0);
+                return crate::api::core::Image::Path(var_field0);
             }
             _ => {
                 unimplemented!("");
@@ -345,12 +343,12 @@ impl SseDecode for crate::api::simple::Image {
     }
 }
 
-impl SseDecode for Vec<crate::api::simple::Entity> {
+impl SseDecode for Vec<crate::api::core::Entity> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut len_ = <i32>::sse_decode(deserializer);
         let mut ans_ = vec![];
         for idx_ in 0..len_ {
-            ans_.push(<crate::api::simple::Entity>::sse_decode(deserializer));
+            ans_.push(<crate::api::core::Entity>::sse_decode(deserializer));
         }
         return ans_;
     }
@@ -377,10 +375,10 @@ impl SseDecode for Option<String> {
     }
 }
 
-impl SseDecode for Option<crate::api::simple::Image> {
+impl SseDecode for Option<crate::api::core::Image> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         if (<bool>::sse_decode(deserializer)) {
-            return Some(<crate::api::simple::Image>::sse_decode(deserializer));
+            return Some(<crate::api::core::Image>::sse_decode(deserializer));
         } else {
             return None;
         }
@@ -411,25 +409,22 @@ impl SseDecode for bool {
 
 // Section: rust2dart
 
-impl flutter_rust_bridge::IntoDart for crate::api::simple::DartAction {
+impl flutter_rust_bridge::IntoDart for crate::api::core::DartAction {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
             Self::Exit => 0.into_dart(),
         }
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::simple::DartAction
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::core::DartAction {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::core::DartAction>
+    for crate::api::core::DartAction
 {
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::DartAction>
-    for crate::api::simple::DartAction
-{
-    fn into_into_dart(self) -> crate::api::simple::DartAction {
+    fn into_into_dart(self) -> crate::api::core::DartAction {
         self
     }
 }
-impl flutter_rust_bridge::IntoDart for crate::api::simple::Entity {
+impl flutter_rust_bridge::IntoDart for crate::api::core::Entity {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         [
             self.index.into_into_dart().into_dart(),
@@ -442,47 +437,44 @@ impl flutter_rust_bridge::IntoDart for crate::api::simple::Entity {
         .into_dart()
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::simple::Entity {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::Entity> for crate::api::simple::Entity {
-    fn into_into_dart(self) -> crate::api::simple::Entity {
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::core::Entity {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::core::Entity> for crate::api::core::Entity {
+    fn into_into_dart(self) -> crate::api::core::Entity {
         self
     }
 }
-impl flutter_rust_bridge::IntoDart for crate::api::simple::EntityError {
+impl flutter_rust_bridge::IntoDart for crate::api::core::EntityError {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
-            crate::api::simple::EntityError::Unknown(field0) => {
+            crate::api::core::EntityError::Unknown(field0) => {
                 [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
         }
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
-    for crate::api::simple::EntityError
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::core::EntityError {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::core::EntityError>
+    for crate::api::core::EntityError
 {
-}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::EntityError>
-    for crate::api::simple::EntityError
-{
-    fn into_into_dart(self) -> crate::api::simple::EntityError {
+    fn into_into_dart(self) -> crate::api::core::EntityError {
         self
     }
 }
-impl flutter_rust_bridge::IntoDart for crate::api::simple::Image {
+impl flutter_rust_bridge::IntoDart for crate::api::core::Image {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
-            crate::api::simple::Image::Data(field0) => {
+            crate::api::core::Image::Data(field0) => {
                 [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
-            crate::api::simple::Image::Path(field0) => {
+            crate::api::core::Image::Path(field0) => {
                 [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
             }
         }
     }
 }
-impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::simple::Image {}
-impl flutter_rust_bridge::IntoIntoDart<crate::api::simple::Image> for crate::api::simple::Image {
-    fn into_into_dart(self) -> crate::api::simple::Image {
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive for crate::api::core::Image {}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::core::Image> for crate::api::core::Image {
+    fn into_into_dart(self) -> crate::api::core::Image {
         self
     }
 }
@@ -517,27 +509,27 @@ impl SseEncode for String {
     }
 }
 
-impl SseEncode for crate::api::simple::DartAction {
+impl SseEncode for crate::api::core::DartAction {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self as _, serializer);
     }
 }
 
-impl SseEncode for crate::api::simple::Entity {
+impl SseEncode for crate::api::core::Entity {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <usize>::sse_encode(self.index, serializer);
         <String>::sse_encode(self.name, serializer);
         <Option<String>>::sse_encode(self.alias, serializer);
         <Option<String>>::sse_encode(self.description, serializer);
-        <Option<crate::api::simple::Image>>::sse_encode(self.icon, serializer);
+        <Option<crate::api::core::Image>>::sse_encode(self.icon, serializer);
         <String>::sse_encode(self.r#type, serializer);
     }
 }
 
-impl SseEncode for crate::api::simple::EntityError {
+impl SseEncode for crate::api::core::EntityError {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         match self {
-            crate::api::simple::EntityError::Unknown(field0) => {
+            crate::api::core::EntityError::Unknown(field0) => {
                 <i32>::sse_encode(0, serializer);
                 <String>::sse_encode(field0, serializer);
             }
@@ -551,14 +543,14 @@ impl SseEncode for i32 {
     }
 }
 
-impl SseEncode for crate::api::simple::Image {
+impl SseEncode for crate::api::core::Image {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         match self {
-            crate::api::simple::Image::Data(field0) => {
+            crate::api::core::Image::Data(field0) => {
                 <i32>::sse_encode(0, serializer);
                 <Vec<u8>>::sse_encode(field0, serializer);
             }
-            crate::api::simple::Image::Path(field0) => {
+            crate::api::core::Image::Path(field0) => {
                 <i32>::sse_encode(1, serializer);
                 <String>::sse_encode(field0, serializer);
             }
@@ -566,11 +558,11 @@ impl SseEncode for crate::api::simple::Image {
     }
 }
 
-impl SseEncode for Vec<crate::api::simple::Entity> {
+impl SseEncode for Vec<crate::api::core::Entity> {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
         for item in self {
-            <crate::api::simple::Entity>::sse_encode(item, serializer);
+            <crate::api::core::Entity>::sse_encode(item, serializer);
         }
     }
 }
@@ -593,11 +585,11 @@ impl SseEncode for Option<String> {
     }
 }
 
-impl SseEncode for Option<crate::api::simple::Image> {
+impl SseEncode for Option<crate::api::core::Image> {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
-            <crate::api::simple::Image>::sse_encode(value, serializer);
+            <crate::api::core::Image>::sse_encode(value, serializer);
         }
     }
 }

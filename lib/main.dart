@@ -8,7 +8,7 @@ import 'package:window_manager/window_manager.dart';
 
 import 'main_screen.dart';
 import 'shortcuts.dart';
-import 'src/rust/api/simple.dart' as rust;
+import 'src/rust/api/core.dart' as rust_core;
 import 'window_event_listener.dart';
 
 Future<void> main() async {
@@ -39,7 +39,7 @@ Future<void> main() async {
   service.init();
 
   runApp(const MyApp());
-  await rust.onExit();
+  await rust_core.onExit();
 }
 
 class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {

@@ -4,7 +4,7 @@
 // Section: imports
 
 use super::*;
-use crate::api::simple::*;
+use crate::api::core::*;
 use flutter_rust_bridge::for_generated::byteorder::{NativeEndian, ReadBytesExt, WriteBytesExt};
 use flutter_rust_bridge::for_generated::transform_result_dco;
 use flutter_rust_bridge::for_generated::wasm_bindgen;
@@ -38,10 +38,10 @@ impl CstDecode<String> for String {
         self
     }
 }
-impl CstDecode<crate::api::simple::Entity>
+impl CstDecode<crate::api::core::Entity>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
-    fn cst_decode(self) -> crate::api::simple::Entity {
+    fn cst_decode(self) -> crate::api::core::Entity {
         let self_ = self
             .dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
             .unwrap();
@@ -51,7 +51,7 @@ impl CstDecode<crate::api::simple::Entity>
             "Expected 6 elements, got {}",
             self_.length()
         );
-        crate::api::simple::Entity {
+        crate::api::core::Entity {
             index: self_.get(0).cst_decode(),
             name: self_.get(1).cst_decode(),
             alias: self_.get(2).cst_decode(),
@@ -61,33 +61,33 @@ impl CstDecode<crate::api::simple::Entity>
         }
     }
 }
-impl CstDecode<crate::api::simple::EntityError>
+impl CstDecode<crate::api::core::EntityError>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
-    fn cst_decode(self) -> crate::api::simple::EntityError {
+    fn cst_decode(self) -> crate::api::core::EntityError {
         let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
         match self_.get(0).unchecked_into_f64() as _ {
-            0 => crate::api::simple::EntityError::Unknown(self_.get(1).cst_decode()),
+            0 => crate::api::core::EntityError::Unknown(self_.get(1).cst_decode()),
             _ => unreachable!(),
         }
     }
 }
-impl CstDecode<crate::api::simple::Image>
+impl CstDecode<crate::api::core::Image>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
-    fn cst_decode(self) -> crate::api::simple::Image {
+    fn cst_decode(self) -> crate::api::core::Image {
         let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
         match self_.get(0).unchecked_into_f64() as _ {
-            0 => crate::api::simple::Image::Data(self_.get(1).cst_decode()),
-            1 => crate::api::simple::Image::Path(self_.get(1).cst_decode()),
+            0 => crate::api::core::Image::Data(self_.get(1).cst_decode()),
+            1 => crate::api::core::Image::Path(self_.get(1).cst_decode()),
             _ => unreachable!(),
         }
     }
 }
-impl CstDecode<Vec<crate::api::simple::Entity>>
+impl CstDecode<Vec<crate::api::core::Entity>>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
-    fn cst_decode(self) -> Vec<crate::api::simple::Entity> {
+    fn cst_decode(self) -> Vec<crate::api::core::Entity> {
         self.dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
             .unwrap()
             .iter()
@@ -132,10 +132,10 @@ impl CstDecode<String> for flutter_rust_bridge::for_generated::wasm_bindgen::JsV
         self.as_string().expect("non-UTF-8 string, or not a string")
     }
 }
-impl CstDecode<crate::api::simple::DartAction>
+impl CstDecode<crate::api::core::DartAction>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
-    fn cst_decode(self) -> crate::api::simple::DartAction {
+    fn cst_decode(self) -> crate::api::core::DartAction {
         (self.unchecked_into_f64() as i32).cst_decode()
     }
 }

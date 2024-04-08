@@ -71,6 +71,8 @@ class _MainScreenState extends State<MainScreen> {
     final entities = watchPropertyValue((Service s) => s.entities);
     final commands = watchPropertyValue((Service s) => s.commands);
     final selectedIndex = watchPropertyValue((Service s) => s.index);
+    final pluginUi = watchPropertyValue((Service s) => s.pluginUi);
+
     return Actions(
       actions: <Type, Action<Intent>>{
         SelectEntryIntent: SelectEntryAction(arg: text.text),
@@ -85,6 +87,7 @@ class _MainScreenState extends State<MainScreen> {
         ),
         child: Column(
           children: [
+            if (pluginUi != null) pluginUi,
             Padding(
               padding: const EdgeInsets.symmetric(
                 vertical: 25.0,

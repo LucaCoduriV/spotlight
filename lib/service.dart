@@ -1,6 +1,7 @@
 import 'dart:io';
 
 import 'package:flutter/material.dart';
+import 'package:spotlight/main.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'src/rust/api/core.dart' as rust_core;
@@ -10,6 +11,7 @@ class Service extends ChangeNotifier {
   List<rust_core.Entity> entities = [];
   List<rust_core.Entity> commands = [];
   late Stream<rust_core.DartAction> stream;
+  Widget? pluginUi;
 
   int? _index;
   rust_core.Entity? selected;
@@ -24,7 +26,7 @@ class Service extends ChangeNotifier {
     stream.listen((event) {
       if (event == rust_core.DartAction.exit) {
         print("ASKED TO EXIT");
-        exit(0);
+        // exit(0);
       }
     });
   }
@@ -91,12 +93,30 @@ class Service extends ChangeNotifier {
   }
 
   Future<void> execute(int index, {String? arg}) async {
-    windowManager.hide();
-    state?.execute(
+    // windowManager.hide();
+    final result = await state?.execute(
         id: index,
         arg: arg,
         onExecuted: () async {
-          exit(0);
+          // exit(0);
         });
+
+    switch (result) {
+      case null:
+        print("null");
+        break;
+      case rust_core.BlazyrEntityActionResponse_Ui(:final field0):
+        print("ui");
+        final widget = rComponentToFlutterWidget(field0);
+        pluginUi = widget;
+        notifyListeners();
+        break;
+      case rust_core.BlazyrEntityActionResponse_Text():
+        print("text");
+        break;
+      case rust_core.BlazyrEntityActionResponse_None():
+        print("none");
+        break;
+    }
   }
 }

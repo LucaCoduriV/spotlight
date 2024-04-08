@@ -72,7 +72,7 @@ impl StateApp {
         .map_err(|e| EntityError::Unknown(e.to_string()));
 
         // TODO remove this call
-        on_executed().await;
+        // on_executed().await;
         result
     }
 

@@ -70,6 +70,6 @@ class CloseAction extends Action<CloseIntent> {
 
   @override
   Object? invoke(covariant CloseIntent intent) async {
-    exit(0);
+    // exit(0);
   }
 }

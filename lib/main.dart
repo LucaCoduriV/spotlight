@@ -118,6 +118,9 @@ Widget rComponentToFlutterWidget(rust_core.BlazyrComponent component) {
       ),
     rust_core.BlazyrComponent_Container(:final child, :final onClick) =>
       Container(
+        height: 100,
+        width: 100,
+        color: Colors.red,
         child: child != null ? rComponentToFlutterWidget(child) : null,
       ),
   };

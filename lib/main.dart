@@ -103,3 +103,22 @@ class _MyAppState extends State<MyApp> {
     );
   }
 }
+
+Widget rComponentToFlutterWidget(rust_core.BlazyrComponent component) {
+  return switch (component) {
+    rust_core.BlazyrComponent_Column(:final children) => Column(
+        children: [
+          for (final child in children!) rComponentToFlutterWidget(child)
+        ],
+      ),
+    rust_core.BlazyrComponent_Row(:final children!) => Row(
+        children: [
+          for (final child in children) rComponentToFlutterWidget(child)
+        ],
+      ),
+    rust_core.BlazyrComponent_Container(:final child, :final onClick) =>
+      Container(
+        child: child != null ? rComponentToFlutterWidget(child) : null,
+      ),
+  };
+}

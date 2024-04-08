@@ -61,7 +61,7 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
-  Future<void> stateAppExecute(
+  Future<BlazyrEntityActionResponse> stateAppExecute(
       {required StateApp that,
       required int id,
       String? arg,
@@ -100,7 +100,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   });
 
   @override
-  Future<void> stateAppExecute(
+  Future<BlazyrEntityActionResponse> stateAppExecute(
       {required StateApp that,
       required int id,
       String? arg,
@@ -117,7 +117,7 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
         return wire.wire_StateApp_execute(port_, arg0, arg1, arg2, arg3);
       },
       codec: DcoCodec(
-        decodeSuccessData: dco_decode_unit,
+        decodeSuccessData: dco_decode_blazyr_entity_action_response,
         decodeErrorData: dco_decode_entity_error,
       ),
       constMeta: kStateAppExecuteConstMeta,
@@ -348,8 +348,58 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BlazyrComponent dco_decode_blazyr_component(dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return BlazyrComponent_Container(
+          child: dco_decode_opt_box_blazyr_component(raw[1]),
+          onClick: dco_decode_opt_String(raw[2]),
+        );
+      case 1:
+        return BlazyrComponent_Column(
+          children: dco_decode_opt_list_blazyr_component(raw[1]),
+        );
+      case 2:
+        return BlazyrComponent_Row(
+          children: dco_decode_opt_list_blazyr_component(raw[1]),
+        );
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  BlazyrEntityActionResponse dco_decode_blazyr_entity_action_response(
+      dynamic raw) {
+    switch (raw[0]) {
+      case 0:
+        return BlazyrEntityActionResponse_Ui(
+          dco_decode_box_autoadd_blazyr_component(raw[1]),
+        );
+      case 1:
+        return BlazyrEntityActionResponse_Text(
+          dco_decode_String(raw[1]),
+        );
+      case 2:
+        return BlazyrEntityActionResponse_None();
+      default:
+        throw Exception("unreachable");
+    }
+  }
+
+  @protected
+  BlazyrComponent dco_decode_box_autoadd_blazyr_component(dynamic raw) {
+    return dco_decode_blazyr_component(raw);
+  }
+
+  @protected
   Image dco_decode_box_autoadd_image(dynamic raw) {
     return dco_decode_image(raw);
+  }
+
+  @protected
+  BlazyrComponent dco_decode_box_blazyr_component(dynamic raw) {
+    return dco_decode_blazyr_component(raw);
   }
 
   @protected
@@ -406,6 +456,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<BlazyrComponent> dco_decode_list_blazyr_component(dynamic raw) {
+    return (raw as List<dynamic>).map(dco_decode_blazyr_component).toList();
+  }
+
+  @protected
   List<Entity> dco_decode_list_entity(dynamic raw) {
     return (raw as List<dynamic>).map(dco_decode_entity).toList();
   }
@@ -423,6 +478,16 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   @protected
   Image? dco_decode_opt_box_autoadd_image(dynamic raw) {
     return raw == null ? null : dco_decode_box_autoadd_image(raw);
+  }
+
+  @protected
+  BlazyrComponent? dco_decode_opt_box_blazyr_component(dynamic raw) {
+    return raw == null ? null : dco_decode_box_blazyr_component(raw);
+  }
+
+  @protected
+  List<BlazyrComponent>? dco_decode_opt_list_blazyr_component(dynamic raw) {
+    return raw == null ? null : dco_decode_list_blazyr_component(raw);
   }
 
   @protected
@@ -491,8 +556,58 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  BlazyrComponent sse_decode_blazyr_component(SseDeserializer deserializer) {
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_child = sse_decode_opt_box_blazyr_component(deserializer);
+        var var_onClick = sse_decode_opt_String(deserializer);
+        return BlazyrComponent_Container(
+            child: var_child, onClick: var_onClick);
+      case 1:
+        var var_children = sse_decode_opt_list_blazyr_component(deserializer);
+        return BlazyrComponent_Column(children: var_children);
+      case 2:
+        var var_children = sse_decode_opt_list_blazyr_component(deserializer);
+        return BlazyrComponent_Row(children: var_children);
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  BlazyrEntityActionResponse sse_decode_blazyr_entity_action_response(
+      SseDeserializer deserializer) {
+    var tag_ = sse_decode_i_32(deserializer);
+    switch (tag_) {
+      case 0:
+        var var_field0 = sse_decode_box_autoadd_blazyr_component(deserializer);
+        return BlazyrEntityActionResponse_Ui(var_field0);
+      case 1:
+        var var_field0 = sse_decode_String(deserializer);
+        return BlazyrEntityActionResponse_Text(var_field0);
+      case 2:
+        return BlazyrEntityActionResponse_None();
+      default:
+        throw UnimplementedError('');
+    }
+  }
+
+  @protected
+  BlazyrComponent sse_decode_box_autoadd_blazyr_component(
+      SseDeserializer deserializer) {
+    return (sse_decode_blazyr_component(deserializer));
+  }
+
+  @protected
   Image sse_decode_box_autoadd_image(SseDeserializer deserializer) {
     return (sse_decode_image(deserializer));
+  }
+
+  @protected
+  BlazyrComponent sse_decode_box_blazyr_component(
+      SseDeserializer deserializer) {
+    return (sse_decode_blazyr_component(deserializer));
   }
 
   @protected
@@ -551,6 +666,17 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  List<BlazyrComponent> sse_decode_list_blazyr_component(
+      SseDeserializer deserializer) {
+    var len_ = sse_decode_i_32(deserializer);
+    var ans_ = <BlazyrComponent>[];
+    for (var idx_ = 0; idx_ < len_; ++idx_) {
+      ans_.add(sse_decode_blazyr_component(deserializer));
+    }
+    return ans_;
+  }
+
+  @protected
   List<Entity> sse_decode_list_entity(SseDeserializer deserializer) {
     var len_ = sse_decode_i_32(deserializer);
     var ans_ = <Entity>[];
@@ -579,6 +705,26 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   Image? sse_decode_opt_box_autoadd_image(SseDeserializer deserializer) {
     if (sse_decode_bool(deserializer)) {
       return (sse_decode_box_autoadd_image(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  BlazyrComponent? sse_decode_opt_box_blazyr_component(
+      SseDeserializer deserializer) {
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_box_blazyr_component(deserializer));
+    } else {
+      return null;
+    }
+  }
+
+  @protected
+  List<BlazyrComponent>? sse_decode_opt_list_blazyr_component(
+      SseDeserializer deserializer) {
+    if (sse_decode_bool(deserializer)) {
+      return (sse_decode_list_blazyr_component(deserializer));
     } else {
       return null;
     }
@@ -726,8 +872,55 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer) {
+    switch (self) {
+      case BlazyrComponent_Container(
+          child: final child,
+          onClick: final onClick
+        ):
+        sse_encode_i_32(0, serializer);
+        sse_encode_opt_box_blazyr_component(child, serializer);
+        sse_encode_opt_String(onClick, serializer);
+      case BlazyrComponent_Column(children: final children):
+        sse_encode_i_32(1, serializer);
+        sse_encode_opt_list_blazyr_component(children, serializer);
+      case BlazyrComponent_Row(children: final children):
+        sse_encode_i_32(2, serializer);
+        sse_encode_opt_list_blazyr_component(children, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_blazyr_entity_action_response(
+      BlazyrEntityActionResponse self, SseSerializer serializer) {
+    switch (self) {
+      case BlazyrEntityActionResponse_Ui(field0: final field0):
+        sse_encode_i_32(0, serializer);
+        sse_encode_box_autoadd_blazyr_component(field0, serializer);
+      case BlazyrEntityActionResponse_Text(field0: final field0):
+        sse_encode_i_32(1, serializer);
+        sse_encode_String(field0, serializer);
+      case BlazyrEntityActionResponse_None():
+        sse_encode_i_32(2, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_box_autoadd_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer) {
+    sse_encode_blazyr_component(self, serializer);
+  }
+
+  @protected
   void sse_encode_box_autoadd_image(Image self, SseSerializer serializer) {
     sse_encode_image(self, serializer);
+  }
+
+  @protected
+  void sse_encode_box_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer) {
+    sse_encode_blazyr_component(self, serializer);
   }
 
   @protected
@@ -772,6 +965,15 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   }
 
   @protected
+  void sse_encode_list_blazyr_component(
+      List<BlazyrComponent> self, SseSerializer serializer) {
+    sse_encode_i_32(self.length, serializer);
+    for (final item in self) {
+      sse_encode_blazyr_component(item, serializer);
+    }
+  }
+
+  @protected
   void sse_encode_list_entity(List<Entity> self, SseSerializer serializer) {
     sse_encode_i_32(self.length, serializer);
     for (final item in self) {
@@ -799,6 +1001,24 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     sse_encode_bool(self != null, serializer);
     if (self != null) {
       sse_encode_box_autoadd_image(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_box_blazyr_component(
+      BlazyrComponent? self, SseSerializer serializer) {
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_box_blazyr_component(self, serializer);
+    }
+  }
+
+  @protected
+  void sse_encode_opt_list_blazyr_component(
+      List<BlazyrComponent>? self, SseSerializer serializer) {
+    sse_encode_bool(self != null, serializer);
+    if (self != null) {
+      sse_encode_list_blazyr_component(self, serializer);
     }
   }
 

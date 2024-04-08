@@ -54,7 +54,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  BlazyrComponent dco_decode_blazyr_component(dynamic raw);
+
+  @protected
+  BlazyrEntityActionResponse dco_decode_blazyr_entity_action_response(
+      dynamic raw);
+
+  @protected
+  BlazyrComponent dco_decode_box_autoadd_blazyr_component(dynamic raw);
+
+  @protected
   Image dco_decode_box_autoadd_image(dynamic raw);
+
+  @protected
+  BlazyrComponent dco_decode_box_blazyr_component(dynamic raw);
 
   @protected
   DartAction dco_decode_dart_action(dynamic raw);
@@ -72,6 +85,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image dco_decode_image(dynamic raw);
 
   @protected
+  List<BlazyrComponent> dco_decode_list_blazyr_component(dynamic raw);
+
+  @protected
   List<Entity> dco_decode_list_entity(dynamic raw);
 
   @protected
@@ -82,6 +98,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Image? dco_decode_opt_box_autoadd_image(dynamic raw);
+
+  @protected
+  BlazyrComponent? dco_decode_opt_box_blazyr_component(dynamic raw);
+
+  @protected
+  List<BlazyrComponent>? dco_decode_opt_list_blazyr_component(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -122,7 +144,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  BlazyrComponent sse_decode_blazyr_component(SseDeserializer deserializer);
+
+  @protected
+  BlazyrEntityActionResponse sse_decode_blazyr_entity_action_response(
+      SseDeserializer deserializer);
+
+  @protected
+  BlazyrComponent sse_decode_box_autoadd_blazyr_component(
+      SseDeserializer deserializer);
+
+  @protected
   Image sse_decode_box_autoadd_image(SseDeserializer deserializer);
+
+  @protected
+  BlazyrComponent sse_decode_box_blazyr_component(SseDeserializer deserializer);
 
   @protected
   DartAction sse_decode_dart_action(SseDeserializer deserializer);
@@ -140,6 +176,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image sse_decode_image(SseDeserializer deserializer);
 
   @protected
+  List<BlazyrComponent> sse_decode_list_blazyr_component(
+      SseDeserializer deserializer);
+
+  @protected
   List<Entity> sse_decode_list_entity(SseDeserializer deserializer);
 
   @protected
@@ -150,6 +190,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Image? sse_decode_opt_box_autoadd_image(SseDeserializer deserializer);
+
+  @protected
+  BlazyrComponent? sse_decode_opt_box_blazyr_component(
+      SseDeserializer deserializer);
+
+  @protected
+  List<BlazyrComponent>? sse_decode_opt_list_blazyr_component(
+      SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -175,10 +223,36 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  ffi.Pointer<wire_cst_blazyr_component>
+      cst_encode_box_autoadd_blazyr_component(BlazyrComponent raw) {
+    final ptr = wire.cst_new_box_autoadd_blazyr_component();
+    cst_api_fill_to_wire_blazyr_component(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
   ffi.Pointer<wire_cst_image> cst_encode_box_autoadd_image(Image raw) {
     final ptr = wire.cst_new_box_autoadd_image();
     cst_api_fill_to_wire_image(raw, ptr.ref);
     return ptr;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_blazyr_component> cst_encode_box_blazyr_component(
+      BlazyrComponent raw) {
+    final ptr = wire.cst_new_box_blazyr_component();
+    cst_api_fill_to_wire_blazyr_component(raw, ptr.ref);
+    return ptr;
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_list_blazyr_component> cst_encode_list_blazyr_component(
+      List<BlazyrComponent> raw) {
+    final ans = wire.cst_new_list_blazyr_component(raw.length);
+    for (var i = 0; i < raw.length; ++i) {
+      cst_api_fill_to_wire_blazyr_component(raw[i], ans.ref.ptr[i]);
+    }
+    return ans;
   }
 
   @protected
@@ -210,9 +284,80 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  ffi.Pointer<wire_cst_blazyr_component> cst_encode_opt_box_blazyr_component(
+      BlazyrComponent? raw) {
+    return raw == null ? ffi.nullptr : cst_encode_box_blazyr_component(raw);
+  }
+
+  @protected
+  ffi.Pointer<wire_cst_list_blazyr_component>
+      cst_encode_opt_list_blazyr_component(List<BlazyrComponent>? raw) {
+    return raw == null ? ffi.nullptr : cst_encode_list_blazyr_component(raw);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_blazyr_component(
+      BlazyrComponent apiObj, wire_cst_blazyr_component wireObj) {
+    if (apiObj is BlazyrComponent_Container) {
+      var pre_child = cst_encode_opt_box_blazyr_component(apiObj.child);
+      var pre_on_click = cst_encode_opt_String(apiObj.onClick);
+      wireObj.tag = 0;
+      wireObj.kind.Container.child = pre_child;
+      wireObj.kind.Container.on_click = pre_on_click;
+      return;
+    }
+    if (apiObj is BlazyrComponent_Column) {
+      var pre_children = cst_encode_opt_list_blazyr_component(apiObj.children);
+      wireObj.tag = 1;
+      wireObj.kind.Column.children = pre_children;
+      return;
+    }
+    if (apiObj is BlazyrComponent_Row) {
+      var pre_children = cst_encode_opt_list_blazyr_component(apiObj.children);
+      wireObj.tag = 2;
+      wireObj.kind.Row.children = pre_children;
+      return;
+    }
+  }
+
+  @protected
+  void cst_api_fill_to_wire_blazyr_entity_action_response(
+      BlazyrEntityActionResponse apiObj,
+      wire_cst_blazyr_entity_action_response wireObj) {
+    if (apiObj is BlazyrEntityActionResponse_Ui) {
+      var pre_field0 = cst_encode_box_autoadd_blazyr_component(apiObj.field0);
+      wireObj.tag = 0;
+      wireObj.kind.Ui.field0 = pre_field0;
+      return;
+    }
+    if (apiObj is BlazyrEntityActionResponse_Text) {
+      var pre_field0 = cst_encode_String(apiObj.field0);
+      wireObj.tag = 1;
+      wireObj.kind.Text.field0 = pre_field0;
+      return;
+    }
+    if (apiObj is BlazyrEntityActionResponse_None) {
+      wireObj.tag = 2;
+      return;
+    }
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_autoadd_blazyr_component(
+      BlazyrComponent apiObj, ffi.Pointer<wire_cst_blazyr_component> wireObj) {
+    cst_api_fill_to_wire_blazyr_component(apiObj, wireObj.ref);
+  }
+
+  @protected
   void cst_api_fill_to_wire_box_autoadd_image(
       Image apiObj, ffi.Pointer<wire_cst_image> wireObj) {
     cst_api_fill_to_wire_image(apiObj, wireObj.ref);
+  }
+
+  @protected
+  void cst_api_fill_to_wire_box_blazyr_component(
+      BlazyrComponent apiObj, ffi.Pointer<wire_cst_blazyr_component> wireObj) {
+    cst_api_fill_to_wire_blazyr_component(apiObj, wireObj.ref);
   }
 
   @protected
@@ -329,7 +474,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_blazyr_entity_action_response(
+      BlazyrEntityActionResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_image(Image self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer);
 
   @protected
   void sse_encode_dart_action(DartAction self, SseSerializer serializer);
@@ -347,6 +508,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_image(Image self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_blazyr_component(
+      List<BlazyrComponent> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_entity(List<Entity> self, SseSerializer serializer);
 
   @protected
@@ -358,6 +523,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_box_autoadd_image(Image? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_blazyr_component(
+      BlazyrComponent? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_blazyr_component(
+      List<BlazyrComponent>? self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);
@@ -574,6 +747,19 @@ class RustLibWire implements BaseWire {
       _rust_arc_decrement_strong_count_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateAppPtr
           .asFunction<void Function(ffi.Pointer<ffi.Void>)>();
 
+  ffi.Pointer<wire_cst_blazyr_component>
+      cst_new_box_autoadd_blazyr_component() {
+    return _cst_new_box_autoadd_blazyr_component();
+  }
+
+  late final _cst_new_box_autoadd_blazyr_componentPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Pointer<wire_cst_blazyr_component> Function()>>(
+      'frbgen_spotlight_cst_new_box_autoadd_blazyr_component');
+  late final _cst_new_box_autoadd_blazyr_component =
+      _cst_new_box_autoadd_blazyr_componentPtr
+          .asFunction<ffi.Pointer<wire_cst_blazyr_component> Function()>();
+
   ffi.Pointer<wire_cst_image> cst_new_box_autoadd_image() {
     return _cst_new_box_autoadd_image();
   }
@@ -583,6 +769,32 @@ class RustLibWire implements BaseWire {
           'frbgen_spotlight_cst_new_box_autoadd_image');
   late final _cst_new_box_autoadd_image = _cst_new_box_autoadd_imagePtr
       .asFunction<ffi.Pointer<wire_cst_image> Function()>();
+
+  ffi.Pointer<wire_cst_blazyr_component> cst_new_box_blazyr_component() {
+    return _cst_new_box_blazyr_component();
+  }
+
+  late final _cst_new_box_blazyr_componentPtr = _lookup<
+          ffi
+          .NativeFunction<ffi.Pointer<wire_cst_blazyr_component> Function()>>(
+      'frbgen_spotlight_cst_new_box_blazyr_component');
+  late final _cst_new_box_blazyr_component = _cst_new_box_blazyr_componentPtr
+      .asFunction<ffi.Pointer<wire_cst_blazyr_component> Function()>();
+
+  ffi.Pointer<wire_cst_list_blazyr_component> cst_new_list_blazyr_component(
+    int len,
+  ) {
+    return _cst_new_list_blazyr_component(
+      len,
+    );
+  }
+
+  late final _cst_new_list_blazyr_componentPtr = _lookup<
+      ffi.NativeFunction<
+          ffi.Pointer<wire_cst_list_blazyr_component> Function(
+              ffi.Int32)>>('frbgen_spotlight_cst_new_list_blazyr_component');
+  late final _cst_new_list_blazyr_component = _cst_new_list_blazyr_componentPtr
+      .asFunction<ffi.Pointer<wire_cst_list_blazyr_component> Function(int)>();
 
   ffi.Pointer<wire_cst_list_entity> cst_new_list_entity(
     int len,
@@ -632,6 +844,42 @@ final class wire_cst_list_prim_u_8_strict extends ffi.Struct {
   external int len;
 }
 
+final class wire_cst_BlazyrComponent_Container extends ffi.Struct {
+  external ffi.Pointer<wire_cst_blazyr_component> child;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> on_click;
+}
+
+final class wire_cst_blazyr_component extends ffi.Struct {
+  @ffi.Int32()
+  external int tag;
+
+  external BlazyrComponentKind kind;
+}
+
+final class BlazyrComponentKind extends ffi.Union {
+  external wire_cst_BlazyrComponent_Container Container;
+
+  external wire_cst_BlazyrComponent_Column Column;
+
+  external wire_cst_BlazyrComponent_Row Row;
+}
+
+final class wire_cst_BlazyrComponent_Column extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_blazyr_component> children;
+}
+
+final class wire_cst_list_blazyr_component extends ffi.Struct {
+  external ffi.Pointer<wire_cst_blazyr_component> ptr;
+
+  @ffi.Int32()
+  external int len;
+}
+
+final class wire_cst_BlazyrComponent_Row extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_blazyr_component> children;
+}
+
 final class wire_cst_Image_Data extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
 }
@@ -673,6 +921,27 @@ final class wire_cst_list_entity extends ffi.Struct {
 
   @ffi.Int32()
   external int len;
+}
+
+final class wire_cst_BlazyrEntityActionResponse_Ui extends ffi.Struct {
+  external ffi.Pointer<wire_cst_blazyr_component> field0;
+}
+
+final class wire_cst_BlazyrEntityActionResponse_Text extends ffi.Struct {
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> field0;
+}
+
+final class BlazyrEntityActionResponseKind extends ffi.Union {
+  external wire_cst_BlazyrEntityActionResponse_Ui Ui;
+
+  external wire_cst_BlazyrEntityActionResponse_Text Text;
+}
+
+final class wire_cst_blazyr_entity_action_response extends ffi.Struct {
+  @ffi.Int32()
+  external int tag;
+
+  external BlazyrEntityActionResponseKind kind;
 }
 
 final class wire_cst_EntityError_Unknown extends ffi.Struct {

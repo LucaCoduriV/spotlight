@@ -1,11 +1,13 @@
 use core::panic;
 use std::{ops::Range, sync::Once};
 
+use anyhow::Ok;
 use blazyr_core::{
     applications::Application, cache_apps, get_apps_from_cache, get_frequency, lookup_apps,
-    lookup_plugins, merge_apps_plugins, set_frequency, App, FuzzyFinder,
+    lookup_commands, merge_apps_commands, set_frequency, App, FuzzyFinder,
 };
-use flutter_rust_bridge::DartFnFuture;
+pub use blazyr_core::{Component, EntityActionResponse};
+use flutter_rust_bridge::{frb, DartFnFuture};
 use thiserror::Error;
 
 use crate::frb_generated::StreamSink;
@@ -30,17 +32,15 @@ pub struct StateApp {
 impl StateApp {
     #[allow(clippy::new_without_default)]
     pub fn new() -> StateApp {
-        // let apps = lookup_apps();
-        // cache_apps(&apps);
         let apps: Vec<App> = get_apps_from_cache();
-        let plugins = lookup_plugins();
+        let commands = lookup_commands();
 
         let mut frequencies: Vec<u64> = apps.iter().map(|v| get_frequency(v.name())).collect();
         let mut plugins_frequencies: Vec<u64> =
-            plugins.iter().map(|v| get_frequency(v.name())).collect();
+            commands.iter().map(|v| get_frequency(v.name())).collect();
         frequencies.append(&mut plugins_frequencies);
 
-        let (entities, apps_range, plugins_range) = merge_apps_plugins(apps, plugins);
+        let (entities, apps_range, plugins_range) = merge_apps_commands(apps, commands);
 
         StateApp {
             entities,
@@ -55,21 +55,23 @@ impl StateApp {
         id: usize,
         arg: Option<String>,
         on_executed: impl Fn() -> DartFnFuture<()>,
-    ) -> Result<(), EntityError> {
+    ) -> Result<BlazyrEntityActionResponse, EntityError> {
         let entity = &mut self.entities[id];
         let new_frequency = self.frequencies[id] + 1;
         let result = match entity {
             blazyr_core::Entity::Application(app) => {
                 set_frequency(app.name(), new_frequency);
                 app.execute(arg.as_deref())
+                    .map(|_| BlazyrEntityActionResponse::None)
             }
-            blazyr_core::Entity::Command(plug) => {
-                set_frequency(plug.name(), new_frequency);
-                plug.execute(arg.as_deref())
+            blazyr_core::Entity::Command(command) => {
+                set_frequency(command.name(), new_frequency);
+                command.execute(arg.as_deref()).map(|v| v.into())
             }
         }
         .map_err(|e| EntityError::Unknown(e.to_string()));
 
+        // TODO remove this call
         on_executed().await;
         result
     }
@@ -82,6 +84,7 @@ impl StateApp {
             .filter(|(_, e)| matches!(e, blazyr_core::Entity::Command(_)))
             .collect();
 
+        // what the fuck was I trying to do here ?
         temp.sort_by_key(|(_, e)| match e {
             blazyr_core::Entity::Application(_app) => 0,
             blazyr_core::Entity::Command(_plug) => 0,
@@ -187,4 +190,50 @@ pub fn set_dart_action_stream(sink: StreamSink<DartAction>) -> anyhow::Result<()
 pub fn on_exit() {
     let apps = lookup_apps();
     cache_apps(&apps);
+}
+
+pub enum BlazyrEntityActionResponse {
+    Ui(BlazyrComponent),
+    Text(String),
+    None,
+}
+
+impl From<EntityActionResponse> for BlazyrEntityActionResponse {
+    fn from(value: EntityActionResponse) -> Self {
+        match value {
+            EntityActionResponse::Ui(component) => BlazyrEntityActionResponse::Ui(component.into()),
+            EntityActionResponse::Text(text) => BlazyrEntityActionResponse::Text(text),
+            EntityActionResponse::None => BlazyrEntityActionResponse::None,
+        }
+    }
+}
+
+pub enum BlazyrComponent {
+    Container {
+        child: Option<Box<BlazyrComponent>>,
+        on_click: Option<String>,
+    },
+    Column {
+        children: Option<Vec<BlazyrComponent>>,
+    },
+    Row {
+        children: Option<Vec<BlazyrComponent>>,
+    },
+}
+
+impl From<Component> for BlazyrComponent {
+    fn from(value: Component) -> Self {
+        match value {
+            Component::Container { child, on_click } => BlazyrComponent::Container {
+                child: child.map(|v| Box::new(BlazyrComponent::from(*v))),
+                on_click,
+            },
+            Component::Column { children } => BlazyrComponent::Column {
+                children: children.map(|v| v.into_iter().map(BlazyrComponent::from).collect()),
+            },
+            Component::Row { children } => BlazyrComponent::Row {
+                children: children.map(|v| v.into_iter().map(BlazyrComponent::from).collect()),
+            },
+        }
+    }
 }

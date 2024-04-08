@@ -44,10 +44,66 @@ impl CstDecode<String> for *mut wire_cst_list_prim_u_8_strict {
         String::from_utf8(vec).unwrap()
     }
 }
+impl CstDecode<crate::api::core::BlazyrComponent> for wire_cst_blazyr_component {
+    fn cst_decode(self) -> crate::api::core::BlazyrComponent {
+        match self.tag {
+            0 => {
+                let ans = unsafe { self.kind.Container };
+                crate::api::core::BlazyrComponent::Container {
+                    child: ans.child.cst_decode(),
+                    on_click: ans.on_click.cst_decode(),
+                }
+            }
+            1 => {
+                let ans = unsafe { self.kind.Column };
+                crate::api::core::BlazyrComponent::Column {
+                    children: ans.children.cst_decode(),
+                }
+            }
+            2 => {
+                let ans = unsafe { self.kind.Row };
+                crate::api::core::BlazyrComponent::Row {
+                    children: ans.children.cst_decode(),
+                }
+            }
+            _ => unreachable!(),
+        }
+    }
+}
+impl CstDecode<crate::api::core::BlazyrEntityActionResponse>
+    for wire_cst_blazyr_entity_action_response
+{
+    fn cst_decode(self) -> crate::api::core::BlazyrEntityActionResponse {
+        match self.tag {
+            0 => {
+                let ans = unsafe { self.kind.Ui };
+                crate::api::core::BlazyrEntityActionResponse::Ui(ans.field0.cst_decode())
+            }
+            1 => {
+                let ans = unsafe { self.kind.Text };
+                crate::api::core::BlazyrEntityActionResponse::Text(ans.field0.cst_decode())
+            }
+            2 => crate::api::core::BlazyrEntityActionResponse::None,
+            _ => unreachable!(),
+        }
+    }
+}
+impl CstDecode<crate::api::core::BlazyrComponent> for *mut wire_cst_blazyr_component {
+    fn cst_decode(self) -> crate::api::core::BlazyrComponent {
+        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+        CstDecode::<crate::api::core::BlazyrComponent>::cst_decode(*wrap).into()
+    }
+}
 impl CstDecode<crate::api::core::Image> for *mut wire_cst_image {
     fn cst_decode(self) -> crate::api::core::Image {
         let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
         CstDecode::<crate::api::core::Image>::cst_decode(*wrap).into()
+    }
+}
+impl CstDecode<Box<crate::api::core::BlazyrComponent>> for *mut wire_cst_blazyr_component {
+    fn cst_decode(self) -> Box<crate::api::core::BlazyrComponent> {
+        let wrap = unsafe { flutter_rust_bridge::for_generated::box_from_leak_ptr(self) };
+        CstDecode::<crate::api::core::BlazyrComponent>::cst_decode(*wrap).into()
     }
 }
 impl CstDecode<crate::api::core::Entity> for wire_cst_entity {
@@ -88,6 +144,15 @@ impl CstDecode<crate::api::core::Image> for wire_cst_image {
         }
     }
 }
+impl CstDecode<Vec<crate::api::core::BlazyrComponent>> for *mut wire_cst_list_blazyr_component {
+    fn cst_decode(self) -> Vec<crate::api::core::BlazyrComponent> {
+        let vec = unsafe {
+            let wrap = flutter_rust_bridge::for_generated::box_from_leak_ptr(self);
+            flutter_rust_bridge::for_generated::vec_from_leak_ptr(wrap.ptr, wrap.len)
+        };
+        vec.into_iter().map(CstDecode::cst_decode).collect()
+    }
+}
 impl CstDecode<Vec<crate::api::core::Entity>> for *mut wire_cst_list_entity {
     fn cst_decode(self) -> Vec<crate::api::core::Entity> {
         let vec = unsafe {
@@ -112,6 +177,32 @@ pub trait NewWithNullPtr {
 impl<T> NewWithNullPtr for *mut T {
     fn new_with_null_ptr() -> Self {
         std::ptr::null_mut()
+    }
+}
+impl NewWithNullPtr for wire_cst_blazyr_component {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            tag: -1,
+            kind: BlazyrComponentKind { nil__: () },
+        }
+    }
+}
+impl Default for wire_cst_blazyr_component {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
+    }
+}
+impl NewWithNullPtr for wire_cst_blazyr_entity_action_response {
+    fn new_with_null_ptr() -> Self {
+        Self {
+            tag: -1,
+            kind: BlazyrEntityActionResponseKind { nil__: () },
+        }
+    }
+}
+impl Default for wire_cst_blazyr_entity_action_response {
+    fn default() -> Self {
+        Self::new_with_null_ptr()
     }
 }
 impl NewWithNullPtr for wire_cst_entity {
@@ -246,8 +337,38 @@ pub extern "C" fn frbgen_spotlight_rust_arc_decrement_strong_count_RustOpaque_fl
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_spotlight_cst_new_box_autoadd_blazyr_component(
+) -> *mut wire_cst_blazyr_component {
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(
+        wire_cst_blazyr_component::new_with_null_ptr(),
+    )
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_spotlight_cst_new_box_autoadd_image() -> *mut wire_cst_image {
     flutter_rust_bridge::for_generated::new_leak_box_ptr(wire_cst_image::new_with_null_ptr())
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_spotlight_cst_new_box_blazyr_component() -> *mut wire_cst_blazyr_component
+{
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(
+        wire_cst_blazyr_component::new_with_null_ptr(),
+    )
+}
+
+#[no_mangle]
+pub extern "C" fn frbgen_spotlight_cst_new_list_blazyr_component(
+    len: i32,
+) -> *mut wire_cst_list_blazyr_component {
+    let wrap = wire_cst_list_blazyr_component {
+        ptr: flutter_rust_bridge::for_generated::new_leak_vec_ptr(
+            <wire_cst_blazyr_component>::new_with_null_ptr(),
+            len,
+        ),
+        len,
+    };
+    flutter_rust_bridge::for_generated::new_leak_box_ptr(wrap)
 }
 
 #[no_mangle]
@@ -273,6 +394,59 @@ pub extern "C" fn frbgen_spotlight_cst_new_list_prim_u_8_strict(
     flutter_rust_bridge::for_generated::new_leak_box_ptr(ans)
 }
 
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_blazyr_component {
+    tag: i32,
+    kind: BlazyrComponentKind,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub union BlazyrComponentKind {
+    Container: wire_cst_BlazyrComponent_Container,
+    Column: wire_cst_BlazyrComponent_Column,
+    Row: wire_cst_BlazyrComponent_Row,
+    nil__: (),
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_BlazyrComponent_Container {
+    child: *mut wire_cst_blazyr_component,
+    on_click: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_BlazyrComponent_Column {
+    children: *mut wire_cst_list_blazyr_component,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_BlazyrComponent_Row {
+    children: *mut wire_cst_list_blazyr_component,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_blazyr_entity_action_response {
+    tag: i32,
+    kind: BlazyrEntityActionResponseKind,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub union BlazyrEntityActionResponseKind {
+    Ui: wire_cst_BlazyrEntityActionResponse_Ui,
+    Text: wire_cst_BlazyrEntityActionResponse_Text,
+    nil__: (),
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_BlazyrEntityActionResponse_Ui {
+    field0: *mut wire_cst_blazyr_component,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_BlazyrEntityActionResponse_Text {
+    field0: *mut wire_cst_list_prim_u_8_strict,
+}
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct wire_cst_entity {
@@ -322,6 +496,12 @@ pub struct wire_cst_Image_Data {
 #[derive(Clone, Copy)]
 pub struct wire_cst_Image_Path {
     field0: *mut wire_cst_list_prim_u_8_strict,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_list_blazyr_component {
+    ptr: *mut wire_cst_blazyr_component,
+    len: i32,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

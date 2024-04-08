@@ -274,6 +274,70 @@ impl SseDecode for String {
     }
 }
 
+impl SseDecode for crate::api::core::BlazyrComponent {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_child =
+                    <Option<Box<crate::api::core::BlazyrComponent>>>::sse_decode(deserializer);
+                let mut var_onClick = <Option<String>>::sse_decode(deserializer);
+                return crate::api::core::BlazyrComponent::Container {
+                    child: var_child,
+                    on_click: var_onClick,
+                };
+            }
+            1 => {
+                let mut var_children =
+                    <Option<Vec<crate::api::core::BlazyrComponent>>>::sse_decode(deserializer);
+                return crate::api::core::BlazyrComponent::Column {
+                    children: var_children,
+                };
+            }
+            2 => {
+                let mut var_children =
+                    <Option<Vec<crate::api::core::BlazyrComponent>>>::sse_decode(deserializer);
+                return crate::api::core::BlazyrComponent::Row {
+                    children: var_children,
+                };
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
+impl SseDecode for crate::api::core::BlazyrEntityActionResponse {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut tag_ = <i32>::sse_decode(deserializer);
+        match tag_ {
+            0 => {
+                let mut var_field0 = <crate::api::core::BlazyrComponent>::sse_decode(deserializer);
+                return crate::api::core::BlazyrEntityActionResponse::Ui(var_field0);
+            }
+            1 => {
+                let mut var_field0 = <String>::sse_decode(deserializer);
+                return crate::api::core::BlazyrEntityActionResponse::Text(var_field0);
+            }
+            2 => {
+                return crate::api::core::BlazyrEntityActionResponse::None;
+            }
+            _ => {
+                unimplemented!("");
+            }
+        }
+    }
+}
+
+impl SseDecode for Box<crate::api::core::BlazyrComponent> {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        return Box::new(<crate::api::core::BlazyrComponent>::sse_decode(
+            deserializer,
+        ));
+    }
+}
+
 impl SseDecode for crate::api::core::DartAction {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut inner = <i32>::sse_decode(deserializer);
@@ -343,6 +407,19 @@ impl SseDecode for crate::api::core::Image {
     }
 }
 
+impl SseDecode for Vec<crate::api::core::BlazyrComponent> {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        let mut len_ = <i32>::sse_decode(deserializer);
+        let mut ans_ = vec![];
+        for idx_ in 0..len_ {
+            ans_.push(<crate::api::core::BlazyrComponent>::sse_decode(
+                deserializer,
+            ));
+        }
+        return ans_;
+    }
+}
+
 impl SseDecode for Vec<crate::api::core::Entity> {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         let mut len_ = <i32>::sse_decode(deserializer);
@@ -385,6 +462,30 @@ impl SseDecode for Option<crate::api::core::Image> {
     }
 }
 
+impl SseDecode for Option<Box<crate::api::core::BlazyrComponent>> {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Box<crate::api::core::BlazyrComponent>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
+impl SseDecode for Option<Vec<crate::api::core::BlazyrComponent>> {
+    fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
+        if (<bool>::sse_decode(deserializer)) {
+            return Some(<Vec<crate::api::core::BlazyrComponent>>::sse_decode(
+                deserializer,
+            ));
+        } else {
+            return None;
+        }
+    }
+}
+
 impl SseDecode for u8 {
     fn sse_decode(deserializer: &mut flutter_rust_bridge::for_generated::SseDeserializer) -> Self {
         deserializer.cursor.read_u8().unwrap()
@@ -409,6 +510,59 @@ impl SseDecode for bool {
 
 // Section: rust2dart
 
+impl flutter_rust_bridge::IntoDart for crate::api::core::BlazyrComponent {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::core::BlazyrComponent::Container { child, on_click } => [
+                0.into_dart(),
+                child.into_into_dart().into_dart(),
+                on_click.into_into_dart().into_dart(),
+            ]
+            .into_dart(),
+            crate::api::core::BlazyrComponent::Column { children } => {
+                [1.into_dart(), children.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::core::BlazyrComponent::Row { children } => {
+                [2.into_dart(), children.into_into_dart().into_dart()].into_dart()
+            }
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::core::BlazyrComponent
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::core::BlazyrComponent>
+    for crate::api::core::BlazyrComponent
+{
+    fn into_into_dart(self) -> crate::api::core::BlazyrComponent {
+        self
+    }
+}
+impl flutter_rust_bridge::IntoDart for crate::api::core::BlazyrEntityActionResponse {
+    fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
+        match self {
+            crate::api::core::BlazyrEntityActionResponse::Ui(field0) => {
+                [0.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::core::BlazyrEntityActionResponse::Text(field0) => {
+                [1.into_dart(), field0.into_into_dart().into_dart()].into_dart()
+            }
+            crate::api::core::BlazyrEntityActionResponse::None => [2.into_dart()].into_dart(),
+        }
+    }
+}
+impl flutter_rust_bridge::for_generated::IntoDartExceptPrimitive
+    for crate::api::core::BlazyrEntityActionResponse
+{
+}
+impl flutter_rust_bridge::IntoIntoDart<crate::api::core::BlazyrEntityActionResponse>
+    for crate::api::core::BlazyrEntityActionResponse
+{
+    fn into_into_dart(self) -> crate::api::core::BlazyrEntityActionResponse {
+        self
+    }
+}
 impl flutter_rust_bridge::IntoDart for crate::api::core::DartAction {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
@@ -509,6 +663,50 @@ impl SseEncode for String {
     }
 }
 
+impl SseEncode for crate::api::core::BlazyrComponent {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::core::BlazyrComponent::Container { child, on_click } => {
+                <i32>::sse_encode(0, serializer);
+                <Option<Box<crate::api::core::BlazyrComponent>>>::sse_encode(child, serializer);
+                <Option<String>>::sse_encode(on_click, serializer);
+            }
+            crate::api::core::BlazyrComponent::Column { children } => {
+                <i32>::sse_encode(1, serializer);
+                <Option<Vec<crate::api::core::BlazyrComponent>>>::sse_encode(children, serializer);
+            }
+            crate::api::core::BlazyrComponent::Row { children } => {
+                <i32>::sse_encode(2, serializer);
+                <Option<Vec<crate::api::core::BlazyrComponent>>>::sse_encode(children, serializer);
+            }
+        }
+    }
+}
+
+impl SseEncode for crate::api::core::BlazyrEntityActionResponse {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        match self {
+            crate::api::core::BlazyrEntityActionResponse::Ui(field0) => {
+                <i32>::sse_encode(0, serializer);
+                <crate::api::core::BlazyrComponent>::sse_encode(field0, serializer);
+            }
+            crate::api::core::BlazyrEntityActionResponse::Text(field0) => {
+                <i32>::sse_encode(1, serializer);
+                <String>::sse_encode(field0, serializer);
+            }
+            crate::api::core::BlazyrEntityActionResponse::None => {
+                <i32>::sse_encode(2, serializer);
+            }
+        }
+    }
+}
+
+impl SseEncode for Box<crate::api::core::BlazyrComponent> {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <crate::api::core::BlazyrComponent>::sse_encode(*self, serializer);
+    }
+}
+
 impl SseEncode for crate::api::core::DartAction {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self as _, serializer);
@@ -558,6 +756,15 @@ impl SseEncode for crate::api::core::Image {
     }
 }
 
+impl SseEncode for Vec<crate::api::core::BlazyrComponent> {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <i32>::sse_encode(self.len() as _, serializer);
+        for item in self {
+            <crate::api::core::BlazyrComponent>::sse_encode(item, serializer);
+        }
+    }
+}
+
 impl SseEncode for Vec<crate::api::core::Entity> {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         <i32>::sse_encode(self.len() as _, serializer);
@@ -590,6 +797,24 @@ impl SseEncode for Option<crate::api::core::Image> {
         <bool>::sse_encode(self.is_some(), serializer);
         if let Some(value) = self {
             <crate::api::core::Image>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Box<crate::api::core::BlazyrComponent>> {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Box<crate::api::core::BlazyrComponent>>::sse_encode(value, serializer);
+        }
+    }
+}
+
+impl SseEncode for Option<Vec<crate::api::core::BlazyrComponent>> {
+    fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
+        <bool>::sse_encode(self.is_some(), serializer);
+        if let Some(value) = self {
+            <Vec<crate::api::core::BlazyrComponent>>::sse_encode(value, serializer);
         }
     }
 }

@@ -34,7 +34,7 @@ class StateApp extends RustOpaque {
         RustLib.instance.api.rust_arc_decrement_strong_count_StateAppPtr,
   );
 
-  Future<void> execute(
+  Future<BlazyrEntityActionResponse> execute(
           {required int id,
           String? arg,
           required FutureOr<void> Function() onExecuted,
@@ -53,6 +53,32 @@ class StateApp extends RustOpaque {
 
   static Future<StateApp> newStateApp({dynamic hint}) =>
       RustLib.instance.api.stateAppNew(hint: hint);
+}
+
+@freezed
+sealed class BlazyrComponent with _$BlazyrComponent {
+  const factory BlazyrComponent.container({
+    BlazyrComponent? child,
+    String? onClick,
+  }) = BlazyrComponent_Container;
+  const factory BlazyrComponent.column({
+    List<BlazyrComponent>? children,
+  }) = BlazyrComponent_Column;
+  const factory BlazyrComponent.row({
+    List<BlazyrComponent>? children,
+  }) = BlazyrComponent_Row;
+}
+
+@freezed
+sealed class BlazyrEntityActionResponse with _$BlazyrEntityActionResponse {
+  const factory BlazyrEntityActionResponse.ui(
+    BlazyrComponent field0,
+  ) = BlazyrEntityActionResponse_Ui;
+  const factory BlazyrEntityActionResponse.text(
+    String field0,
+  ) = BlazyrEntityActionResponse_Text;
+  const factory BlazyrEntityActionResponse.none() =
+      BlazyrEntityActionResponse_None;
 }
 
 enum DartAction {

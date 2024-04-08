@@ -53,7 +53,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String dco_decode_String(dynamic raw);
 
   @protected
+  BlazyrComponent dco_decode_blazyr_component(dynamic raw);
+
+  @protected
+  BlazyrEntityActionResponse dco_decode_blazyr_entity_action_response(
+      dynamic raw);
+
+  @protected
+  BlazyrComponent dco_decode_box_autoadd_blazyr_component(dynamic raw);
+
+  @protected
   Image dco_decode_box_autoadd_image(dynamic raw);
+
+  @protected
+  BlazyrComponent dco_decode_box_blazyr_component(dynamic raw);
 
   @protected
   DartAction dco_decode_dart_action(dynamic raw);
@@ -71,6 +84,9 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image dco_decode_image(dynamic raw);
 
   @protected
+  List<BlazyrComponent> dco_decode_list_blazyr_component(dynamic raw);
+
+  @protected
   List<Entity> dco_decode_list_entity(dynamic raw);
 
   @protected
@@ -81,6 +97,12 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Image? dco_decode_opt_box_autoadd_image(dynamic raw);
+
+  @protected
+  BlazyrComponent? dco_decode_opt_box_blazyr_component(dynamic raw);
+
+  @protected
+  List<BlazyrComponent>? dco_decode_opt_list_blazyr_component(dynamic raw);
 
   @protected
   int dco_decode_u_8(dynamic raw);
@@ -121,7 +143,21 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   String sse_decode_String(SseDeserializer deserializer);
 
   @protected
+  BlazyrComponent sse_decode_blazyr_component(SseDeserializer deserializer);
+
+  @protected
+  BlazyrEntityActionResponse sse_decode_blazyr_entity_action_response(
+      SseDeserializer deserializer);
+
+  @protected
+  BlazyrComponent sse_decode_box_autoadd_blazyr_component(
+      SseDeserializer deserializer);
+
+  @protected
   Image sse_decode_box_autoadd_image(SseDeserializer deserializer);
+
+  @protected
+  BlazyrComponent sse_decode_box_blazyr_component(SseDeserializer deserializer);
 
   @protected
   DartAction sse_decode_dart_action(SseDeserializer deserializer);
@@ -139,6 +175,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   Image sse_decode_image(SseDeserializer deserializer);
 
   @protected
+  List<BlazyrComponent> sse_decode_list_blazyr_component(
+      SseDeserializer deserializer);
+
+  @protected
   List<Entity> sse_decode_list_entity(SseDeserializer deserializer);
 
   @protected
@@ -149,6 +189,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   Image? sse_decode_opt_box_autoadd_image(SseDeserializer deserializer);
+
+  @protected
+  BlazyrComponent? sse_decode_opt_box_blazyr_component(
+      SseDeserializer deserializer);
+
+  @protected
+  List<BlazyrComponent>? sse_decode_opt_list_blazyr_component(
+      SseDeserializer deserializer);
 
   @protected
   int sse_decode_u_8(SseDeserializer deserializer);
@@ -173,8 +221,53 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  List<dynamic> cst_encode_blazyr_component(BlazyrComponent raw) {
+    if (raw is BlazyrComponent_Container) {
+      return [
+        0,
+        cst_encode_opt_box_blazyr_component(raw.child),
+        cst_encode_opt_String(raw.onClick)
+      ];
+    }
+    if (raw is BlazyrComponent_Column) {
+      return [1, cst_encode_opt_list_blazyr_component(raw.children)];
+    }
+    if (raw is BlazyrComponent_Row) {
+      return [2, cst_encode_opt_list_blazyr_component(raw.children)];
+    }
+
+    throw Exception('unreachable');
+  }
+
+  @protected
+  List<dynamic> cst_encode_blazyr_entity_action_response(
+      BlazyrEntityActionResponse raw) {
+    if (raw is BlazyrEntityActionResponse_Ui) {
+      return [0, cst_encode_box_autoadd_blazyr_component(raw.field0)];
+    }
+    if (raw is BlazyrEntityActionResponse_Text) {
+      return [1, cst_encode_String(raw.field0)];
+    }
+    if (raw is BlazyrEntityActionResponse_None) {
+      return [2];
+    }
+
+    throw Exception('unreachable');
+  }
+
+  @protected
+  List<dynamic> cst_encode_box_autoadd_blazyr_component(BlazyrComponent raw) {
+    return cst_encode_blazyr_component(raw);
+  }
+
+  @protected
   List<dynamic> cst_encode_box_autoadd_image(Image raw) {
     return cst_encode_image(raw);
+  }
+
+  @protected
+  List<dynamic> cst_encode_box_blazyr_component(BlazyrComponent raw) {
+    return cst_encode_blazyr_component(raw);
   }
 
   @protected
@@ -211,6 +304,11 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   }
 
   @protected
+  List<dynamic> cst_encode_list_blazyr_component(List<BlazyrComponent> raw) {
+    return raw.map(cst_encode_blazyr_component).toList();
+  }
+
+  @protected
   List<dynamic> cst_encode_list_entity(List<Entity> raw) {
     return raw.map(cst_encode_entity).toList();
   }
@@ -228,6 +326,17 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   List<dynamic>? cst_encode_opt_box_autoadd_image(Image? raw) {
     return raw == null ? null : cst_encode_box_autoadd_image(raw);
+  }
+
+  @protected
+  List<dynamic>? cst_encode_opt_box_blazyr_component(BlazyrComponent? raw) {
+    return raw == null ? null : cst_encode_box_blazyr_component(raw);
+  }
+
+  @protected
+  List<dynamic>? cst_encode_opt_list_blazyr_component(
+      List<BlazyrComponent>? raw) {
+    return raw == null ? null : cst_encode_list_blazyr_component(raw);
   }
 
   @protected
@@ -307,7 +416,23 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_String(String self, SseSerializer serializer);
 
   @protected
+  void sse_encode_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_blazyr_entity_action_response(
+      BlazyrEntityActionResponse self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_autoadd_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer);
+
+  @protected
   void sse_encode_box_autoadd_image(Image self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_box_blazyr_component(
+      BlazyrComponent self, SseSerializer serializer);
 
   @protected
   void sse_encode_dart_action(DartAction self, SseSerializer serializer);
@@ -325,6 +450,10 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   void sse_encode_image(Image self, SseSerializer serializer);
 
   @protected
+  void sse_encode_list_blazyr_component(
+      List<BlazyrComponent> self, SseSerializer serializer);
+
+  @protected
   void sse_encode_list_entity(List<Entity> self, SseSerializer serializer);
 
   @protected
@@ -336,6 +465,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
 
   @protected
   void sse_encode_opt_box_autoadd_image(Image? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_box_blazyr_component(
+      BlazyrComponent? self, SseSerializer serializer);
+
+  @protected
+  void sse_encode_opt_list_blazyr_component(
+      List<BlazyrComponent>? self, SseSerializer serializer);
 
   @protected
   void sse_encode_u_8(int self, SseSerializer serializer);

@@ -38,6 +38,39 @@ impl CstDecode<String> for String {
         self
     }
 }
+impl CstDecode<crate::api::core::BlazyrComponent>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> crate::api::core::BlazyrComponent {
+        let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
+        match self_.get(0).unchecked_into_f64() as _ {
+            0 => crate::api::core::BlazyrComponent::Container {
+                child: self_.get(1).cst_decode(),
+                on_click: self_.get(2).cst_decode(),
+            },
+            1 => crate::api::core::BlazyrComponent::Column {
+                children: self_.get(1).cst_decode(),
+            },
+            2 => crate::api::core::BlazyrComponent::Row {
+                children: self_.get(1).cst_decode(),
+            },
+            _ => unreachable!(),
+        }
+    }
+}
+impl CstDecode<crate::api::core::BlazyrEntityActionResponse>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> crate::api::core::BlazyrEntityActionResponse {
+        let self_ = self.unchecked_into::<flutter_rust_bridge::for_generated::js_sys::Array>();
+        match self_.get(0).unchecked_into_f64() as _ {
+            0 => crate::api::core::BlazyrEntityActionResponse::Ui(self_.get(1).cst_decode()),
+            1 => crate::api::core::BlazyrEntityActionResponse::Text(self_.get(1).cst_decode()),
+            2 => crate::api::core::BlazyrEntityActionResponse::None,
+            _ => unreachable!(),
+        }
+    }
+}
 impl CstDecode<crate::api::core::Entity>
     for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
 {
@@ -82,6 +115,17 @@ impl CstDecode<crate::api::core::Image>
             1 => crate::api::core::Image::Path(self_.get(1).cst_decode()),
             _ => unreachable!(),
         }
+    }
+}
+impl CstDecode<Vec<crate::api::core::BlazyrComponent>>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> Vec<crate::api::core::BlazyrComponent> {
+        self.dyn_into::<flutter_rust_bridge::for_generated::js_sys::Array>()
+            .unwrap()
+            .iter()
+            .map(CstDecode::cst_decode)
+            .collect()
     }
 }
 impl CstDecode<Vec<crate::api::core::Entity>>
@@ -130,6 +174,13 @@ impl
 impl CstDecode<String> for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue {
     fn cst_decode(self) -> String {
         self.as_string().expect("non-UTF-8 string, or not a string")
+    }
+}
+impl CstDecode<Box<crate::api::core::BlazyrComponent>>
+    for flutter_rust_bridge::for_generated::wasm_bindgen::JsValue
+{
+    fn cst_decode(self) -> Box<crate::api::core::BlazyrComponent> {
+        Box::new(self.cst_decode())
     }
 }
 impl CstDecode<crate::api::core::DartAction>

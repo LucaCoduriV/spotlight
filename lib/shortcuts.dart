@@ -2,6 +2,7 @@ import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -51,12 +52,21 @@ class SelectEntryIntent extends Intent {
 
 class SelectEntryAction extends Action<SelectEntryIntent> {
   final Service service = di.get();
+  final PluginUIService pluginUIService = di.get();
   final String? arg;
   SelectEntryAction({this.arg});
 
   @override
-  Object? invoke(covariant SelectEntryIntent intent) {
-    service.select(arg: arg);
+  Object? invoke(covariant SelectEntryIntent intent) async {
+    final result = await service.runSelectedEntity(arg: arg);
+    switch (result) {
+      case RunEntityResultUI(:final widget):
+        pluginUIService.currentPluginUI = widget;
+        pluginUIService.showPluginUI = true;
+        break;
+      case RunEntityResultText():
+      case RunEntityResultNone():
+    }
     return null;
   }
 }

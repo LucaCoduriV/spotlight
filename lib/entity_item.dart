@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/theme.dart';
 import 'package:watch_it/watch_it.dart';
@@ -31,6 +32,7 @@ class _EntityItemState extends State<EntityItem> {
   @override
   Widget build(BuildContext context) {
     final Service service = di.get();
+    final PluginUIService pluginUIService = di.get();
 
     return ListTile(
       tileColor:
@@ -53,8 +55,17 @@ class _EntityItemState extends State<EntityItem> {
         widget.type,
         style: CustomTheme.secondaryText,
       ),
-      onTap: () {
-        service.execute(widget.index, arg: widget.searchString);
+      onTap: () async {
+        final result =
+            await service.run(widget.index, arg: widget.searchString);
+        switch (result) {
+          case RunEntityResultUI(:final widget):
+            pluginUIService.currentPluginUI = widget;
+            pluginUIService.showPluginUI = true;
+            break;
+          case RunEntityResultText():
+          case RunEntityResultNone():
+        }
       },
     );
   }

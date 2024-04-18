@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
 import 'package:watch_it/watch_it.dart';
@@ -37,6 +38,7 @@ Future<void> main() async {
   await RustLib.init();
   final service = di.registerSingleton<Service>(Service());
   service.init();
+  di.registerSingleton<PluginUIService>(PluginUIService());
 
   runApp(const MyApp());
   await rust_core.onExit();
@@ -118,6 +120,7 @@ Widget rComponentToFlutterWidget(
     rust_core.BlazyrComponent_Container(:final child) => Container(
         height: 100,
         width: 100,
+        margin: const EdgeInsets.all(2.0),
         color: Colors.red,
         child: child != null ? callback(child) : null,
       ),

@@ -1,8 +1,5 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:spotlight/main.dart';
-import 'package:window_manager/window_manager.dart';
 
 import 'src/rust/api/core.dart' as rust_core;
 
@@ -11,7 +8,6 @@ class Service extends ChangeNotifier {
   List<rust_core.Entity> entities = [];
   List<rust_core.Entity> commands = [];
   late Stream<rust_core.DartAction> stream;
-  Widget? pluginUi;
 
   int? _index;
   rust_core.Entity? selected;
@@ -25,7 +21,6 @@ class Service extends ChangeNotifier {
     stream = rust_core.setDartActionStream();
     stream.listen((event) {
       if (event == rust_core.DartAction.exit) {
-        print("ASKED TO EXIT");
         // exit(0);
       }
     });
@@ -67,11 +62,11 @@ class Service extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> select({String? arg}) async {
+  Future<RunEntityResult> runSelectedEntity({String? arg}) async {
     if (selected == null) {
-      return;
+      return RunEntityResultNone();
     }
-    await execute(selected!.index, arg: arg);
+    return await run(selected!.index, arg: arg);
   }
 
   Future<void> search(String search) async {
@@ -98,13 +93,13 @@ class Service extends ChangeNotifier {
     String? arg,
   }) async {
     // windowManager.hide();
-    final _result = await state?.componentClickable(
+    await state?.componentClickable(
       id: index,
       action: action,
     );
   }
 
-  Future<void> execute(int index, {String? arg}) async {
+  Future<RunEntityResult> run(int index, {String? arg}) async {
     // windowManager.hide();
     final result = await state?.execute(
         id: index,
@@ -114,21 +109,25 @@ class Service extends ChangeNotifier {
         });
 
     switch (result) {
-      case null:
-        print("null");
-        break;
       case rust_core.BlazyrEntityActionResponse_Ui(:final field0):
-        print("ui");
         final widget = rComponentToFlutterWidget(field0, index, this);
-        pluginUi = widget;
-        notifyListeners();
-        break;
+        return RunEntityResultUI(widget);
       case rust_core.BlazyrEntityActionResponse_Text():
-        print("text");
-        break;
+        return RunEntityResultText();
       case rust_core.BlazyrEntityActionResponse_None():
-        print("none");
-        break;
+      case null:
+        return RunEntityResultNone();
     }
   }
 }
+
+sealed class RunEntityResult {}
+
+class RunEntityResultUI extends RunEntityResult {
+  final Widget? widget;
+  RunEntityResultUI(this.widget);
+}
+
+class RunEntityResultText extends RunEntityResult {}
+
+class RunEntityResultNone extends RunEntityResult {}

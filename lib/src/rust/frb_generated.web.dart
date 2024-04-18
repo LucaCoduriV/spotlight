@@ -223,17 +223,20 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
   @protected
   List<dynamic> cst_encode_blazyr_component(BlazyrComponent raw) {
     if (raw is BlazyrComponent_Container) {
-      return [
-        0,
-        cst_encode_opt_box_blazyr_component(raw.child),
-        cst_encode_opt_String(raw.onClick)
-      ];
+      return [0, cst_encode_opt_box_blazyr_component(raw.child)];
     }
     if (raw is BlazyrComponent_Column) {
       return [1, cst_encode_opt_list_blazyr_component(raw.children)];
     }
     if (raw is BlazyrComponent_Row) {
       return [2, cst_encode_opt_list_blazyr_component(raw.children)];
+    }
+    if (raw is BlazyrComponent_Clickable) {
+      return [
+        3,
+        cst_encode_opt_box_blazyr_component(raw.child),
+        cst_encode_opt_String(raw.onClick)
+      ];
     }
 
     throw Exception('unreachable');
@@ -497,6 +500,10 @@ class RustLibWire extends BaseWire {
       wasmModule.dart_fn_deliver_output(
           call_id, ptr_, rust_vec_len_, data_len_);
 
+  void wire_StateApp_component_clickable(
+          NativePortType port_, Object that, int id, String action) =>
+      wasmModule.wire_StateApp_component_clickable(port_, that, id, action);
+
   void wire_StateApp_execute(NativePortType port_, Object that, int id,
           String? arg, PlatformPointer on_executed) =>
       wasmModule.wire_StateApp_execute(port_, that, id, arg, on_executed);
@@ -544,6 +551,9 @@ class RustLibWasmModule implements WasmModule {
 
   external void dart_fn_deliver_output(int call_id,
       PlatformGeneralizedUint8ListPtr ptr_, int rust_vec_len_, int data_len_);
+
+  external void wire_StateApp_component_clickable(
+      NativePortType port_, Object that, int id, String action);
 
   external void wire_StateApp_execute(NativePortType port_, Object that, int id,
       String? arg, PlatformPointer on_executed);

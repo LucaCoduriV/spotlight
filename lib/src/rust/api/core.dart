@@ -34,6 +34,14 @@ class StateApp extends RustOpaque {
         RustLib.instance.api.rust_arc_decrement_strong_count_StateAppPtr,
   );
 
+  Future<void> componentClickable(
+          {required int id, required String action, dynamic hint}) =>
+      RustLib.instance.api.stateAppComponentClickable(
+        that: this,
+        id: id,
+        action: action,
+      );
+
   Future<BlazyrEntityActionResponse> execute(
           {required int id,
           String? arg,
@@ -59,7 +67,6 @@ class StateApp extends RustOpaque {
 sealed class BlazyrComponent with _$BlazyrComponent {
   const factory BlazyrComponent.container({
     BlazyrComponent? child,
-    String? onClick,
   }) = BlazyrComponent_Container;
   const factory BlazyrComponent.column({
     List<BlazyrComponent>? children,
@@ -67,6 +74,10 @@ sealed class BlazyrComponent with _$BlazyrComponent {
   const factory BlazyrComponent.row({
     List<BlazyrComponent>? children,
   }) = BlazyrComponent_Row;
+  const factory BlazyrComponent.clickable({
+    BlazyrComponent? child,
+    String? onClick,
+  }) = BlazyrComponent_Clickable;
 }
 
 @freezed

@@ -61,6 +61,12 @@ class RustLib extends BaseEntrypoint<RustLibApi, RustLibApiImpl, RustLibWire> {
 }
 
 abstract class RustLibApi extends BaseApi {
+  Future<void> stateAppComponentClickable(
+      {required StateApp that,
+      required int id,
+      required String action,
+      dynamic hint});
+
   Future<BlazyrEntityActionResponse> stateAppExecute(
       {required StateApp that,
       required int id,
@@ -98,6 +104,37 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     required super.generalizedFrbRustBinding,
     required super.portManager,
   });
+
+  @override
+  Future<void> stateAppComponentClickable(
+      {required StateApp that,
+      required int id,
+      required String action,
+      dynamic hint}) {
+    return handler.executeNormal(NormalTask(
+      callFfi: (port_) {
+        var arg0 =
+            cst_encode_Auto_RefMut_RustOpaque_flutter_rust_bridgefor_generatedrust_asyncRwLockStateApp(
+                that);
+        var arg1 = cst_encode_usize(id);
+        var arg2 = cst_encode_String(action);
+        return wire.wire_StateApp_component_clickable(port_, arg0, arg1, arg2);
+      },
+      codec: DcoCodec(
+        decodeSuccessData: dco_decode_unit,
+        decodeErrorData: dco_decode_entity_error,
+      ),
+      constMeta: kStateAppComponentClickableConstMeta,
+      argValues: [that, id, action],
+      apiImpl: this,
+      hint: hint,
+    ));
+  }
+
+  TaskConstMeta get kStateAppComponentClickableConstMeta => const TaskConstMeta(
+        debugName: "StateApp_component_clickable",
+        argNames: ["that", "id", "action"],
+      );
 
   @override
   Future<BlazyrEntityActionResponse> stateAppExecute(
@@ -353,7 +390,6 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 0:
         return BlazyrComponent_Container(
           child: dco_decode_opt_box_blazyr_component(raw[1]),
-          onClick: dco_decode_opt_String(raw[2]),
         );
       case 1:
         return BlazyrComponent_Column(
@@ -362,6 +398,11 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
       case 2:
         return BlazyrComponent_Row(
           children: dco_decode_opt_list_blazyr_component(raw[1]),
+        );
+      case 3:
+        return BlazyrComponent_Clickable(
+          child: dco_decode_opt_box_blazyr_component(raw[1]),
+          onClick: dco_decode_opt_String(raw[2]),
         );
       default:
         throw Exception("unreachable");
@@ -561,15 +602,18 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
     switch (tag_) {
       case 0:
         var var_child = sse_decode_opt_box_blazyr_component(deserializer);
-        var var_onClick = sse_decode_opt_String(deserializer);
-        return BlazyrComponent_Container(
-            child: var_child, onClick: var_onClick);
+        return BlazyrComponent_Container(child: var_child);
       case 1:
         var var_children = sse_decode_opt_list_blazyr_component(deserializer);
         return BlazyrComponent_Column(children: var_children);
       case 2:
         var var_children = sse_decode_opt_list_blazyr_component(deserializer);
         return BlazyrComponent_Row(children: var_children);
+      case 3:
+        var var_child = sse_decode_opt_box_blazyr_component(deserializer);
+        var var_onClick = sse_decode_opt_String(deserializer);
+        return BlazyrComponent_Clickable(
+            child: var_child, onClick: var_onClick);
       default:
         throw UnimplementedError('');
     }
@@ -875,19 +919,22 @@ class RustLibApiImpl extends RustLibApiImplPlatform implements RustLibApi {
   void sse_encode_blazyr_component(
       BlazyrComponent self, SseSerializer serializer) {
     switch (self) {
-      case BlazyrComponent_Container(
-          child: final child,
-          onClick: final onClick
-        ):
+      case BlazyrComponent_Container(child: final child):
         sse_encode_i_32(0, serializer);
         sse_encode_opt_box_blazyr_component(child, serializer);
-        sse_encode_opt_String(onClick, serializer);
       case BlazyrComponent_Column(children: final children):
         sse_encode_i_32(1, serializer);
         sse_encode_opt_list_blazyr_component(children, serializer);
       case BlazyrComponent_Row(children: final children):
         sse_encode_i_32(2, serializer);
         sse_encode_opt_list_blazyr_component(children, serializer);
+      case BlazyrComponent_Clickable(
+          child: final child,
+          onClick: final onClick
+        ):
+        sse_encode_i_32(3, serializer);
+        sse_encode_opt_box_blazyr_component(child, serializer);
+        sse_encode_opt_String(onClick, serializer);
     }
   }
 

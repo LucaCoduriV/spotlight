@@ -51,7 +51,6 @@ impl CstDecode<crate::api::core::BlazyrComponent> for wire_cst_blazyr_component 
                 let ans = unsafe { self.kind.Container };
                 crate::api::core::BlazyrComponent::Container {
                     child: ans.child.cst_decode(),
-                    on_click: ans.on_click.cst_decode(),
                 }
             }
             1 => {
@@ -64,6 +63,13 @@ impl CstDecode<crate::api::core::BlazyrComponent> for wire_cst_blazyr_component 
                 let ans = unsafe { self.kind.Row };
                 crate::api::core::BlazyrComponent::Row {
                     children: ans.children.cst_decode(),
+                }
+            }
+            3 => {
+                let ans = unsafe { self.kind.Clickable };
+                crate::api::core::BlazyrComponent::Clickable {
+                    child: ans.child.cst_decode(),
+                    on_click: ans.on_click.cst_decode(),
                 }
             }
             _ => unreachable!(),
@@ -267,6 +273,16 @@ pub extern "C" fn frbgen_spotlight_dart_fn_deliver_output(
 }
 
 #[no_mangle]
+pub extern "C" fn frbgen_spotlight_wire_StateApp_component_clickable(
+    port_: i64,
+    that: *const std::ffi::c_void,
+    id: usize,
+    action: *mut wire_cst_list_prim_u_8_strict,
+) {
+    wire_StateApp_component_clickable_impl(port_, that, id, action)
+}
+
+#[no_mangle]
 pub extern "C" fn frbgen_spotlight_wire_StateApp_execute(
     port_: i64,
     that: *const std::ffi::c_void,
@@ -406,13 +422,13 @@ pub union BlazyrComponentKind {
     Container: wire_cst_BlazyrComponent_Container,
     Column: wire_cst_BlazyrComponent_Column,
     Row: wire_cst_BlazyrComponent_Row,
+    Clickable: wire_cst_BlazyrComponent_Clickable,
     nil__: (),
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
 pub struct wire_cst_BlazyrComponent_Container {
     child: *mut wire_cst_blazyr_component,
-    on_click: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]
@@ -423,6 +439,12 @@ pub struct wire_cst_BlazyrComponent_Column {
 #[derive(Clone, Copy)]
 pub struct wire_cst_BlazyrComponent_Row {
     children: *mut wire_cst_list_blazyr_component,
+}
+#[repr(C)]
+#[derive(Clone, Copy)]
+pub struct wire_cst_BlazyrComponent_Clickable {
+    child: *mut wire_cst_blazyr_component,
+    on_click: *mut wire_cst_list_prim_u_8_strict,
 }
 #[repr(C)]
 #[derive(Clone, Copy)]

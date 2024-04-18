@@ -33,6 +33,43 @@ flutter_rust_bridge::frb_generated_default_handler!();
 
 // Section: wire_funcs
 
+fn wire_StateApp_component_clickable_impl(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: impl CstDecode<
+        flutter_rust_bridge::RustOpaque<
+            flutter_rust_bridge::for_generated::rust_async::RwLock<StateApp>,
+        >,
+    >,
+    id: impl CstDecode<usize>,
+    action: impl CstDecode<String>,
+) {
+    FLUTTER_RUST_BRIDGE_HANDLER.wrap_async::<flutter_rust_bridge::for_generated::DcoCodec, _, _, _>(
+        flutter_rust_bridge::for_generated::TaskInfo {
+            debug_name: "StateApp_component_clickable",
+            port: Some(port_),
+            mode: flutter_rust_bridge::for_generated::FfiCallMode::Normal,
+        },
+        move || {
+            let api_that = that.cst_decode();
+            let api_id = id.cst_decode();
+            let api_action = action.cst_decode();
+            move |context| async move {
+                transform_result_dco(
+                    (move || async move {
+                        let mut api_that = api_that.rust_auto_opaque_decode_async_ref_mut().await;
+                        crate::api::core::StateApp::component_clickable(
+                            &mut api_that,
+                            api_id,
+                            api_action,
+                        )
+                        .await
+                    })()
+                    .await,
+                )
+            }
+        },
+    )
+}
 fn wire_StateApp_execute_impl(
     port_: flutter_rust_bridge::for_generated::MessagePort,
     that: impl CstDecode<
@@ -281,11 +318,7 @@ impl SseDecode for crate::api::core::BlazyrComponent {
             0 => {
                 let mut var_child =
                     <Option<Box<crate::api::core::BlazyrComponent>>>::sse_decode(deserializer);
-                let mut var_onClick = <Option<String>>::sse_decode(deserializer);
-                return crate::api::core::BlazyrComponent::Container {
-                    child: var_child,
-                    on_click: var_onClick,
-                };
+                return crate::api::core::BlazyrComponent::Container { child: var_child };
             }
             1 => {
                 let mut var_children =
@@ -299,6 +332,15 @@ impl SseDecode for crate::api::core::BlazyrComponent {
                     <Option<Vec<crate::api::core::BlazyrComponent>>>::sse_decode(deserializer);
                 return crate::api::core::BlazyrComponent::Row {
                     children: var_children,
+                };
+            }
+            3 => {
+                let mut var_child =
+                    <Option<Box<crate::api::core::BlazyrComponent>>>::sse_decode(deserializer);
+                let mut var_onClick = <Option<String>>::sse_decode(deserializer);
+                return crate::api::core::BlazyrComponent::Clickable {
+                    child: var_child,
+                    on_click: var_onClick,
                 };
             }
             _ => {
@@ -513,18 +555,21 @@ impl SseDecode for bool {
 impl flutter_rust_bridge::IntoDart for crate::api::core::BlazyrComponent {
     fn into_dart(self) -> flutter_rust_bridge::for_generated::DartAbi {
         match self {
-            crate::api::core::BlazyrComponent::Container { child, on_click } => [
-                0.into_dart(),
-                child.into_into_dart().into_dart(),
-                on_click.into_into_dart().into_dart(),
-            ]
-            .into_dart(),
+            crate::api::core::BlazyrComponent::Container { child } => {
+                [0.into_dart(), child.into_into_dart().into_dart()].into_dart()
+            }
             crate::api::core::BlazyrComponent::Column { children } => {
                 [1.into_dart(), children.into_into_dart().into_dart()].into_dart()
             }
             crate::api::core::BlazyrComponent::Row { children } => {
                 [2.into_dart(), children.into_into_dart().into_dart()].into_dart()
             }
+            crate::api::core::BlazyrComponent::Clickable { child, on_click } => [
+                3.into_dart(),
+                child.into_into_dart().into_dart(),
+                on_click.into_into_dart().into_dart(),
+            ]
+            .into_dart(),
         }
     }
 }
@@ -666,10 +711,9 @@ impl SseEncode for String {
 impl SseEncode for crate::api::core::BlazyrComponent {
     fn sse_encode(self, serializer: &mut flutter_rust_bridge::for_generated::SseSerializer) {
         match self {
-            crate::api::core::BlazyrComponent::Container { child, on_click } => {
+            crate::api::core::BlazyrComponent::Container { child } => {
                 <i32>::sse_encode(0, serializer);
                 <Option<Box<crate::api::core::BlazyrComponent>>>::sse_encode(child, serializer);
-                <Option<String>>::sse_encode(on_click, serializer);
             }
             crate::api::core::BlazyrComponent::Column { children } => {
                 <i32>::sse_encode(1, serializer);
@@ -678,6 +722,11 @@ impl SseEncode for crate::api::core::BlazyrComponent {
             crate::api::core::BlazyrComponent::Row { children } => {
                 <i32>::sse_encode(2, serializer);
                 <Option<Vec<crate::api::core::BlazyrComponent>>>::sse_encode(children, serializer);
+            }
+            crate::api::core::BlazyrComponent::Clickable { child, on_click } => {
+                <i32>::sse_encode(3, serializer);
+                <Option<Box<crate::api::core::BlazyrComponent>>>::sse_encode(child, serializer);
+                <Option<String>>::sse_encode(on_click, serializer);
             }
         }
     }

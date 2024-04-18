@@ -300,10 +300,8 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       BlazyrComponent apiObj, wire_cst_blazyr_component wireObj) {
     if (apiObj is BlazyrComponent_Container) {
       var pre_child = cst_encode_opt_box_blazyr_component(apiObj.child);
-      var pre_on_click = cst_encode_opt_String(apiObj.onClick);
       wireObj.tag = 0;
       wireObj.kind.Container.child = pre_child;
-      wireObj.kind.Container.on_click = pre_on_click;
       return;
     }
     if (apiObj is BlazyrComponent_Column) {
@@ -316,6 +314,14 @@ abstract class RustLibApiImplPlatform extends BaseApiImpl<RustLibWire> {
       var pre_children = cst_encode_opt_list_blazyr_component(apiObj.children);
       wireObj.tag = 2;
       wireObj.kind.Row.children = pre_children;
+      return;
+    }
+    if (apiObj is BlazyrComponent_Clickable) {
+      var pre_child = cst_encode_opt_box_blazyr_component(apiObj.child);
+      var pre_on_click = cst_encode_opt_String(apiObj.onClick);
+      wireObj.tag = 3;
+      wireObj.kind.Clickable.child = pre_child;
+      wireObj.kind.Clickable.on_click = pre_on_click;
       return;
     }
   }
@@ -593,6 +599,30 @@ class RustLibWire implements BaseWire {
   late final _dart_fn_deliver_output = _dart_fn_deliver_outputPtr
       .asFunction<void Function(int, ffi.Pointer<ffi.Uint8>, int, int)>();
 
+  void wire_StateApp_component_clickable(
+    int port_,
+    ffi.Pointer<ffi.Void> that,
+    int id,
+    ffi.Pointer<wire_cst_list_prim_u_8_strict> action,
+  ) {
+    return _wire_StateApp_component_clickable(
+      port_,
+      that,
+      id,
+      action,
+    );
+  }
+
+  late final _wire_StateApp_component_clickablePtr = _lookup<
+          ffi.NativeFunction<
+              ffi.Void Function(ffi.Int64, ffi.Pointer<ffi.Void>, ffi.UintPtr,
+                  ffi.Pointer<wire_cst_list_prim_u_8_strict>)>>(
+      'frbgen_spotlight_wire_StateApp_component_clickable');
+  late final _wire_StateApp_component_clickable =
+      _wire_StateApp_component_clickablePtr.asFunction<
+          void Function(int, ffi.Pointer<ffi.Void>, int,
+              ffi.Pointer<wire_cst_list_prim_u_8_strict>)>();
+
   void wire_StateApp_execute(
     int port_,
     ffi.Pointer<ffi.Void> that,
@@ -846,8 +876,6 @@ final class wire_cst_list_prim_u_8_strict extends ffi.Struct {
 
 final class wire_cst_BlazyrComponent_Container extends ffi.Struct {
   external ffi.Pointer<wire_cst_blazyr_component> child;
-
-  external ffi.Pointer<wire_cst_list_prim_u_8_strict> on_click;
 }
 
 final class wire_cst_blazyr_component extends ffi.Struct {
@@ -863,6 +891,8 @@ final class BlazyrComponentKind extends ffi.Union {
   external wire_cst_BlazyrComponent_Column Column;
 
   external wire_cst_BlazyrComponent_Row Row;
+
+  external wire_cst_BlazyrComponent_Clickable Clickable;
 }
 
 final class wire_cst_BlazyrComponent_Column extends ffi.Struct {
@@ -878,6 +908,12 @@ final class wire_cst_list_blazyr_component extends ffi.Struct {
 
 final class wire_cst_BlazyrComponent_Row extends ffi.Struct {
   external ffi.Pointer<wire_cst_list_blazyr_component> children;
+}
+
+final class wire_cst_BlazyrComponent_Clickable extends ffi.Struct {
+  external ffi.Pointer<wire_cst_blazyr_component> child;
+
+  external ffi.Pointer<wire_cst_list_prim_u_8_strict> on_click;
 }
 
 final class wire_cst_Image_Data extends ffi.Struct {

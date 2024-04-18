@@ -92,6 +92,18 @@ class Service extends ChangeNotifier {
     notifyListeners();
   }
 
+  Future<void> clickableComponent(
+    int index,
+    String action, {
+    String? arg,
+  }) async {
+    // windowManager.hide();
+    final _result = await state?.componentClickable(
+      id: index,
+      action: action,
+    );
+  }
+
   Future<void> execute(int index, {String? arg}) async {
     // windowManager.hide();
     final result = await state?.execute(
@@ -107,7 +119,7 @@ class Service extends ChangeNotifier {
         break;
       case rust_core.BlazyrEntityActionResponse_Ui(:final field0):
         print("ui");
-        final widget = rComponentToFlutterWidget(field0);
+        final widget = rComponentToFlutterWidget(field0, index, this);
         pluginUi = widget;
         notifyListeners();
         break;

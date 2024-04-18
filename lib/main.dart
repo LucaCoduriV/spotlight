@@ -104,24 +104,31 @@ class _MyAppState extends State<MyApp> {
   }
 }
 
-Widget rComponentToFlutterWidget(rust_core.BlazyrComponent component) {
+Widget rComponentToFlutterWidget(
+    rust_core.BlazyrComponent component, int index, Service service) {
+  callback(rust_core.BlazyrComponent component) =>
+      rComponentToFlutterWidget(component, index, service);
   return switch (component) {
     rust_core.BlazyrComponent_Column(:final children) => Column(
-        children: [
-          for (final child in children!) rComponentToFlutterWidget(child)
-        ],
+        children: [for (final child in children!) callback(child)],
       ),
     rust_core.BlazyrComponent_Row(:final children!) => Row(
-        children: [
-          for (final child in children) rComponentToFlutterWidget(child)
-        ],
+        children: [for (final child in children) callback(child)],
       ),
-    rust_core.BlazyrComponent_Container(:final child, :final onClick) =>
-      Container(
+    rust_core.BlazyrComponent_Container(:final child) => Container(
         height: 100,
         width: 100,
         color: Colors.red,
-        child: child != null ? rComponentToFlutterWidget(child) : null,
+        child: child != null ? callback(child) : null,
+      ),
+    rust_core.BlazyrComponent_Clickable(:final child, :final onClick) =>
+      GestureDetector(
+        onTap: () {
+          if (onClick != null) {
+            service.clickableComponent(index, onClick);
+          }
+        },
+        child: child != null ? callback(child) : null,
       ),
   };
 }

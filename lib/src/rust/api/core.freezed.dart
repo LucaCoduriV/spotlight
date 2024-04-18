@@ -18,24 +18,27 @@ final _privateConstructorUsedError = UnsupportedError(
 mixin _$BlazyrComponent {
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(BlazyrComponent? child, String? onClick)
-        container,
+    required TResult Function(BlazyrComponent? child) container,
     required TResult Function(List<BlazyrComponent>? children) column,
     required TResult Function(List<BlazyrComponent>? children) row,
+    required TResult Function(BlazyrComponent? child, String? onClick)
+        clickable,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(BlazyrComponent? child, String? onClick)? container,
+    TResult? Function(BlazyrComponent? child)? container,
     TResult? Function(List<BlazyrComponent>? children)? column,
     TResult? Function(List<BlazyrComponent>? children)? row,
+    TResult? Function(BlazyrComponent? child, String? onClick)? clickable,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(BlazyrComponent? child, String? onClick)? container,
+    TResult Function(BlazyrComponent? child)? container,
     TResult Function(List<BlazyrComponent>? children)? column,
     TResult Function(List<BlazyrComponent>? children)? row,
+    TResult Function(BlazyrComponent? child, String? onClick)? clickable,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -44,6 +47,7 @@ mixin _$BlazyrComponent {
     required TResult Function(BlazyrComponent_Container value) container,
     required TResult Function(BlazyrComponent_Column value) column,
     required TResult Function(BlazyrComponent_Row value) row,
+    required TResult Function(BlazyrComponent_Clickable value) clickable,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -51,6 +55,7 @@ mixin _$BlazyrComponent {
     TResult? Function(BlazyrComponent_Container value)? container,
     TResult? Function(BlazyrComponent_Column value)? column,
     TResult? Function(BlazyrComponent_Row value)? row,
+    TResult? Function(BlazyrComponent_Clickable value)? clickable,
   }) =>
       throw _privateConstructorUsedError;
   @optionalTypeArgs
@@ -58,6 +63,7 @@ mixin _$BlazyrComponent {
     TResult Function(BlazyrComponent_Container value)? container,
     TResult Function(BlazyrComponent_Column value)? column,
     TResult Function(BlazyrComponent_Row value)? row,
+    TResult Function(BlazyrComponent_Clickable value)? clickable,
     required TResult orElse(),
   }) =>
       throw _privateConstructorUsedError;
@@ -88,7 +94,7 @@ abstract class _$$BlazyrComponent_ContainerImplCopyWith<$Res> {
           $Res Function(_$BlazyrComponent_ContainerImpl) then) =
       __$$BlazyrComponent_ContainerImplCopyWithImpl<$Res>;
   @useResult
-  $Res call({BlazyrComponent? child, String? onClick});
+  $Res call({BlazyrComponent? child});
 
   $BlazyrComponentCopyWith<$Res>? get child;
 }
@@ -106,17 +112,12 @@ class __$$BlazyrComponent_ContainerImplCopyWithImpl<$Res>
   @override
   $Res call({
     Object? child = freezed,
-    Object? onClick = freezed,
   }) {
     return _then(_$BlazyrComponent_ContainerImpl(
       child: freezed == child
           ? _value.child
           : child // ignore: cast_nullable_to_non_nullable
               as BlazyrComponent?,
-      onClick: freezed == onClick
-          ? _value.onClick
-          : onClick // ignore: cast_nullable_to_non_nullable
-              as String?,
     ));
   }
 
@@ -136,16 +137,14 @@ class __$$BlazyrComponent_ContainerImplCopyWithImpl<$Res>
 /// @nodoc
 
 class _$BlazyrComponent_ContainerImpl implements BlazyrComponent_Container {
-  const _$BlazyrComponent_ContainerImpl({this.child, this.onClick});
+  const _$BlazyrComponent_ContainerImpl({this.child});
 
   @override
   final BlazyrComponent? child;
-  @override
-  final String? onClick;
 
   @override
   String toString() {
-    return 'BlazyrComponent.container(child: $child, onClick: $onClick)';
+    return 'BlazyrComponent.container(child: $child)';
   }
 
   @override
@@ -153,12 +152,11 @@ class _$BlazyrComponent_ContainerImpl implements BlazyrComponent_Container {
     return identical(this, other) ||
         (other.runtimeType == runtimeType &&
             other is _$BlazyrComponent_ContainerImpl &&
-            (identical(other.child, child) || other.child == child) &&
-            (identical(other.onClick, onClick) || other.onClick == onClick));
+            (identical(other.child, child) || other.child == child));
   }
 
   @override
-  int get hashCode => Object.hash(runtimeType, child, onClick);
+  int get hashCode => Object.hash(runtimeType, child);
 
   @JsonKey(ignore: true)
   @override
@@ -170,34 +168,37 @@ class _$BlazyrComponent_ContainerImpl implements BlazyrComponent_Container {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(BlazyrComponent? child, String? onClick)
-        container,
+    required TResult Function(BlazyrComponent? child) container,
     required TResult Function(List<BlazyrComponent>? children) column,
     required TResult Function(List<BlazyrComponent>? children) row,
+    required TResult Function(BlazyrComponent? child, String? onClick)
+        clickable,
   }) {
-    return container(child, onClick);
+    return container(child);
   }
 
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(BlazyrComponent? child, String? onClick)? container,
+    TResult? Function(BlazyrComponent? child)? container,
     TResult? Function(List<BlazyrComponent>? children)? column,
     TResult? Function(List<BlazyrComponent>? children)? row,
+    TResult? Function(BlazyrComponent? child, String? onClick)? clickable,
   }) {
-    return container?.call(child, onClick);
+    return container?.call(child);
   }
 
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(BlazyrComponent? child, String? onClick)? container,
+    TResult Function(BlazyrComponent? child)? container,
     TResult Function(List<BlazyrComponent>? children)? column,
     TResult Function(List<BlazyrComponent>? children)? row,
+    TResult Function(BlazyrComponent? child, String? onClick)? clickable,
     required TResult orElse(),
   }) {
     if (container != null) {
-      return container(child, onClick);
+      return container(child);
     }
     return orElse();
   }
@@ -208,6 +209,7 @@ class _$BlazyrComponent_ContainerImpl implements BlazyrComponent_Container {
     required TResult Function(BlazyrComponent_Container value) container,
     required TResult Function(BlazyrComponent_Column value) column,
     required TResult Function(BlazyrComponent_Row value) row,
+    required TResult Function(BlazyrComponent_Clickable value) clickable,
   }) {
     return container(this);
   }
@@ -218,6 +220,7 @@ class _$BlazyrComponent_ContainerImpl implements BlazyrComponent_Container {
     TResult? Function(BlazyrComponent_Container value)? container,
     TResult? Function(BlazyrComponent_Column value)? column,
     TResult? Function(BlazyrComponent_Row value)? row,
+    TResult? Function(BlazyrComponent_Clickable value)? clickable,
   }) {
     return container?.call(this);
   }
@@ -228,6 +231,7 @@ class _$BlazyrComponent_ContainerImpl implements BlazyrComponent_Container {
     TResult Function(BlazyrComponent_Container value)? container,
     TResult Function(BlazyrComponent_Column value)? column,
     TResult Function(BlazyrComponent_Row value)? row,
+    TResult Function(BlazyrComponent_Clickable value)? clickable,
     required TResult orElse(),
   }) {
     if (container != null) {
@@ -238,12 +242,10 @@ class _$BlazyrComponent_ContainerImpl implements BlazyrComponent_Container {
 }
 
 abstract class BlazyrComponent_Container implements BlazyrComponent {
-  const factory BlazyrComponent_Container(
-      {final BlazyrComponent? child,
-      final String? onClick}) = _$BlazyrComponent_ContainerImpl;
+  const factory BlazyrComponent_Container({final BlazyrComponent? child}) =
+      _$BlazyrComponent_ContainerImpl;
 
   BlazyrComponent? get child;
-  String? get onClick;
   @JsonKey(ignore: true)
   _$$BlazyrComponent_ContainerImplCopyWith<_$BlazyrComponent_ContainerImpl>
       get copyWith => throw _privateConstructorUsedError;
@@ -325,10 +327,11 @@ class _$BlazyrComponent_ColumnImpl implements BlazyrComponent_Column {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(BlazyrComponent? child, String? onClick)
-        container,
+    required TResult Function(BlazyrComponent? child) container,
     required TResult Function(List<BlazyrComponent>? children) column,
     required TResult Function(List<BlazyrComponent>? children) row,
+    required TResult Function(BlazyrComponent? child, String? onClick)
+        clickable,
   }) {
     return column(children);
   }
@@ -336,9 +339,10 @@ class _$BlazyrComponent_ColumnImpl implements BlazyrComponent_Column {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(BlazyrComponent? child, String? onClick)? container,
+    TResult? Function(BlazyrComponent? child)? container,
     TResult? Function(List<BlazyrComponent>? children)? column,
     TResult? Function(List<BlazyrComponent>? children)? row,
+    TResult? Function(BlazyrComponent? child, String? onClick)? clickable,
   }) {
     return column?.call(children);
   }
@@ -346,9 +350,10 @@ class _$BlazyrComponent_ColumnImpl implements BlazyrComponent_Column {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(BlazyrComponent? child, String? onClick)? container,
+    TResult Function(BlazyrComponent? child)? container,
     TResult Function(List<BlazyrComponent>? children)? column,
     TResult Function(List<BlazyrComponent>? children)? row,
+    TResult Function(BlazyrComponent? child, String? onClick)? clickable,
     required TResult orElse(),
   }) {
     if (column != null) {
@@ -363,6 +368,7 @@ class _$BlazyrComponent_ColumnImpl implements BlazyrComponent_Column {
     required TResult Function(BlazyrComponent_Container value) container,
     required TResult Function(BlazyrComponent_Column value) column,
     required TResult Function(BlazyrComponent_Row value) row,
+    required TResult Function(BlazyrComponent_Clickable value) clickable,
   }) {
     return column(this);
   }
@@ -373,6 +379,7 @@ class _$BlazyrComponent_ColumnImpl implements BlazyrComponent_Column {
     TResult? Function(BlazyrComponent_Container value)? container,
     TResult? Function(BlazyrComponent_Column value)? column,
     TResult? Function(BlazyrComponent_Row value)? row,
+    TResult? Function(BlazyrComponent_Clickable value)? clickable,
   }) {
     return column?.call(this);
   }
@@ -383,6 +390,7 @@ class _$BlazyrComponent_ColumnImpl implements BlazyrComponent_Column {
     TResult Function(BlazyrComponent_Container value)? container,
     TResult Function(BlazyrComponent_Column value)? column,
     TResult Function(BlazyrComponent_Row value)? row,
+    TResult Function(BlazyrComponent_Clickable value)? clickable,
     required TResult orElse(),
   }) {
     if (column != null) {
@@ -476,10 +484,11 @@ class _$BlazyrComponent_RowImpl implements BlazyrComponent_Row {
   @override
   @optionalTypeArgs
   TResult when<TResult extends Object?>({
-    required TResult Function(BlazyrComponent? child, String? onClick)
-        container,
+    required TResult Function(BlazyrComponent? child) container,
     required TResult Function(List<BlazyrComponent>? children) column,
     required TResult Function(List<BlazyrComponent>? children) row,
+    required TResult Function(BlazyrComponent? child, String? onClick)
+        clickable,
   }) {
     return row(children);
   }
@@ -487,9 +496,10 @@ class _$BlazyrComponent_RowImpl implements BlazyrComponent_Row {
   @override
   @optionalTypeArgs
   TResult? whenOrNull<TResult extends Object?>({
-    TResult? Function(BlazyrComponent? child, String? onClick)? container,
+    TResult? Function(BlazyrComponent? child)? container,
     TResult? Function(List<BlazyrComponent>? children)? column,
     TResult? Function(List<BlazyrComponent>? children)? row,
+    TResult? Function(BlazyrComponent? child, String? onClick)? clickable,
   }) {
     return row?.call(children);
   }
@@ -497,9 +507,10 @@ class _$BlazyrComponent_RowImpl implements BlazyrComponent_Row {
   @override
   @optionalTypeArgs
   TResult maybeWhen<TResult extends Object?>({
-    TResult Function(BlazyrComponent? child, String? onClick)? container,
+    TResult Function(BlazyrComponent? child)? container,
     TResult Function(List<BlazyrComponent>? children)? column,
     TResult Function(List<BlazyrComponent>? children)? row,
+    TResult Function(BlazyrComponent? child, String? onClick)? clickable,
     required TResult orElse(),
   }) {
     if (row != null) {
@@ -514,6 +525,7 @@ class _$BlazyrComponent_RowImpl implements BlazyrComponent_Row {
     required TResult Function(BlazyrComponent_Container value) container,
     required TResult Function(BlazyrComponent_Column value) column,
     required TResult Function(BlazyrComponent_Row value) row,
+    required TResult Function(BlazyrComponent_Clickable value) clickable,
   }) {
     return row(this);
   }
@@ -524,6 +536,7 @@ class _$BlazyrComponent_RowImpl implements BlazyrComponent_Row {
     TResult? Function(BlazyrComponent_Container value)? container,
     TResult? Function(BlazyrComponent_Column value)? column,
     TResult? Function(BlazyrComponent_Row value)? row,
+    TResult? Function(BlazyrComponent_Clickable value)? clickable,
   }) {
     return row?.call(this);
   }
@@ -534,6 +547,7 @@ class _$BlazyrComponent_RowImpl implements BlazyrComponent_Row {
     TResult Function(BlazyrComponent_Container value)? container,
     TResult Function(BlazyrComponent_Column value)? column,
     TResult Function(BlazyrComponent_Row value)? row,
+    TResult Function(BlazyrComponent_Clickable value)? clickable,
     required TResult orElse(),
   }) {
     if (row != null) {
@@ -551,6 +565,180 @@ abstract class BlazyrComponent_Row implements BlazyrComponent {
   @JsonKey(ignore: true)
   _$$BlazyrComponent_RowImplCopyWith<_$BlazyrComponent_RowImpl> get copyWith =>
       throw _privateConstructorUsedError;
+}
+
+/// @nodoc
+abstract class _$$BlazyrComponent_ClickableImplCopyWith<$Res> {
+  factory _$$BlazyrComponent_ClickableImplCopyWith(
+          _$BlazyrComponent_ClickableImpl value,
+          $Res Function(_$BlazyrComponent_ClickableImpl) then) =
+      __$$BlazyrComponent_ClickableImplCopyWithImpl<$Res>;
+  @useResult
+  $Res call({BlazyrComponent? child, String? onClick});
+
+  $BlazyrComponentCopyWith<$Res>? get child;
+}
+
+/// @nodoc
+class __$$BlazyrComponent_ClickableImplCopyWithImpl<$Res>
+    extends _$BlazyrComponentCopyWithImpl<$Res, _$BlazyrComponent_ClickableImpl>
+    implements _$$BlazyrComponent_ClickableImplCopyWith<$Res> {
+  __$$BlazyrComponent_ClickableImplCopyWithImpl(
+      _$BlazyrComponent_ClickableImpl _value,
+      $Res Function(_$BlazyrComponent_ClickableImpl) _then)
+      : super(_value, _then);
+
+  @pragma('vm:prefer-inline')
+  @override
+  $Res call({
+    Object? child = freezed,
+    Object? onClick = freezed,
+  }) {
+    return _then(_$BlazyrComponent_ClickableImpl(
+      child: freezed == child
+          ? _value.child
+          : child // ignore: cast_nullable_to_non_nullable
+              as BlazyrComponent?,
+      onClick: freezed == onClick
+          ? _value.onClick
+          : onClick // ignore: cast_nullable_to_non_nullable
+              as String?,
+    ));
+  }
+
+  @override
+  @pragma('vm:prefer-inline')
+  $BlazyrComponentCopyWith<$Res>? get child {
+    if (_value.child == null) {
+      return null;
+    }
+
+    return $BlazyrComponentCopyWith<$Res>(_value.child!, (value) {
+      return _then(_value.copyWith(child: value));
+    });
+  }
+}
+
+/// @nodoc
+
+class _$BlazyrComponent_ClickableImpl implements BlazyrComponent_Clickable {
+  const _$BlazyrComponent_ClickableImpl({this.child, this.onClick});
+
+  @override
+  final BlazyrComponent? child;
+  @override
+  final String? onClick;
+
+  @override
+  String toString() {
+    return 'BlazyrComponent.clickable(child: $child, onClick: $onClick)';
+  }
+
+  @override
+  bool operator ==(Object other) {
+    return identical(this, other) ||
+        (other.runtimeType == runtimeType &&
+            other is _$BlazyrComponent_ClickableImpl &&
+            (identical(other.child, child) || other.child == child) &&
+            (identical(other.onClick, onClick) || other.onClick == onClick));
+  }
+
+  @override
+  int get hashCode => Object.hash(runtimeType, child, onClick);
+
+  @JsonKey(ignore: true)
+  @override
+  @pragma('vm:prefer-inline')
+  _$$BlazyrComponent_ClickableImplCopyWith<_$BlazyrComponent_ClickableImpl>
+      get copyWith => __$$BlazyrComponent_ClickableImplCopyWithImpl<
+          _$BlazyrComponent_ClickableImpl>(this, _$identity);
+
+  @override
+  @optionalTypeArgs
+  TResult when<TResult extends Object?>({
+    required TResult Function(BlazyrComponent? child) container,
+    required TResult Function(List<BlazyrComponent>? children) column,
+    required TResult Function(List<BlazyrComponent>? children) row,
+    required TResult Function(BlazyrComponent? child, String? onClick)
+        clickable,
+  }) {
+    return clickable(child, onClick);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? whenOrNull<TResult extends Object?>({
+    TResult? Function(BlazyrComponent? child)? container,
+    TResult? Function(List<BlazyrComponent>? children)? column,
+    TResult? Function(List<BlazyrComponent>? children)? row,
+    TResult? Function(BlazyrComponent? child, String? onClick)? clickable,
+  }) {
+    return clickable?.call(child, onClick);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeWhen<TResult extends Object?>({
+    TResult Function(BlazyrComponent? child)? container,
+    TResult Function(List<BlazyrComponent>? children)? column,
+    TResult Function(List<BlazyrComponent>? children)? row,
+    TResult Function(BlazyrComponent? child, String? onClick)? clickable,
+    required TResult orElse(),
+  }) {
+    if (clickable != null) {
+      return clickable(child, onClick);
+    }
+    return orElse();
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult map<TResult extends Object?>({
+    required TResult Function(BlazyrComponent_Container value) container,
+    required TResult Function(BlazyrComponent_Column value) column,
+    required TResult Function(BlazyrComponent_Row value) row,
+    required TResult Function(BlazyrComponent_Clickable value) clickable,
+  }) {
+    return clickable(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult? mapOrNull<TResult extends Object?>({
+    TResult? Function(BlazyrComponent_Container value)? container,
+    TResult? Function(BlazyrComponent_Column value)? column,
+    TResult? Function(BlazyrComponent_Row value)? row,
+    TResult? Function(BlazyrComponent_Clickable value)? clickable,
+  }) {
+    return clickable?.call(this);
+  }
+
+  @override
+  @optionalTypeArgs
+  TResult maybeMap<TResult extends Object?>({
+    TResult Function(BlazyrComponent_Container value)? container,
+    TResult Function(BlazyrComponent_Column value)? column,
+    TResult Function(BlazyrComponent_Row value)? row,
+    TResult Function(BlazyrComponent_Clickable value)? clickable,
+    required TResult orElse(),
+  }) {
+    if (clickable != null) {
+      return clickable(this);
+    }
+    return orElse();
+  }
+}
+
+abstract class BlazyrComponent_Clickable implements BlazyrComponent {
+  const factory BlazyrComponent_Clickable(
+      {final BlazyrComponent? child,
+      final String? onClick}) = _$BlazyrComponent_ClickableImpl;
+
+  BlazyrComponent? get child;
+  String? get onClick;
+  @JsonKey(ignore: true)
+  _$$BlazyrComponent_ClickableImplCopyWith<_$BlazyrComponent_ClickableImpl>
+      get copyWith => throw _privateConstructorUsedError;
 }
 
 /// @nodoc

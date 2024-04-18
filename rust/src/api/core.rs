@@ -76,6 +76,20 @@ impl StateApp {
         result
     }
 
+    pub async fn component_clickable(
+        &mut self,
+        id: usize,
+        action: String,
+    ) -> Result<(), EntityError> {
+        let entity = &mut self.entities[id];
+
+        match entity {
+            blazyr_core::Entity::Application(_) => panic!(),
+            blazyr_core::Entity::Command(command) => command.component_clickable(action),
+        }
+        .map_err(|e| EntityError::Unknown(e.to_string()))
+    }
+
     pub fn get_commands(&self) -> Vec<Entity> {
         let mut temp: Vec<_> = self
             .entities
@@ -211,7 +225,6 @@ impl From<EntityActionResponse> for BlazyrEntityActionResponse {
 pub enum BlazyrComponent {
     Container {
         child: Option<Box<BlazyrComponent>>,
-        on_click: Option<String>,
     },
     Column {
         children: Option<Vec<BlazyrComponent>>,
@@ -219,20 +232,27 @@ pub enum BlazyrComponent {
     Row {
         children: Option<Vec<BlazyrComponent>>,
     },
+    Clickable {
+        child: Option<Box<BlazyrComponent>>,
+        on_click: Option<String>,
+    },
 }
 
 impl From<Component> for BlazyrComponent {
     fn from(value: Component) -> Self {
         match value {
-            Component::Container { child, on_click } => BlazyrComponent::Container {
+            Component::Container { child } => BlazyrComponent::Container {
                 child: child.map(|v| Box::new(BlazyrComponent::from(*v))),
-                on_click,
             },
             Component::Column { children } => BlazyrComponent::Column {
                 children: children.map(|v| v.into_iter().map(BlazyrComponent::from).collect()),
             },
             Component::Row { children } => BlazyrComponent::Row {
                 children: children.map(|v| v.into_iter().map(BlazyrComponent::from).collect()),
+            },
+            Component::Clickable { on_click, child } => BlazyrComponent::Clickable {
+                child: child.map(|v| Box::new(BlazyrComponent::from(*v))),
+                on_click,
             },
         }
     }

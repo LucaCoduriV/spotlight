@@ -46,13 +46,16 @@ impl CstDecode<crate::api::core::BlazyrComponent>
         match self_.get(0).unchecked_into_f64() as _ {
             0 => crate::api::core::BlazyrComponent::Container {
                 child: self_.get(1).cst_decode(),
-                on_click: self_.get(2).cst_decode(),
             },
             1 => crate::api::core::BlazyrComponent::Column {
                 children: self_.get(1).cst_decode(),
             },
             2 => crate::api::core::BlazyrComponent::Row {
                 children: self_.get(1).cst_decode(),
+            },
+            3 => crate::api::core::BlazyrComponent::Clickable {
+                child: self_.get(1).cst_decode(),
+                on_click: self_.get(2).cst_decode(),
             },
             _ => unreachable!(),
         }
@@ -228,6 +231,16 @@ pub fn dart_fn_deliver_output(
         )
     };
     FLUTTER_RUST_BRIDGE_HANDLER.dart_fn_handle_output(call_id, message)
+}
+
+#[wasm_bindgen]
+pub fn wire_StateApp_component_clickable(
+    port_: flutter_rust_bridge::for_generated::MessagePort,
+    that: flutter_rust_bridge::for_generated::wasm_bindgen::JsValue,
+    id: usize,
+    action: String,
+) {
+    wire_StateApp_component_clickable_impl(port_, that, id, action)
 }
 
 #[wasm_bindgen]

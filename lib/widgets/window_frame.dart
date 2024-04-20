@@ -34,7 +34,7 @@ class BWindowFrame extends StatelessWidget with WatchItMixin {
           mainAxisSize: MainAxisSize.max,
           children: [
             if (topBar != null) topBar!,
-            if (child != null) child!,
+            if (child != null) Expanded(child: child!),
             if (bottomBar != null) bottomBar!,
           ],
         ),

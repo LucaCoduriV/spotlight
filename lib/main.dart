@@ -10,14 +10,29 @@ import 'package:watch_it/watch_it.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'shortcuts.dart';
-import 'src/rust/api/core.dart' as rust_core;
+import 'src/rust/api/core.dart' as r;
+import 'theme.dart';
 import 'widgets/window_frame.dart';
 import 'window_event_listener.dart';
 
+const windowSize = Size(750, 550);
+
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  await setupWindow();
+
+  await RustLib.init();
+  await setupDi();
+
+  runApp(const MyApp(
+    windowSize: windowSize,
+  ));
+
+  await r.onExit();
+}
+
+Future<void> setupWindow() async {
   await windowManager.ensureInitialized();
-  const windowSize = Size(750, 550);
 
   WindowOptions windowOptions = const WindowOptions(
     size: windowSize,
@@ -37,17 +52,13 @@ Future<void> main() async {
     await windowManager.focus();
     await windowManager.setResizable(false);
   });
+}
 
-  await RustLib.init();
-  final service = di.registerSingleton<Service>(Service());
-  service.init();
+Future<void> setupDi() async {
+  final state =
+      di.registerSingleton<r.StateApp>(await r.StateApp.newStateApp());
+  di.registerSingleton<Service>(Service(state));
   di.registerSingleton<PluginUIService>(PluginUIService());
-
-  runApp(const MyApp(
-    windowSize: windowSize,
-  ));
-
-  await rust_core.onExit();
 }
 
 class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
@@ -108,9 +119,18 @@ class _MyAppState extends State<MyApp> {
               size: widget.windowSize,
               bottomBar: const BBottomBar(),
               topBar: BSearchBar(textController: textEditingController),
-              child: const Column(
+              child: Column(
+                mainAxisSize: MainAxisSize.max,
                 children: [
-                  Text("coucou"),
+                  Padding(
+                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.start,
+                      children: [
+                        Text("Results", style: CustomTheme.headerText),
+                      ],
+                    ),
+                  ),
                 ],
               ),
             ),
@@ -119,34 +139,4 @@ class _MyAppState extends State<MyApp> {
       ),
     );
   }
-}
-
-Widget rComponentToFlutterWidget(
-    rust_core.BlazyrComponent component, int index, Service service) {
-  callback(rust_core.BlazyrComponent component) =>
-      rComponentToFlutterWidget(component, index, service);
-  return switch (component) {
-    rust_core.BlazyrComponent_Column(:final children) => Column(
-        children: [for (final child in children!) callback(child)],
-      ),
-    rust_core.BlazyrComponent_Row(:final children!) => Row(
-        children: [for (final child in children) callback(child)],
-      ),
-    rust_core.BlazyrComponent_Container(:final child) => Container(
-        height: 100,
-        width: 100,
-        margin: const EdgeInsets.all(2.0),
-        color: Colors.red,
-        child: child != null ? callback(child) : null,
-      ),
-    rust_core.BlazyrComponent_Clickable(:final child, :final onClick) =>
-      GestureDetector(
-        onTap: () {
-          if (onClick != null) {
-            service.clickableComponent(index, onClick);
-          }
-        },
-        child: child != null ? callback(child) : null,
-      ),
-  };
 }

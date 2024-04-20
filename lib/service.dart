@@ -1,26 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:spotlight/main.dart';
 
-import 'src/rust/api/core.dart' as rust_core;
+import 'rust_helper.dart';
+import 'src/rust/api/core.dart' as r;
 
 class Service extends ChangeNotifier {
-  rust_core.StateApp? state;
-  List<rust_core.Entity> entities = [];
-  List<rust_core.Entity> commands = [];
-  late Stream<rust_core.DartAction> stream;
+  r.StateApp state;
+  List<r.Entity> entities = [];
+  List<r.Entity> commands = [];
+  late Stream<r.DartAction> stream;
 
   int? _index;
-  rust_core.Entity? selected;
+  r.Entity? selected;
 
   get index => _index;
 
-  Future<void> init() async {
-    state = await rust_core.StateApp.newStateApp();
-    commands = await state!.getCommands();
+  Service(this.state) {
+    _init();
+  }
+
+  Future<void> _init() async {
+    commands = await state.getCommands();
     await search("");
-    stream = rust_core.setDartActionStream();
+    stream = r.setDartActionStream();
     stream.listen((event) {
-      if (event == rust_core.DartAction.exit) {
+      if (event == r.DartAction.exit) {
         // exit(0);
       }
     });
@@ -70,10 +73,7 @@ class Service extends ChangeNotifier {
   }
 
   Future<void> search(String search) async {
-    if (state == null) {
-      return;
-    }
-    entities = await rust_core.search(obj: state!, search: search);
+    entities = await r.search(obj: state, search: search);
 
     // After each search select the first entity available
     selected = entities.firstOrNull;
@@ -93,7 +93,7 @@ class Service extends ChangeNotifier {
     String? arg,
   }) async {
     // windowManager.hide();
-    await state?.componentClickable(
+    await state.componentClickable(
       id: index,
       action: action,
     );
@@ -101,33 +101,13 @@ class Service extends ChangeNotifier {
 
   Future<RunEntityResult> run(int index, {String? arg}) async {
     // windowManager.hide();
-    final result = await state?.execute(
+    final response = await state.execute(
         id: index,
         arg: arg,
         onExecuted: () async {
           // exit(0);
         });
 
-    switch (result) {
-      case rust_core.BlazyrEntityActionResponse_Ui(:final field0):
-        final widget = rComponentToFlutterWidget(field0, index, this);
-        return RunEntityResultUI(widget);
-      case rust_core.BlazyrEntityActionResponse_Text():
-        return RunEntityResultText();
-      case rust_core.BlazyrEntityActionResponse_None():
-      case null:
-        return RunEntityResultNone();
-    }
+    return response.intoRunEntityResult(index, this);
   }
 }
-
-sealed class RunEntityResult {}
-
-class RunEntityResultUI extends RunEntityResult {
-  final Widget? widget;
-  RunEntityResultUI(this.widget);
-}
-
-class RunEntityResultText extends RunEntityResult {}
-
-class RunEntityResultNone extends RunEntityResult {}

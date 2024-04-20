@@ -1,10 +1,10 @@
-import 'dart:io';
-
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:watch_it/watch_it.dart';
+
+import 'rust_helper.dart';
 
 class PreviousIntent extends Intent {
   const PreviousIntent();

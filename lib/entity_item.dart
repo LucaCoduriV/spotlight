@@ -4,6 +4,8 @@ import 'package:spotlight/service.dart';
 import 'package:spotlight/theme.dart';
 import 'package:watch_it/watch_it.dart';
 
+import 'rust_helper.dart';
+
 class EntityItem extends StatefulWidget {
   final String name;
   final String description;

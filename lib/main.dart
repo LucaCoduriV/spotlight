@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
+import 'package:spotlight/main_screen.dart';
 import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
@@ -57,7 +58,7 @@ Future<void> setupWindow() async {
 Future<void> setupDi() async {
   final state =
       di.registerSingleton<r.StateApp>(await r.StateApp.newStateApp());
-  di.registerSingleton<Service>(Service(state));
+  di.registerSingleton<MainScreenService>(MainScreenService(state));
   di.registerSingleton<PluginUIService>(PluginUIService());
 }
 
@@ -71,7 +72,7 @@ class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
 
 class _MyAppState extends State<MyApp> {
   final text = TextEditingController();
-  final Service service = di.get();
+  final MainScreenService service = di.get();
   final ItemScrollController scrollController = ItemScrollController();
   final windowEventListener = WindowEventListener();
   final TextEditingController textEditingController = TextEditingController();
@@ -115,25 +116,7 @@ class _MyAppState extends State<MyApp> {
               NextIntent: NextAction(scrollController),
               CloseIntent: CloseAction(),
             },
-            child: BWindowFrame(
-              size: widget.windowSize,
-              bottomBar: const BBottomBar(),
-              topBar: BSearchBar(textController: textEditingController),
-              child: Column(
-                mainAxisSize: MainAxisSize.max,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      children: [
-                        Text("Results", style: CustomTheme.headerText),
-                      ],
-                    ),
-                  ),
-                ],
-              ),
-            ),
+            child: MainScreen(scrollController: scrollController),
           ),
         ),
       ),

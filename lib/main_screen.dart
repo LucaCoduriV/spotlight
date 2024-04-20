@@ -3,15 +3,17 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:jovial_svg/jovial_svg.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:spotlight/plugin_ui.dart';
 import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
-import 'package:spotlight/theme.dart';
+import 'package:spotlight/widgets/list.dart';
 import 'package:watch_it/watch_it.dart';
 
-import 'entity_item.dart';
+import 'main.dart';
 import 'shortcuts.dart';
 import 'src/rust/api/core.dart' as rust_core;
+import 'widgets/bottom_bar.dart';
+import 'widgets/search_bar.dart';
+import 'widgets/window_frame.dart';
 
 class MainScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
   const MainScreen({
@@ -26,7 +28,7 @@ class MainScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
 }
 
 class _MainScreenState extends State<MainScreen> {
-  final Service service = di.get();
+  final MainScreenService service = di.get();
   final PluginUIService pluginUIService = di.get();
   final text = TextEditingController();
 
@@ -71,105 +73,59 @@ class _MainScreenState extends State<MainScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final entities = watchPropertyValue((Service s) => s.entities);
-    final commands = watchPropertyValue((Service s) => s.commands);
-    final selectedIndex = watchPropertyValue((Service s) => s.index);
-    final showPluginUi =
-        watchPropertyValue((PluginUIService s) => s.showPluginUI);
+    final entities = watchPropertyValue((MainScreenService s) => s.entities);
+    final commands = watchPropertyValue((MainScreenService s) => s.commands);
+    final selectedIndex =
+        watchPropertyValue((MainScreenService s) => s.selectedEntityIndex);
 
     return Actions(
       actions: <Type, Action<Intent>>{
         SelectEntryIntent: SelectEntryAction(arg: text.text),
       },
-      child: Card(
-        margin: const EdgeInsets.all(1),
-        surfaceTintColor: null,
-        color: CustomTheme.backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-          side: BorderSide(width: 0.2, color: CustomTheme.textColor),
-        ),
-        child: showPluginUi
-            ? const PluginUI()
-            : Column(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(
-                      vertical: 25.0,
-                      horizontal: 20,
-                    ),
-                    child: TextField(
-                      textInputAction: TextInputAction.none,
-                      autofocus: true,
-                      controller: text,
-                      showCursor: false,
-                      style: CustomTheme.primaryText.copyWith(fontSize: 18),
-                      decoration: InputDecoration.collapsed(
-                        hintStyle: CustomTheme.hintText,
-                        hintText: 'Search for apps and commands...',
-                      ),
-                    ),
-                  ),
-                  Divider(thickness: 0.1, color: CustomTheme.textColor),
-                  if (entities.isNotEmpty)
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.start,
-                        children: [
-                          Text("Results", style: CustomTheme.headerText),
-                        ],
-                      ),
-                    ),
-                  if (entities.length + commands.length >= 0)
-                    Expanded(
-                      child: ScrollablePositionedList.builder(
-                        itemScrollController: widget.scrollController,
-                        itemCount: entities.length +
-                            commands.length +
-                            (commands.isEmpty ? 0 : 1),
-                        itemBuilder: (ctx, index) {
-                          if (index < entities.length) {
-                            final e = entities[index];
-                            return EntityItem(
-                              image: getImage(e.icon),
-                              selected: index == selectedIndex,
-                              index: e.index,
-                              name: e.name,
-                              description: e.description ?? "",
-                              type: e.type,
-                              searchString: text.text,
-                            );
-                          } else if (index == entities.length &&
-                              commands.isNotEmpty) {
-                            return Padding(
-                              padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
-                              child: Row(
-                                mainAxisAlignment: MainAxisAlignment.start,
-                                children: [
-                                  Text("Use with...",
-                                      style: CustomTheme.headerText),
-                                ],
-                              ),
-                            );
-                          }
+      child: BWindowFrame(
+        size: windowSize,
+        bottomBar: const BBottomBar(),
+        topBar: BSearchBar(textController: text),
+        child: Column(
+          mainAxisSize: MainAxisSize.max,
+          children: [
+            if (entities.isNotEmpty) const BHeader(text: "Result"),
+            if (entities.length + commands.length >= 0)
+              Expanded(
+                child: BList(
+                  itemScrollController: widget.scrollController,
+                  itemCount: entities.length +
+                      commands.length +
+                      (commands.isEmpty ? 0 : 1),
+                  itemBuilder: (ctx, index) {
+                    if (index < entities.length) {
+                      final e = entities[index];
+                      return buildListItem(e, index, selectedIndex);
+                    } else if (index == entities.length &&
+                        commands.isNotEmpty) {
+                      return const BHeader(text: "Use with...");
+                    }
 
-                          final e = commands[index - entities.length - 1];
-                          return EntityItem(
-                            image: getImage(e.icon),
-                            selected: index - 1 == selectedIndex,
-                            index: e.index,
-                            name: e.name,
-                            description: e.description ?? "",
-                            type: e.type,
-                            searchString: text.text,
-                          );
-                        },
-                      ),
-                    ),
-                ],
+                    final e = commands[index - entities.length - 1];
+                    return buildListItem(e, index - 1, selectedIndex);
+                  },
+                ),
               ),
+          ],
+        ),
       ),
+    );
+  }
+
+  BListItem buildListItem(rust_core.Entity e, int index, selectedIndex) {
+    return BListItem(
+      image: getImage(e.icon),
+      selected: index == selectedIndex,
+      index: e.index,
+      name: e.name,
+      description: e.description ?? "",
+      type: e.type,
+      searchString: text.text,
     );
   }
 }

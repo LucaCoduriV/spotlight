@@ -33,7 +33,7 @@ class EntityItem extends StatefulWidget {
 class _EntityItemState extends State<EntityItem> {
   @override
   Widget build(BuildContext context) {
-    final Service service = di.get();
+    final MainScreenService service = di.get();
     final PluginUIService pluginUIService = di.get();
 
     return ListTile(

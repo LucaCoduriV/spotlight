@@ -11,16 +11,17 @@ class PreviousIntent extends Intent {
 }
 
 class PreviousAction extends Action<PreviousIntent> {
-  final Service service = di.get();
+  final MainScreenService service = di.get();
   final ItemScrollController controller;
   PreviousAction(this.controller);
 
   @override
   Object? invoke(covariant PreviousIntent intent) {
     service.previous();
-    if (service.index != null) {
+    if (service.selectedEntityIndex != null) {
       controller.scrollTo(
-          index: service.index!, duration: const Duration(milliseconds: 100));
+          index: service.selectedEntityIndex!,
+          duration: const Duration(milliseconds: 100));
     }
     return null;
   }
@@ -31,16 +32,17 @@ class NextIntent extends Intent {
 }
 
 class NextAction extends Action<NextIntent> {
-  final Service service = di.get();
+  final MainScreenService service = di.get();
   final ItemScrollController controller;
   NextAction(this.controller);
 
   @override
   Object? invoke(covariant NextIntent intent) {
     service.next();
-    if (service.index != null) {
+    if (service.selectedEntityIndex != null) {
       controller.scrollTo(
-          index: service.index!, duration: const Duration(milliseconds: 100));
+          index: service.selectedEntityIndex!,
+          duration: const Duration(milliseconds: 100));
     }
     return null;
   }
@@ -51,7 +53,7 @@ class SelectEntryIntent extends Intent {
 }
 
 class SelectEntryAction extends Action<SelectEntryIntent> {
-  final Service service = di.get();
+  final MainScreenService service = di.get();
   final PluginUIService pluginUIService = di.get();
   final String? arg;
   SelectEntryAction({this.arg});

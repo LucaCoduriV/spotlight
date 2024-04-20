@@ -6,7 +6,8 @@ import 'src/rust/api/core.dart' as r;
 /// This file needs to be refactor
 
 extension FromRustToDart on r.BlazyrEntityActionResponse {
-  RunEntityResult intoRunEntityResult(int entityIndex, Service service) {
+  RunEntityResult intoRunEntityResult(
+      int entityIndex, MainScreenService service) {
     switch (this) {
       case r.BlazyrEntityActionResponse_Ui(:final field0):
         final widget = rComponentToFlutterWidget(field0, entityIndex, service);
@@ -31,7 +32,7 @@ class RunEntityResultText extends RunEntityResult {}
 class RunEntityResultNone extends RunEntityResult {}
 
 Widget rComponentToFlutterWidget(
-    r.BlazyrComponent component, int index, Service service) {
+    r.BlazyrComponent component, int index, MainScreenService service) {
   callback(r.BlazyrComponent component) =>
       rComponentToFlutterWidget(component, index, service);
   return switch (component) {

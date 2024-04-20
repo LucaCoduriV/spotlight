@@ -1,18 +1,26 @@
 import 'package:flutter/material.dart';
+import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 
 import '../theme.dart';
 
 class BList extends StatelessWidget {
-  final List<BListItem> items;
+  final int itemCount;
+  final Widget Function(BuildContext ctx, int index) itemBuilder;
+  final ItemScrollController? itemScrollController;
+
   const BList({
     super.key,
-    this.items = const [],
+    required this.itemCount,
+    required this.itemBuilder,
+    this.itemScrollController,
   });
 
   @override
   Widget build(BuildContext context) {
-    return ListView(
-      children: items,
+    return ScrollablePositionedList.builder(
+      itemScrollController: itemScrollController,
+      itemCount: itemCount,
+      itemBuilder: itemBuilder,
     );
   }
 }
@@ -62,6 +70,27 @@ class BListItem extends StatelessWidget {
         style: CustomTheme.secondaryText,
       ),
       onTap: onClick,
+    );
+  }
+}
+
+class BHeader extends StatelessWidget {
+  final String text;
+  const BHeader({
+    super.key,
+    required this.text,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return Padding(
+      padding: const EdgeInsets.fromLTRB(15, 10, 15, 5),
+      child: Row(
+        mainAxisAlignment: MainAxisAlignment.start,
+        children: [
+          Text(text, style: CustomTheme.headerText),
+        ],
+      ),
     );
   }
 }

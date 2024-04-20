@@ -3,18 +3,18 @@ import 'package:flutter/material.dart';
 import 'rust_helper.dart';
 import 'src/rust/api/core.dart' as r;
 
-class Service extends ChangeNotifier {
+class MainScreenService extends ChangeNotifier {
   r.StateApp state;
   List<r.Entity> entities = [];
   List<r.Entity> commands = [];
   late Stream<r.DartAction> stream;
 
-  int? _index;
+  int? _selectedEntityIndex;
   r.Entity? selected;
 
-  get index => _index;
+  get selectedEntityIndex => _selectedEntityIndex;
 
-  Service(this.state) {
+  MainScreenService(this.state) {
     _init();
   }
 
@@ -31,36 +31,36 @@ class Service extends ChangeNotifier {
 
   /// Select the next item in searchResult or in entitiesCommands
   void next() {
-    if (_index == null) {
+    if (_selectedEntityIndex == null) {
       return;
     }
-    if ((_index! + 1) >= entities.length + commands.length) {
-      _index = 0;
+    if ((_selectedEntityIndex! + 1) >= entities.length + commands.length) {
+      _selectedEntityIndex = 0;
     } else {
-      _index = _index! + 1;
+      _selectedEntityIndex = _selectedEntityIndex! + 1;
     }
-    if (_index! >= entities.length) {
-      selected = commands[_index! - entities.length];
+    if (_selectedEntityIndex! >= entities.length) {
+      selected = commands[_selectedEntityIndex! - entities.length];
     } else {
-      selected = entities[_index!];
+      selected = entities[_selectedEntityIndex!];
     }
     notifyListeners();
   }
 
   /// Select the previous item in searchResult or in entitiesCommands
   void previous() {
-    if (_index == null) {
+    if (_selectedEntityIndex == null) {
       return;
     }
-    if ((_index! - 1) < 0) {
-      _index = entities.length + commands.length - 1;
+    if ((_selectedEntityIndex! - 1) < 0) {
+      _selectedEntityIndex = entities.length + commands.length - 1;
     } else {
-      _index = _index! - 1;
+      _selectedEntityIndex = _selectedEntityIndex! - 1;
     }
-    if (_index! < entities.length) {
-      selected = entities[_index!];
+    if (_selectedEntityIndex! < entities.length) {
+      selected = entities[_selectedEntityIndex!];
     } else {
-      selected = commands[_index! - entities.length];
+      selected = commands[_selectedEntityIndex! - entities.length];
     }
     notifyListeners();
   }
@@ -77,16 +77,17 @@ class Service extends ChangeNotifier {
 
     // After each search select the first entity available
     selected = entities.firstOrNull;
-    _index = 0;
+    _selectedEntityIndex = 0;
     if (entities.isEmpty) {
       selected = commands.firstOrNull;
       if (commands.isEmpty) {
-        _index = null;
+        _selectedEntityIndex = null;
       }
     }
     notifyListeners();
   }
 
+  // TODO: move this function to an other service
   Future<void> clickableComponent(
     int index,
     String action, {

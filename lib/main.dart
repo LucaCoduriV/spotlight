@@ -4,26 +4,29 @@ import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
+import 'package:spotlight/widgets/bottom_bar.dart';
+import 'package:spotlight/widgets/search_bar.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:window_manager/window_manager.dart';
 
-import 'main_screen.dart';
 import 'shortcuts.dart';
 import 'src/rust/api/core.dart' as rust_core;
+import 'widgets/window_frame.dart';
 import 'window_event_listener.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await windowManager.ensureInitialized();
+  const windowSize = Size(750, 550);
 
   WindowOptions windowOptions = const WindowOptions(
-    size: Size(750, 550),
+    size: windowSize,
     center: true,
     backgroundColor: Colors.transparent,
     skipTaskbar: true,
     titleBarStyle: TitleBarStyle.hidden,
-    maximumSize: Size(750, 550),
-    minimumSize: Size(750, 550),
+    maximumSize: windowSize,
+    minimumSize: windowSize,
     fullScreen: false,
     alwaysOnTop: true,
     windowButtonVisibility: false,
@@ -40,12 +43,16 @@ Future<void> main() async {
   service.init();
   di.registerSingleton<PluginUIService>(PluginUIService());
 
-  runApp(const MyApp());
+  runApp(const MyApp(
+    windowSize: windowSize,
+  ));
+
   await rust_core.onExit();
 }
 
 class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {
-  const MyApp({super.key});
+  final Size windowSize;
+  const MyApp({super.key, required this.windowSize});
 
   @override
   State<MyApp> createState() => _MyAppState();
@@ -56,6 +63,7 @@ class _MyAppState extends State<MyApp> {
   final Service service = di.get();
   final ItemScrollController scrollController = ItemScrollController();
   final windowEventListener = WindowEventListener();
+  final TextEditingController textEditingController = TextEditingController();
 
   @override
   void initState() {
@@ -96,8 +104,15 @@ class _MyAppState extends State<MyApp> {
               NextIntent: NextAction(scrollController),
               CloseIntent: CloseAction(),
             },
-            child: MainScreen(
-              scrollController: scrollController,
+            child: BWindowFrame(
+              size: widget.windowSize,
+              bottomBar: const BBottomBar(),
+              topBar: BSearchBar(textController: textEditingController),
+              child: const Column(
+                children: [
+                  Text("coucou"),
+                ],
+              ),
             ),
           ),
         ),

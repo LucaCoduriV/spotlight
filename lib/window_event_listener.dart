@@ -6,6 +6,6 @@ class WindowEventListener with WindowListener {
   @override
   void onWindowBlur() {
     super.onWindowBlur();
-    // exit(0);
+    exit(0);
   }
 }

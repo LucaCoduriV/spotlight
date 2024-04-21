@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/plugin_screen.dart';
-import 'package:spotlight/plugin_ui_service.dart';
+import 'package:spotlight/plugin_screen_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:watch_it/watch_it.dart';
 
@@ -55,7 +55,7 @@ class SelectEntryIntent extends Intent {
 
 class SelectEntryAction extends Action<SelectEntryIntent> {
   final MainScreenService service = di.get();
-  final PluginUIService pluginUIService = di.get();
+  final PluginScreenService pluginUIService = di.get();
   final String? arg;
   final BuildContext ctx;
 

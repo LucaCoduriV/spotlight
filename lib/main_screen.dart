@@ -3,7 +3,7 @@ import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:jovial_svg/jovial_svg.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
-import 'package:spotlight/plugin_ui_service.dart';
+import 'package:spotlight/plugin_screen_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/widgets/list.dart';
 import 'package:watch_it/watch_it.dart';
@@ -31,7 +31,7 @@ class MainScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
 
 class _MainScreenState extends State<MainScreen> {
   final MainScreenService service = di.get();
-  final PluginUIService pluginUIService = di.get();
+  final PluginScreenService pluginUIService = di.get();
   final text = TextEditingController();
 
   @override

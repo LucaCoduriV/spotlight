@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
 import 'package:spotlight/main_screen.dart';
-import 'package:spotlight/plugin_ui_service.dart';
+import 'package:spotlight/plugin_screen_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
 import 'package:watch_it/watch_it.dart';
@@ -57,7 +57,7 @@ Future<void> setupDi() async {
   final state =
       di.registerSingleton<r.StateApp>(await r.StateApp.newStateApp());
   di.registerSingleton<MainScreenService>(MainScreenService(state));
-  di.registerSingleton<PluginUIService>(PluginUIService());
+  di.registerSingleton<PluginScreenService>(PluginScreenService());
 }
 
 class MyApp extends StatefulWidget with WatchItStatefulWidgetMixin {

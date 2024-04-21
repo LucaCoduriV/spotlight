@@ -9,6 +9,8 @@ import 'package:spotlight/widgets/list.dart';
 import 'package:watch_it/watch_it.dart';
 
 import 'main.dart';
+import 'plugin_screen.dart';
+import 'rust_helper.dart';
 import 'shortcuts.dart';
 import 'src/rust/api/core.dart' as rust_core;
 import 'widgets/bottom_bar.dart';
@@ -80,7 +82,7 @@ class _MainScreenState extends State<MainScreen> {
 
     return Actions(
       actions: <Type, Action<Intent>>{
-        SelectEntryIntent: SelectEntryAction(arg: text.text),
+        SelectEntryIntent: SelectEntryAction(arg: text.text, ctx: context),
       },
       child: BWindowFrame(
         size: windowSize,
@@ -126,6 +128,23 @@ class _MainScreenState extends State<MainScreen> {
       description: e.description ?? "",
       type: e.type,
       searchString: text.text,
+      onClick: () async {
+        final result = await service.run(e.index);
+        switch (result) {
+          case RunEntityResultUI(:final widget):
+            if (context.mounted && widget != null) {
+              Navigator.of(context).push(
+                MaterialPageRoute(
+                  builder: (ctx) => PluginScreen(child: widget),
+                  fullscreenDialog: true,
+                ),
+              );
+            }
+            break;
+          case RunEntityResultText():
+          case RunEntityResultNone():
+        }
+      },
     );
   }
 }

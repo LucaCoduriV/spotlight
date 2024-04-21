@@ -5,8 +5,6 @@ import 'package:spotlight/widgets/search_bar.dart';
 import 'package:spotlight/widgets/window_frame.dart';
 import 'package:watch_it/watch_it.dart';
 
-import 'plugin_ui_service.dart';
-
 class PluginScreen extends StatefulWidget with WatchItStatefulWidgetMixin {
   final Widget child;
   const PluginScreen({super.key, required this.child});
@@ -20,8 +18,6 @@ class _PluginScreenState extends State<PluginScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final pluginUiService = di.get<PluginUIService>();
-
     return BWindowFrame(
       size: windowSize,
       topBar: BSearchBar(

@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:scrollable_positioned_list/scrollable_positioned_list.dart';
@@ -5,15 +7,11 @@ import 'package:spotlight/main_screen.dart';
 import 'package:spotlight/plugin_ui_service.dart';
 import 'package:spotlight/service.dart';
 import 'package:spotlight/src/rust/frb_generated.dart';
-import 'package:spotlight/widgets/bottom_bar.dart';
-import 'package:spotlight/widgets/search_bar.dart';
 import 'package:watch_it/watch_it.dart';
 import 'package:window_manager/window_manager.dart';
 
 import 'shortcuts.dart';
 import 'src/rust/api/core.dart' as r;
-import 'theme.dart';
-import 'widgets/window_frame.dart';
 import 'window_event_listener.dart';
 
 const windowSize = Size(750, 550);
@@ -108,17 +106,35 @@ class _MyAppState extends State<MyApp> {
               LogicalKeyboardKey.keyN,
             ): const NextIntent(),
             LogicalKeySet(LogicalKeyboardKey.enter): const SelectEntryIntent(),
-            LogicalKeySet(LogicalKeyboardKey.escape): const CloseIntent(),
+            LogicalKeySet(LogicalKeyboardKey.escape): const PopIntent(),
           },
-          child: Actions(
-            actions: <Type, Action<Intent>>{
-              PreviousIntent: PreviousAction(scrollController),
-              NextIntent: NextAction(scrollController),
-              CloseIntent: CloseAction(),
-            },
-            child: MainScreen(scrollController: scrollController),
-          ),
+          child: PopChecker(scrollController: scrollController),
         ),
+      ),
+    );
+  }
+}
+
+class PopChecker extends StatelessWidget {
+  const PopChecker({
+    super.key,
+    required this.scrollController,
+  });
+
+  final ItemScrollController scrollController;
+
+  @override
+  Widget build(BuildContext context) {
+    return PopScope(
+      canPop: false,
+      onPopInvoked: (_) => exit(0),
+      child: Actions(
+        actions: <Type, Action<Intent>>{
+          PreviousIntent: PreviousAction(scrollController),
+          NextIntent: NextAction(scrollController),
+          PopIntent: PopAction(context),
+        },
+        child: MainScreen(scrollController: scrollController),
       ),
     );
   }

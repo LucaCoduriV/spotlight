@@ -88,15 +88,19 @@ class SelectEntryAction extends Action<SelectEntryIntent> {
   }
 }
 
-class CloseIntent extends Intent {
-  const CloseIntent();
+class PopIntent extends Intent {
+  const PopIntent();
 }
 
-class CloseAction extends Action<CloseIntent> {
-  CloseAction();
+class PopAction extends Action<PopIntent> {
+  final BuildContext ctx;
+  PopAction(this.ctx);
 
   @override
-  Object? invoke(covariant CloseIntent intent) async {
-    // exit(0);
+  Object? invoke(covariant PopIntent intent) {
+    if (ctx.mounted) {
+      Navigator.of(ctx).pop();
+    }
+    return null;
   }
 }

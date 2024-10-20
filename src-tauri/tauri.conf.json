@@ -13,6 +13,7 @@
     "withGlobalTauri": true,
     "windows": [
       {
+        "transparent": true,
         "title": "blazyr",
         "width": 800,
         "height": 600
